@@ -8,6 +8,7 @@
     // --- State ---
     let currency = '$';
     let chart = null;
+    const STORAGE_KEY = 'yis-simulation';
 
     // --- DOM Cache ---
     const $ = (id) => document.getElementById(id);
@@ -34,6 +35,7 @@
         bigQuote:      $('bigQuote'),
         quoteAuthor:   $('quoteAuthor'),
         navbar:        $('navbar'),
+        toast:         $('toast'),
     };
 
     // --- Quotes ---
@@ -88,6 +90,51 @@
             if (balance >= target) return (m / 12).toFixed(1);
         }
         return null;
+    }
+
+    // --- Toast notifications ---
+    function showToast(message) {
+        els.toast.textContent = message;
+        els.toast.classList.add('show');
+        setTimeout(() => els.toast.classList.remove('show'), 2500);
+    }
+
+    // --- Save / Load simulation ---
+    function saveSimulation() {
+        const data = {
+            initial: els.initial.value,
+            monthly: els.monthly.value,
+            rate: els.rate.value,
+            years: els.years.value,
+            currency: currency,
+            savedAt: new Date().toISOString(),
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        showToast('Simulation saved! Come back anytime.');
+    }
+
+    function loadSimulation() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+
+        try {
+            const data = JSON.parse(raw);
+            els.initial.value = data.initial;
+            els.monthly.value = data.monthly;
+            els.rate.value = data.rate;
+            els.years.value = data.years;
+
+            if (data.currency) {
+                currency = data.currency;
+                document.querySelectorAll('.currency-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.currency === currency);
+                });
+            }
+
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
 
     // --- Chart ---
@@ -316,15 +363,9 @@
 
     // --- Navbar scroll effect ---
     function initNavbar() {
-        let lastScroll = 0;
         window.addEventListener('scroll', () => {
             const scrollY = window.scrollY;
-            if (scrollY > 100) {
-                els.navbar.style.borderBottomColor = 'var(--border-light)';
-            } else {
-                els.navbar.style.borderBottomColor = 'var(--border)';
-            }
-            lastScroll = scrollY;
+            els.navbar.style.borderBottomColor = scrollY > 100 ? 'var(--border-light)' : 'var(--border)';
         }, { passive: true });
     }
 
@@ -341,13 +382,26 @@
         });
     }
 
+    // --- Save button ---
+    function initSave() {
+        $('saveBtn').addEventListener('click', saveSimulation);
+    }
+
     // --- Init ---
     function init() {
         initTheme();
+
+        // Load saved simulation if exists
+        const loaded = loadSimulation();
+        if (loaded) {
+            showToast('Welcome back! Your simulation was restored.');
+        }
+
         initCurrency();
         initQuotes();
         initNavbar();
         initSmoothScroll();
+        initSave();
 
         [els.initial, els.monthly, els.rate, els.years].forEach(s => {
             s.addEventListener('input', update);

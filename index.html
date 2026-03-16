@@ -39,11 +39,20 @@
                 <a href="#learn">Learn</a>
                 <a href="#legends">Legends</a>
             </div>
-            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                <span id="themeIcon">☀️</span>
-            </button>
+            <div class="nav-right">
+                <button class="save-btn" id="saveBtn" title="Save your simulation">
+                    <span class="save-icon">💾</span>
+                    <span class="save-text">Save</span>
+                </button>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <span id="themeIcon">☀️</span>
+                </button>
+            </div>
         </div>
     </nav>
+
+    <!-- ========== SAVE TOAST ========== -->
+    <div class="toast" id="toast"></div>
 
     <!-- ========== HERO ========== -->
     <header class="hero" id="hero">
@@ -52,7 +61,7 @@
             <div class="hero-badge">Built for Gen Z & Millennials</div>
             <h1 class="hero-title">
                 Your money could be<br>
-                <span class="hero-highlight" id="heroAmount">$736,098</span>
+                <span class="hero-highlight" id="heroAmount">$226,049</span>
             </h1>
             <p class="hero-subtitle">Starting with just $500 and $100/month. No trust fund needed.<br>See for yourself below.</p>
             <a href="#simulator" class="hero-cta">
@@ -67,11 +76,11 @@
         <div class="container">
             <div class="goal-card" id="goalCard">
                 <div class="goal-top">
-                    <div class="goal-amount" id="goalAmount">$736,098</div>
+                    <div class="goal-amount" id="goalAmount">$226,049</div>
                     <div class="goal-label">Your projected wealth</div>
                 </div>
                 <div class="goal-bottom">
-                    <p class="goal-quote">"With 100K+ of patrimoine invested in the stock market, you're basically guaranteed to never stress about money again. And it's way simpler than you think."</p>
+                    <p class="goal-quote">"With 100K+ invested in the stock market, you're basically guaranteed to never stress about money again. And it's way simpler than you think."</p>
                 </div>
             </div>
         </div>
@@ -109,10 +118,48 @@
                     <div class="control-group">
                         <div class="control-header">
                             <label for="annualReturn">Annual return</label>
-                            <span class="control-value" id="returnValue">15%</span>
+                            <span class="control-value" id="returnValue">10%</span>
                         </div>
-                        <input type="range" id="annualReturn" min="1" max="25" step="0.5" value="15">
+                        <input type="range" id="annualReturn" min="1" max="25" step="0.5" value="10">
                         <div class="control-range"><span>1%</span><span>25%</span></div>
+                    </div>
+
+                    <!-- Historical returns reference -->
+                    <div class="returns-ref" id="returnsRef">
+                        <div class="returns-ref-title">Historical annual returns (for reference)</div>
+                        <div class="returns-ref-grid">
+                            <div class="returns-ref-item">
+                                <span class="returns-ref-label">S&P 500</span>
+                                <span class="returns-ref-value green">~10.5%</span>
+                                <span class="returns-ref-period">1957-2024</span>
+                            </div>
+                            <div class="returns-ref-item">
+                                <span class="returns-ref-label">NASDAQ</span>
+                                <span class="returns-ref-value green">~12.2%</span>
+                                <span class="returns-ref-period">1985-2024</span>
+                            </div>
+                            <div class="returns-ref-item">
+                                <span class="returns-ref-label">MSCI World</span>
+                                <span class="returns-ref-value green">~8.5%</span>
+                                <span class="returns-ref-period">1987-2024</span>
+                            </div>
+                            <div class="returns-ref-item">
+                                <span class="returns-ref-label">Bonds</span>
+                                <span class="returns-ref-value">~4.5%</span>
+                                <span class="returns-ref-period">Avg. US Treasury</span>
+                            </div>
+                            <div class="returns-ref-item">
+                                <span class="returns-ref-label">Savings Acct</span>
+                                <span class="returns-ref-value dim">~2%</span>
+                                <span class="returns-ref-period">Avg. high-yield</span>
+                            </div>
+                            <div class="returns-ref-item">
+                                <span class="returns-ref-label">Inflation</span>
+                                <span class="returns-ref-value red">~3.2%</span>
+                                <span class="returns-ref-period">US avg. 1960-2024</span>
+                            </div>
+                        </div>
+                        <p class="returns-ref-note">Default 10% = S&P 500 average. Conservative but realistic long-term.</p>
                     </div>
 
                     <div class="control-group">
@@ -296,6 +343,51 @@
         </div>
     </section>
 
+    <!-- ========== START INVESTING CTA (Monetization) ========== -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-card">
+                <div class="cta-content">
+                    <h2 class="cta-title">Ready to start for real?</h2>
+                    <p class="cta-desc">The simulator showed you the math. Now here are platforms where you can actually begin investing, even with small amounts.</p>
+                </div>
+                <div class="brokers-grid">
+                    <a href="https://www.trade-republic.com" target="_blank" rel="noopener" class="broker-card">
+                        <div class="broker-name">Trade Republic</div>
+                        <div class="broker-detail">From 1€/month &middot; Europe</div>
+                    </a>
+                    <a href="https://www.etoro.com" target="_blank" rel="noopener" class="broker-card">
+                        <div class="broker-name">eToro</div>
+                        <div class="broker-detail">Social investing &middot; Global</div>
+                    </a>
+                    <a href="https://www.degiro.com" target="_blank" rel="noopener" class="broker-card">
+                        <div class="broker-name">DEGIRO</div>
+                        <div class="broker-detail">Low fees &middot; Europe</div>
+                    </a>
+                    <a href="https://www.fidelity.com" target="_blank" rel="noopener" class="broker-card">
+                        <div class="broker-name">Fidelity</div>
+                        <div class="broker-detail">Zero commissions &middot; USA</div>
+                    </a>
+                </div>
+                <p class="cta-disclaimer">These are suggestions, not financial advice. We may earn a commission from some links.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SUPPORT BANNER ========== -->
+    <section class="support-section">
+        <div class="container">
+            <div class="support-card">
+                <div class="support-text">
+                    <strong>Like this tool?</strong> It's 100% free, no ads, no tracking. If it helped you, consider supporting the project.
+                </div>
+                <a href="https://buymeacoffee.com" target="_blank" rel="noopener" class="support-btn">
+                    ☕ Buy me a coffee
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- ========== FOOTER ========== -->
     <footer class="footer">
         <div class="container">
@@ -310,7 +402,7 @@
                         <img src="assets/logo.svg" alt="" class="logo-icon">
                         <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
                     </div>
-                    <p class="footer-about">A free tool built to show young people the power of starting early. No sign-up. No ads. Just math.</p>
+                    <p class="footer-about">A free tool built to show young people the power of starting early. No sign-up required. Just math.</p>
                 </div>
                 <div class="footer-col">
                     <h4 class="footer-heading">Navigate</h4>
@@ -320,14 +412,16 @@
                     <a href="#legends">Legends</a>
                 </div>
                 <div class="footer-col">
-                    <h4 class="footer-heading">Resources</h4>
+                    <h4 class="footer-heading">Learn to invest</h4>
                     <a href="https://www.investopedia.com/terms/c/compoundinterest.asp" target="_blank" rel="noopener">What is compound interest?</a>
-                    <a href="https://www.investopedia.com/terms/i/index-investing.asp" target="_blank" rel="noopener">What is index investing?</a>
+                    <a href="https://www.investopedia.com/terms/i/indexfund.asp" target="_blank" rel="noopener">What is an index fund?</a>
                     <a href="https://www.investopedia.com/articles/basics/06/invest1000.asp" target="_blank" rel="noopener">How to start with $1000</a>
+                    <a href="https://www.investopedia.com/articles/01/071801.asp" target="_blank" rel="noopener">Warren Buffett's strategy</a>
+                    <a href="https://www.investopedia.com/terms/r/rateofreturn.asp" target="_blank" rel="noopener">How to pick a return rate</a>
                 </div>
                 <div class="footer-col">
                     <h4 class="footer-heading">Disclaimer</h4>
-                    <p class="footer-disclaimer">This simulator is for educational purposes only. Past returns do not guarantee future results. Always do your own research before investing.</p>
+                    <p class="footer-disclaimer">This simulator is for educational purposes only. Past returns do not guarantee future results. The default 10% reflects the S&P 500 historical average. Always do your own research before investing.</p>
                 </div>
             </div>
 
