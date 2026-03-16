@@ -40,6 +40,21 @@
                 <a href="#legends">Legends</a>
             </div>
             <div class="nav-right">
+                <!-- Language Selector -->
+                <div class="lang-dropdown" id="langDropdown">
+                    <button class="lang-btn" id="langBtn" aria-label="Change language">
+                        <span id="langFlag">EN</span>
+                    </button>
+                    <div class="lang-menu" id="langMenu">
+                        <button class="lang-option active" data-lang="en">🇺🇸 English</button>
+                        <button class="lang-option" data-lang="fr">🇫🇷 Fran&ccedil;ais</button>
+                        <button class="lang-option" data-lang="es">🇪🇸 Espa&ntilde;ol</button>
+                        <button class="lang-option" data-lang="pt">🇧🇷 Portugu&ecirc;s</button>
+                        <button class="lang-option" data-lang="de">🇩🇪 Deutsch</button>
+                        <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
+                        <button class="lang-option" data-lang="zh">🇨🇳 中文</button>
+                    </div>
+                </div>
                 <button class="save-btn" id="saveBtn" title="Save your simulation">
                     <span class="save-icon">💾</span>
                     <span class="save-text">Save</span>
@@ -279,6 +294,11 @@
                             <div class="stat-label">To hit 100K</div>
                         </div>
                     </div>
+                    <!-- Share Button -->
+                    <button class="share-btn" id="shareBtn" onclick="shareResults()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                        <span data-i18n="share">Share my results</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -453,41 +473,93 @@
         </div>
     </section>
 
-    <!-- ========== GO PRO SECTION ========== -->
+    <!-- ========== FREE vs PRO COMPARISON ========== -->
     <section class="pro-section" id="pro">
         <div class="container">
-            <div class="pro-card">
-                <div class="pro-badge">PRO</div>
-                <h2 class="pro-title">Unlock the full experience</h2>
-                <p class="pro-desc">Take your investing journey to the next level with premium features.</p>
-                <div class="pro-features">
-                    <div class="pro-feature">
-                        <span class="pro-check">&#10003;</span>
-                        <span>Cloud sync across all your devices</span>
+            <div class="section-header center">
+                <h2 class="section-title">Free vs Pro</h2>
+                <p class="section-desc">Start free. Upgrade when you're ready to go deeper.</p>
+            </div>
+
+            <div class="plans-grid">
+                <!-- FREE PLAN -->
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3 class="plan-name">Free</h3>
+                        <div class="plan-price-row">
+                            <span class="plan-price">$0</span>
+                            <span class="plan-period">forever</span>
+                        </div>
                     </div>
-                    <div class="pro-feature">
-                        <span class="pro-check">&#10003;</span>
-                        <span>Save unlimited simulations</span>
+                    <div class="plan-features">
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Investment simulator</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Compound interest chart</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Milestones tracker</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Age comparison (20 vs 30)</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Share your results</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Multi-language support</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Save 1 simulation (local)</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Historical returns reference</div>
+                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Tax impact simulator</div>
+                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Inflation-adjusted projections</div>
+                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Index fund comparisons</div>
+                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Historical market data overlay</div>
+                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Education hub access</div>
+                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Cloud sync + unlimited saves</div>
+                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Export PDF reports</div>
                     </div>
-                    <div class="pro-feature">
-                        <span class="pro-check">&#10003;</span>
-                        <span>Export reports as PDF</span>
-                    </div>
-                    <div class="pro-feature">
-                        <span class="pro-check">&#10003;</span>
-                        <span>Advanced comparison tools</span>
-                    </div>
-                    <div class="pro-feature">
-                        <span class="pro-check">&#10003;</span>
-                        <span>Priority support</span>
-                    </div>
+                    <a href="#simulator" class="plan-btn plan-btn-free">Start for free</a>
                 </div>
-                <div class="pro-pricing">
-                    <span class="pro-price">$4.99</span>
-                    <span class="pro-period">/month</span>
+
+                <!-- PRO PLAN -->
+                <div class="plan-card pro">
+                    <div class="pro-badge">MOST POPULAR</div>
+                    <div class="plan-header">
+                        <h3 class="plan-name">Pro</h3>
+                        <div class="plan-price-row">
+                            <span class="plan-price">$4.99</span>
+                            <span class="plan-period">/month</span>
+                        </div>
+                    </div>
+                    <div class="plan-features">
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Everything in Free</div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Tax impact simulator <span class="feat-tag">NEW</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Inflation-adjusted projections <span class="feat-tag">NEW</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> S&P 500 / NASDAQ / MSCI comparison <span class="feat-tag">NEW</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Historical market data overlay <span class="feat-tag">NEW</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Education hub: courses, YouTube, blogs <span class="feat-tag">NEW</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Cloud sync across all devices</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Unlimited simulations saved</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Export reports as PDF</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Priority support</div>
+                    </div>
+                    <button class="plan-btn plan-btn-pro" onclick="handleUpgradePro()">Start 7-day free trial</button>
+                    <p class="pro-note">Cancel anytime. No credit card required to try.</p>
                 </div>
-                <button class="pro-btn" onclick="handleUpgradePro()">Upgrade to Pro</button>
-                <p class="pro-note">Cancel anytime. 7-day free trial.</p>
+            </div>
+
+            <!-- Pro Feature Highlights -->
+            <div class="pro-highlights">
+                <div class="pro-hl-card">
+                    <div class="pro-hl-icon">🏛️</div>
+                    <h4>Tax Simulator</h4>
+                    <p>Simulate taxes by country. US, EU, UK, Asia — all regulations covered.</p>
+                </div>
+                <div class="pro-hl-card">
+                    <div class="pro-hl-icon">📉</div>
+                    <h4>Inflation Impact</h4>
+                    <p>See what your money is really worth after inflation eats into returns.</p>
+                </div>
+                <div class="pro-hl-card">
+                    <div class="pro-hl-icon">📊</div>
+                    <h4>Fund Comparisons</h4>
+                    <p>Compare S&P 500, NASDAQ, MSCI World side by side with your simulation.</p>
+                </div>
+                <div class="pro-hl-card">
+                    <div class="pro-hl-icon">🎓</div>
+                    <h4>Education Hub</h4>
+                    <p>Curated courses, YouTube playlists, weekly blogs — learn investing from zero.</p>
+                </div>
             </div>
         </div>
     </section>

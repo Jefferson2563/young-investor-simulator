@@ -84,6 +84,36 @@ function handleSignOut() {
     auth.signOut();
 }
 
+// --- Share results ---
+function shareResults() {
+    const data = window._yisGetData();
+    if (!data || !data.result) return;
+    const r = data.result;
+    const fmt = window._yisFormatMoney;
+    const text = `I just simulated my investment future!\n\n` +
+        `Final value: ${fmt(r.finalBalance)}\n` +
+        `I put in: ${fmt(r.totalContributed)}\n` +
+        `Market gave me: ${fmt(r.totalInterest)}\n` +
+        `Money multiplied: ${r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '0x'}\n\n` +
+        `Try it yourself: ${window.location.href}\n` +
+        `#YoungInvestorSimulator #Investing #CompoundInterest`;
+
+    if (navigator.share) {
+        navigator.share({
+            title: 'My Investment Simulation',
+            text: text,
+            url: window.location.href,
+        }).catch(() => {});
+    } else {
+        navigator.clipboard.writeText(text).then(() => {
+            window._yisShowToast('Results copied to clipboard! Share it anywhere.');
+        }).catch(() => {
+            // Fallback: select text in a prompt
+            prompt('Copy your results:', text);
+        });
+    }
+}
+
 function handleUpgradePro() {
     // Stripe Checkout integration
     // Replace with your Stripe payment link when you set up Stripe
@@ -560,6 +590,130 @@ function closeFullscreen() {
         $('saveBtn').addEventListener('click', saveSimulation);
     }
 
+    // --- i18n / Language selector ---
+    const translations = {
+        en: { heroTitle1: 'Your money could be', heroBadge: 'Built for Gen Z & Millennials', heroSub: 'Starting with just $500 and $100/month. No trust fund needed.', heroSub2: 'See for yourself below.', heroCta: 'Try the simulator', simTitle: 'Play with the numbers', simDesc: 'Move the sliders. Watch your future change in real-time.', starting: 'Starting amount', monthly: 'Monthly contribution', annual: 'Annual return', duration: 'Duration', youPutIn: 'You put in', marketGave: 'Market gave you', multiplied: 'Money multiplied', toHit100k: 'To hit 100K', share: 'Share my results', milestoneTitle: 'Your milestones', milestoneDesc: 'Each one brings you closer to financial freedom.', compTitle: 'Starting at 20 vs 30', compDesc: 'Same monthly amount. 10 years difference. Life-changing gap.', legendsTitle: 'They all started young', legendsDesc: "The world's greatest investors didn't wait. Neither should you.", signIn: 'Sign In', flag: 'EN' },
+        fr: { heroTitle1: 'Votre argent pourrait devenir', heroBadge: 'Fait pour la Gen Z & Millennials', heroSub: 'En commen\u00e7ant avec 500$ et 100$/mois. Pas besoin de fonds fiduciaire.', heroSub2: 'V\u00e9rifiez par vous-m\u00eame ci-dessous.', heroCta: 'Essayer le simulateur', simTitle: 'Jouez avec les chiffres', simDesc: 'Bougez les curseurs. Regardez votre avenir changer en temps r\u00e9el.', starting: 'Montant initial', monthly: 'Contribution mensuelle', annual: 'Rendement annuel', duration: 'Dur\u00e9e', youPutIn: 'Vous avez mis', marketGave: 'Le march\u00e9 vous a donn\u00e9', multiplied: 'Argent multipli\u00e9', toHit100k: 'Pour atteindre 100K', share: 'Partager mes r\u00e9sultats', milestoneTitle: 'Vos jalons', milestoneDesc: 'Chacun vous rapproche de la libert\u00e9 financi\u00e8re.', compTitle: 'Commencer \u00e0 20 vs 30 ans', compDesc: 'M\u00eame montant mensuel. 10 ans de diff\u00e9rence. \u00c9cart qui change la vie.', legendsTitle: 'Ils ont tous commenc\u00e9 jeunes', legendsDesc: "Les plus grands investisseurs n'ont pas attendu. Vous non plus.", signIn: 'Connexion', flag: 'FR' },
+        es: { heroTitle1: 'Tu dinero podr\u00eda ser', heroBadge: 'Hecho para Gen Z y Millennials', heroSub: 'Empezando con $500 y $100/mes. Sin fondo fiduciario.', heroSub2: 'Compru\u00e9balo t\u00fa mismo.', heroCta: 'Probar el simulador', simTitle: 'Juega con los n\u00fameros', simDesc: 'Mueve los controles. Mira tu futuro cambiar en tiempo real.', starting: 'Cantidad inicial', monthly: 'Contribuci\u00f3n mensual', annual: 'Rendimiento anual', duration: 'Duraci\u00f3n', youPutIn: 'Pusiste', marketGave: 'El mercado te dio', multiplied: 'Dinero multiplicado', toHit100k: 'Para llegar a 100K', share: 'Compartir mis resultados', milestoneTitle: 'Tus hitos', milestoneDesc: 'Cada uno te acerca a la libertad financiera.', compTitle: 'Empezar a los 20 vs 30', compDesc: 'Mismo monto mensual. 10 a\u00f1os de diferencia. Brecha que cambia la vida.', legendsTitle: 'Todos empezaron j\u00f3venes', legendsDesc: 'Los mayores inversores no esperaron. T\u00fa tampoco.', signIn: 'Iniciar sesi\u00f3n', flag: 'ES' },
+        pt: { heroTitle1: 'Seu dinheiro poderia ser', heroBadge: 'Feito para Gen Z & Millennials', heroSub: 'Come\u00e7ando com $500 e $100/m\u00eas. Sem fundo fiduci\u00e1rio.', heroSub2: 'Veja por si mesmo abaixo.', heroCta: 'Experimentar o simulador', simTitle: 'Brinque com os n\u00fameros', simDesc: 'Mova os controles. Veja seu futuro mudar em tempo real.', starting: 'Valor inicial', monthly: 'Contribui\u00e7\u00e3o mensal', annual: 'Retorno anual', duration: 'Dura\u00e7\u00e3o', youPutIn: 'Voc\u00ea colocou', marketGave: 'O mercado te deu', multiplied: 'Dinheiro multiplicado', toHit100k: 'Para atingir 100K', share: 'Compartilhar meus resultados', milestoneTitle: 'Seus marcos', milestoneDesc: 'Cada um te aproxima da liberdade financeira.', compTitle: 'Come\u00e7ar aos 20 vs 30', compDesc: 'Mesmo valor mensal. 10 anos de diferen\u00e7a. Diferen\u00e7a que muda a vida.', legendsTitle: 'Todos come\u00e7aram jovens', legendsDesc: 'Os maiores investidores n\u00e3o esperaram. Voc\u00ea tamb\u00e9m n\u00e3o.', signIn: 'Entrar', flag: 'PT' },
+        de: { heroTitle1: 'Dein Geld k\u00f6nnte werden', heroBadge: 'Gebaut f\u00fcr Gen Z & Millennials', heroSub: 'Starte mit $500 und $100/Monat. Kein Treuhandfonds n\u00f6tig.', heroSub2: '\u00dcberzeuge dich selbst.', heroCta: 'Simulator ausprobieren', simTitle: 'Spiel mit den Zahlen', simDesc: 'Bewege die Regler. Sieh deine Zukunft in Echtzeit.', starting: 'Startbetrag', monthly: 'Monatlicher Beitrag', annual: 'J\u00e4hrliche Rendite', duration: 'Dauer', youPutIn: 'Du hast eingezahlt', marketGave: 'Der Markt gab dir', multiplied: 'Geld multipliziert', toHit100k: 'Bis 100K', share: 'Meine Ergebnisse teilen', milestoneTitle: 'Deine Meilensteine', milestoneDesc: 'Jeder bringt dich der finanziellen Freiheit n\u00e4her.', compTitle: 'Start mit 20 vs 30', compDesc: 'Gleicher Betrag. 10 Jahre Unterschied. Lebensver\u00e4ndernde L\u00fccke.', legendsTitle: 'Sie haben alle jung angefangen', legendsDesc: 'Die gr\u00f6\u00dften Investoren haben nicht gewartet. Du auch nicht.', signIn: 'Anmelden', flag: 'DE' },
+        ar: { heroTitle1: '\u0623\u0645\u0648\u0627\u0644\u0643 \u064a\u0645\u0643\u0646 \u0623\u0646 \u062a\u0635\u0628\u062d', heroBadge: '\u0645\u0635\u0645\u0645 \u0644\u0644\u062c\u064a\u0644 \u0632\u064a \u0648\u0627\u0644\u0645\u064a\u0644\u064a\u0646\u064a\u0627\u0644', heroSub: '\u0627\u0628\u062f\u0623 \u0628\u0640 500$ \u0648 100$/\u0634\u0647\u0631.', heroSub2: '\u062c\u0631\u0628 \u0628\u0646\u0641\u0633\u0643.', heroCta: '\u062c\u0631\u0628 \u0627\u0644\u0645\u062d\u0627\u0643\u064a', simTitle: '\u0627\u0644\u0639\u0628 \u0628\u0627\u0644\u0623\u0631\u0642\u0627\u0645', simDesc: '\u062d\u0631\u0643 \u0627\u0644\u0645\u0632\u0627\u0644\u0642. \u0634\u0627\u0647\u062f \u0645\u0633\u062a\u0642\u0628\u0644\u0643 \u064a\u062a\u063a\u064a\u0631.', starting: '\u0627\u0644\u0645\u0628\u0644\u063a \u0627\u0644\u0623\u0648\u0644\u064a', monthly: '\u0627\u0644\u0645\u0633\u0627\u0647\u0645\u0629 \u0627\u0644\u0634\u0647\u0631\u064a\u0629', annual: '\u0627\u0644\u0639\u0627\u0626\u062f \u0627\u0644\u0633\u0646\u0648\u064a', duration: '\u0627\u0644\u0645\u062f\u0629', youPutIn: '\u0623\u0646\u062a \u0648\u0636\u0639\u062a', marketGave: '\u0627\u0644\u0633\u0648\u0642 \u0623\u0639\u0637\u0627\u0643', multiplied: '\u0627\u0644\u0645\u0627\u0644 \u062a\u0636\u0627\u0639\u0641', toHit100k: '\u0644\u0644\u0648\u0635\u0648\u0644 \u0644 100K', share: '\u0634\u0627\u0631\u0643 \u0646\u062a\u0627\u0626\u062c\u064a', milestoneTitle: '\u0625\u0646\u062c\u0627\u0632\u0627\u062a\u0643', milestoneDesc: '\u0643\u0644 \u0648\u0627\u062d\u062f \u064a\u0642\u0631\u0628\u0643 \u0645\u0646 \u0627\u0644\u062d\u0631\u064a\u0629 \u0627\u0644\u0645\u0627\u0644\u064a\u0629.', compTitle: '\u0627\u0644\u0628\u062f\u0621 \u0641\u064a 20 \u0645\u0642\u0627\u0628\u0644 30', compDesc: '\u0646\u0641\u0633 \u0627\u0644\u0645\u0628\u0644\u063a. 10 \u0633\u0646\u0648\u0627\u062a \u0641\u0631\u0642.', legendsTitle: '\u0643\u0644\u0647\u0645 \u0628\u062f\u0623\u0648\u0627 \u0635\u063a\u0627\u0631\u0627', legendsDesc: '\u0623\u0639\u0638\u0645 \u0627\u0644\u0645\u0633\u062a\u062b\u0645\u0631\u064a\u0646 \u0644\u0645 \u064a\u0646\u062a\u0638\u0631\u0648\u0627.', signIn: '\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644', flag: 'AR' },
+        zh: { heroTitle1: '\u4f60\u7684\u94b1\u53ef\u4ee5\u53d8\u6210', heroBadge: '\u4e13\u4e3a Z \u4e16\u4ee3\u548c\u5343\u79a7\u4e00\u4ee3\u6253\u9020', heroSub: '\u4ece 500$ \u548c\u6bcf\u6708 100$ \u5f00\u59cb\u3002', heroSub2: '\u81ea\u5df1\u770b\u770b\u4e0b\u9762\u3002', heroCta: '\u8bd5\u8bd5\u6a21\u62df\u5668', simTitle: '\u73a9\u8f6c\u6570\u5b57', simDesc: '\u79fb\u52a8\u6ed1\u5757\u3002\u5b9e\u65f6\u89c2\u770b\u4f60\u7684\u672a\u6765\u53d8\u5316\u3002', starting: '\u8d77\u59cb\u91d1\u989d', monthly: '\u6bcf\u6708\u8d21\u732e', annual: '\u5e74\u56de\u62a5\u7387', duration: '\u65f6\u95f4', youPutIn: '\u4f60\u6295\u5165\u4e86', marketGave: '\u5e02\u573a\u7ed9\u4f60', multiplied: '\u94b1\u7ffb\u500d', toHit100k: '\u8fbe\u5230 100K', share: '\u5206\u4eab\u6211\u7684\u7ed3\u679c', milestoneTitle: '\u4f60\u7684\u91cc\u7a0b\u7891', milestoneDesc: '\u6bcf\u4e00\u4e2a\u90fd\u8ba9\u4f60\u66f4\u63a5\u8fd1\u8d22\u52a1\u81ea\u7531\u3002', compTitle: '20\u5c81 vs 30\u5c81\u5f00\u59cb', compDesc: '\u76f8\u540c\u6708\u989d\u300210\u5e74\u5dee\u8ddd\u3002\u6539\u53d8\u4eba\u751f\u7684\u5dee\u8ddd\u3002', legendsTitle: '\u4ed6\u4eec\u90fd\u5f88\u5e74\u8f7b\u5c31\u5f00\u59cb\u4e86', legendsDesc: '\u4e16\u754c\u4e0a\u6700\u4f1f\u5927\u7684\u6295\u8d44\u8005\u6ca1\u6709\u7b49\u5f85\u3002\u4f60\u4e5f\u4e0d\u5e94\u8be5\u3002', signIn: '\u767b\u5f55', flag: 'ZH' },
+    };
+
+    let currentLang = localStorage.getItem('yis-lang') || 'en';
+
+    function applyLanguage(lang) {
+        currentLang = lang;
+        localStorage.setItem('yis-lang', lang);
+        const t = translations[lang] || translations.en;
+
+        // Update flag button
+        $('langFlag').textContent = t.flag;
+
+        // Update active state
+        document.querySelectorAll('.lang-option').forEach(o => {
+            o.classList.toggle('active', o.dataset.lang === lang);
+        });
+
+        // Apply to key UI elements
+        const map = {
+            '.hero-badge': t.heroBadge,
+            '.hero-subtitle': t.heroSub + '<br>' + t.heroSub2,
+            '.hero-cta span:first-child': t.heroCta,
+            '#authBtn': t.signIn,
+        };
+
+        // Hero title (first part only, amount stays)
+        const heroTitle = document.querySelector('.hero-title');
+        if (heroTitle) {
+            const amount = $('heroAmount').outerHTML;
+            heroTitle.innerHTML = t.heroTitle1 + '<br>' + amount;
+        }
+
+        // Simulator section
+        const simHeader = document.querySelector('.simulator .section-title');
+        const simDesc = document.querySelector('.simulator .section-desc');
+        if (simHeader) simHeader.textContent = t.simTitle;
+        if (simDesc) simDesc.textContent = t.simDesc;
+
+        // Labels
+        const labels = document.querySelectorAll('.control-header label');
+        if (labels[0]) labels[0].textContent = t.starting;
+        if (labels[1]) labels[1].textContent = t.monthly;
+        if (labels[2]) labels[2].textContent = t.annual;
+        if (labels[3]) labels[3].textContent = t.duration;
+
+        // Stats
+        const statLabels = document.querySelectorAll('.stat-label');
+        if (statLabels[0]) statLabels[0].textContent = t.youPutIn;
+        if (statLabels[1]) statLabels[1].textContent = t.marketGave;
+        if (statLabels[2]) statLabels[2].textContent = t.multiplied;
+        if (statLabels[3]) statLabels[3].textContent = t.toHit100k;
+
+        // Share button
+        const shareText = document.querySelector('[data-i18n="share"]');
+        if (shareText) shareText.textContent = t.share;
+
+        // Milestones
+        const msTitle = document.querySelector('.milestones-section .section-title');
+        const msDesc = document.querySelector('.milestones-section .section-desc');
+        if (msTitle) msTitle.textContent = t.milestoneTitle;
+        if (msDesc) msDesc.textContent = t.milestoneDesc;
+
+        // Comparison
+        const cmpTitle = document.querySelector('.comparison-section .section-title');
+        const cmpDesc = document.querySelector('.comparison-section .section-desc');
+        if (cmpTitle) cmpTitle.textContent = t.compTitle;
+        if (cmpDesc) cmpDesc.textContent = t.compDesc;
+
+        // Legends
+        const legTitle = document.querySelector('.legends-section .section-title');
+        const legDesc = document.querySelector('.legends-section .section-desc');
+        if (legTitle) legTitle.textContent = t.legendsTitle;
+        if (legDesc) legDesc.textContent = t.legendsDesc;
+
+        // Auth button
+        const authBtn = $('authBtn');
+        if (authBtn && authBtn.style.display !== 'none') {
+            authBtn.textContent = t.signIn;
+        }
+
+        // RTL for Arabic
+        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+        // Close menu
+        $('langDropdown').classList.remove('open');
+    }
+
+    function initLanguage() {
+        // Toggle dropdown
+        $('langBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            $('langDropdown').classList.toggle('open');
+        });
+
+        // Close on outside click
+        document.addEventListener('click', () => {
+            $('langDropdown').classList.remove('open');
+        });
+
+        // Language options
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                applyLanguage(opt.dataset.lang);
+            });
+        });
+
+        // Apply saved language
+        if (currentLang !== 'en') {
+            applyLanguage(currentLang);
+        } else {
+            $('langFlag').textContent = 'EN';
+        }
+    }
+
     // --- Fullscreen chart on double-click ---
     function initFullscreen() {
         const chartContainer = $('chartContainer');
@@ -631,6 +785,7 @@ function closeFullscreen() {
         initSmoothScroll();
         initSave();
         initFullscreen();
+        initLanguage();
         initAuth();
 
         [els.initial, els.monthly, els.rate, els.years].forEach(s => {
