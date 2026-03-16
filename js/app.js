@@ -121,7 +121,7 @@ function shareResults() {
 function handleUpgradePro() {
     // Stripe Checkout integration
     // Replace with your Stripe payment link when you set up Stripe
-    const STRIPE_LINK = 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
+    const STRIPE_LINK = 'https://buy.stripe.com/test_00wcN4dA23hc1vSa2o00000';
     if (STRIPE_LINK.includes('YOUR_PAYMENT_LINK')) {
         alert('Stripe payment not configured yet. See js/firebase-config.js for setup instructions.');
         return;
