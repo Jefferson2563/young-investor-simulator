@@ -40,16 +40,94 @@
                 <a href="#legends">Legends</a>
             </div>
             <div class="nav-right">
-                <button class="save-btn" id="saveBtn" title="Saves to this browser — come back anytime to continue">
+                <button class="save-btn" id="saveBtn" title="Save your simulation">
                     <span class="save-icon">💾</span>
                     <span class="save-text">Save</span>
                 </button>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <span id="themeIcon">☀️</span>
                 </button>
+                <button class="auth-btn" id="authBtn" onclick="openAuthModal()">
+                    Sign In
+                </button>
+                <div class="user-menu" id="userMenu" style="display:none;">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <button class="signout-btn" id="signOutBtn" onclick="handleSignOut()">Sign Out</button>
+                </div>
             </div>
         </div>
     </nav>
+
+    <!-- ========== AUTH MODAL ========== -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+            <div class="modal-header">
+                <img src="assets/logo.svg" alt="" class="modal-logo">
+                <h2 class="modal-title" id="authTitle">Sign In</h2>
+                <p class="modal-desc">Save your simulations to the cloud and access from any device.</p>
+            </div>
+
+            <!-- Auth Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="signin" onclick="switchAuthTab('signin')">Sign In</button>
+                <button class="auth-tab" data-tab="signup" onclick="switchAuthTab('signup')">Sign Up</button>
+            </div>
+
+            <!-- Sign In Form -->
+            <form class="auth-form" id="signinForm" onsubmit="handleSignIn(event)">
+                <div class="form-group">
+                    <label for="signinEmail">Email</label>
+                    <input type="email" id="signinEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="signinPassword">Password</label>
+                    <input type="password" id="signinPassword" placeholder="Your password" required minlength="6">
+                </div>
+                <div class="auth-error" id="signinError"></div>
+                <button type="submit" class="auth-submit" id="signinSubmit">Sign In</button>
+            </form>
+
+            <!-- Sign Up Form -->
+            <form class="auth-form" id="signupForm" style="display:none;" onsubmit="handleSignUp(event)">
+                <div class="form-group">
+                    <label for="signupName">Name</label>
+                    <input type="text" id="signupName" placeholder="Your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Min 6 characters" required minlength="6">
+                </div>
+                <div class="auth-error" id="signupError"></div>
+                <button type="submit" class="auth-submit" id="signupSubmit">Create Account</button>
+            </form>
+
+            <div class="auth-divider">
+                <span>or</span>
+            </div>
+
+            <button class="google-btn" onclick="handleGoogleSignIn()">
+                <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+                Continue with Google
+            </button>
+
+            <p class="auth-footer">Free forever. Your data stays private.</p>
+        </div>
+    </div>
+
+    <!-- ========== FULLSCREEN CHART MODAL ========== -->
+    <div class="fullscreen-overlay" id="fullscreenChart">
+        <button class="fullscreen-close" onclick="closeFullscreen()">&times;</button>
+        <div class="fullscreen-hint">Press ESC or click X to close</div>
+        <div class="fullscreen-chart-wrap">
+            <canvas id="fullscreenCanvas"></canvas>
+        </div>
+        <div class="fullscreen-stats" id="fullscreenStats"></div>
+    </div>
 
     <!-- ========== SAVE TOAST ========== -->
     <div class="toast" id="toast"></div>
@@ -179,8 +257,9 @@
 
                 <!-- Chart + Stats -->
                 <div class="chart-area">
-                    <div class="chart-container">
+                    <div class="chart-container" id="chartContainer" title="Double-click to view fullscreen">
                         <canvas id="growthChart"></canvas>
+                        <div class="chart-expand-hint">Double-click to expand</div>
                     </div>
                     <div class="stats-grid">
                         <div class="stat-card">
@@ -354,7 +433,7 @@
                 <div class="brokers-grid">
                     <a href="https://www.trade-republic.com" target="_blank" rel="noopener" class="broker-card">
                         <div class="broker-name">Trade Republic</div>
-                        <div class="broker-detail">From 1€/month &middot; Europe</div>
+                        <div class="broker-detail">From 1&euro;/month &middot; Europe</div>
                     </a>
                     <a href="https://www.etoro.com" target="_blank" rel="noopener" class="broker-card">
                         <div class="broker-name">eToro</div>
@@ -374,16 +453,41 @@
         </div>
     </section>
 
-    <!-- ========== SUPPORT BANNER ========== -->
-    <section class="support-section">
+    <!-- ========== GO PRO SECTION ========== -->
+    <section class="pro-section" id="pro">
         <div class="container">
-            <div class="support-card">
-                <div class="support-text">
-                    <strong>Like this tool?</strong> It's 100% free, no ads, no tracking. If it helped you, consider supporting the project.
+            <div class="pro-card">
+                <div class="pro-badge">PRO</div>
+                <h2 class="pro-title">Unlock the full experience</h2>
+                <p class="pro-desc">Take your investing journey to the next level with premium features.</p>
+                <div class="pro-features">
+                    <div class="pro-feature">
+                        <span class="pro-check">&#10003;</span>
+                        <span>Cloud sync across all your devices</span>
+                    </div>
+                    <div class="pro-feature">
+                        <span class="pro-check">&#10003;</span>
+                        <span>Save unlimited simulations</span>
+                    </div>
+                    <div class="pro-feature">
+                        <span class="pro-check">&#10003;</span>
+                        <span>Export reports as PDF</span>
+                    </div>
+                    <div class="pro-feature">
+                        <span class="pro-check">&#10003;</span>
+                        <span>Advanced comparison tools</span>
+                    </div>
+                    <div class="pro-feature">
+                        <span class="pro-check">&#10003;</span>
+                        <span>Priority support</span>
+                    </div>
                 </div>
-                <a href="https://buymeacoffee.com" target="_blank" rel="noopener" class="support-btn">
-                    ☕ Buy me a coffee
-                </a>
+                <div class="pro-pricing">
+                    <span class="pro-price">$4.99</span>
+                    <span class="pro-period">/month</span>
+                </div>
+                <button class="pro-btn" onclick="handleUpgradePro()">Upgrade to Pro</button>
+                <p class="pro-note">Cancel anytime. 7-day free trial.</p>
             </div>
         </div>
     </section>
@@ -402,7 +506,7 @@
                         <img src="assets/logo.svg" alt="" class="logo-icon">
                         <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
                     </div>
-                    <p class="footer-about">A free tool built to show young people the power of starting early. No sign-up required. Just math.</p>
+                    <p class="footer-about">A free tool built to show young people the power of starting early. Sign up to save your progress and track your journey.</p>
                 </div>
                 <div class="footer-col">
                     <h4 class="footer-heading">Navigate</h4>
@@ -433,6 +537,13 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+    <script src="js/firebase-config.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>

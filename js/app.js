@@ -1,13 +1,143 @@
 /* ============================================
    YOUNG INVESTOR SIMULATOR - Core Logic
+   With Authentication, Cloud Save, Fullscreen Chart
    ============================================ */
 
+// --- Global auth/modal functions (called from HTML onclick) ---
+let currentUser = null;
+
+function openAuthModal() {
+    document.getElementById('authModal').classList.add('active');
+}
+
+function closeAuthModal() {
+    document.getElementById('authModal').classList.remove('active');
+    document.getElementById('signinError').textContent = '';
+    document.getElementById('signupError').textContent = '';
+}
+
+function switchAuthTab(tab) {
+    document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+    document.querySelector(`.auth-tab[data-tab="${tab}"]`).classList.add('active');
+    document.getElementById('signinForm').style.display = tab === 'signin' ? 'flex' : 'none';
+    document.getElementById('signupForm').style.display = tab === 'signup' ? 'flex' : 'none';
+    document.getElementById('authTitle').textContent = tab === 'signin' ? 'Sign In' : 'Create Account';
+}
+
+async function handleSignIn(e) {
+    e.preventDefault();
+    const email = document.getElementById('signinEmail').value;
+    const password = document.getElementById('signinPassword').value;
+    const errorEl = document.getElementById('signinError');
+    const btn = document.getElementById('signinSubmit');
+
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+    errorEl.textContent = '';
+
+    try {
+        await auth.signInWithEmailAndPassword(email, password);
+        closeAuthModal();
+    } catch (err) {
+        errorEl.textContent = friendlyError(err.code);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+    }
+}
+
+async function handleSignUp(e) {
+    e.preventDefault();
+    const name = document.getElementById('signupName').value;
+    const email = document.getElementById('signupEmail').value;
+    const password = document.getElementById('signupPassword').value;
+    const errorEl = document.getElementById('signupError');
+    const btn = document.getElementById('signupSubmit');
+
+    btn.disabled = true;
+    btn.textContent = 'Creating account...';
+    errorEl.textContent = '';
+
+    try {
+        const cred = await auth.createUserWithEmailAndPassword(email, password);
+        await cred.user.updateProfile({ displayName: name });
+        closeAuthModal();
+    } catch (err) {
+        errorEl.textContent = friendlyError(err.code);
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Create Account';
+    }
+}
+
+async function handleGoogleSignIn() {
+    try {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        await auth.signInWithPopup(provider);
+        closeAuthModal();
+    } catch (err) {
+        document.getElementById('signinError').textContent = friendlyError(err.code);
+    }
+}
+
+function handleSignOut() {
+    auth.signOut();
+}
+
+function handleUpgradePro() {
+    // Stripe Checkout integration
+    // Replace with your Stripe payment link when you set up Stripe
+    const STRIPE_LINK = 'https://buy.stripe.com/YOUR_PAYMENT_LINK';
+    if (STRIPE_LINK.includes('YOUR_PAYMENT_LINK')) {
+        alert('Stripe payment not configured yet. See js/firebase-config.js for setup instructions.');
+        return;
+    }
+    window.open(STRIPE_LINK, '_blank');
+}
+
+function friendlyError(code) {
+    const messages = {
+        'auth/email-already-in-use': 'This email is already registered. Try signing in instead.',
+        'auth/invalid-email': 'Please enter a valid email address.',
+        'auth/weak-password': 'Password must be at least 6 characters.',
+        'auth/user-not-found': 'No account found with this email.',
+        'auth/wrong-password': 'Incorrect password. Try again.',
+        'auth/too-many-requests': 'Too many attempts. Please wait a moment.',
+        'auth/popup-closed-by-user': 'Sign-in popup was closed.',
+        'auth/invalid-credential': 'Invalid email or password.',
+    };
+    return messages[code] || 'Something went wrong. Please try again.';
+}
+
+// --- Fullscreen chart ---
+let fullscreenChartInstance = null;
+
+function openFullscreen() {
+    const overlay = document.getElementById('fullscreenChart');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    renderFullscreenChart();
+}
+
+function closeFullscreen() {
+    const overlay = document.getElementById('fullscreenChart');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+    if (fullscreenChartInstance) {
+        fullscreenChartInstance.destroy();
+        fullscreenChartInstance = null;
+    }
+}
+
+// --- Main App IIFE ---
 (function () {
     'use strict';
 
     // --- State ---
     let currency = '$';
     let chart = null;
+    let lastYearlyData = null;
+    let lastResult = null;
     const STORAGE_KEY = 'yis-simulation';
 
     // --- DOM Cache ---
@@ -59,6 +189,9 @@
         return currency + Math.round(amount).toLocaleString('en-US');
     }
 
+    // Expose formatMoney globally for fullscreen chart
+    window._yisFormatMoney = formatMoney;
+
     function calculate(initial, monthly, rate, years) {
         const monthlyRate = rate / 100 / 12;
         const months = years * 12;
@@ -99,8 +232,11 @@
         setTimeout(() => els.toast.classList.remove('show'), 2500);
     }
 
+    // Expose showToast globally
+    window._yisShowToast = showToast;
+
     // --- Save / Load simulation ---
-    function saveSimulation() {
+    async function saveSimulation() {
         const data = {
             initial: els.initial.value,
             monthly: els.monthly.value,
@@ -109,8 +245,21 @@
             currency: currency,
             savedAt: new Date().toISOString(),
         };
+
+        // Always save to localStorage
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        showToast('Saved to this browser! Your settings will be here when you come back.');
+
+        // If logged in, also save to Firestore
+        if (currentUser) {
+            try {
+                await db.collection('simulations').doc(currentUser.uid).set(data);
+                showToast('Saved to your account! Access from any device.');
+            } catch (err) {
+                showToast('Saved locally. Cloud sync error — try again later.');
+            }
+        } else {
+            showToast('Saved to this browser! Sign in to save across devices.');
+        }
     }
 
     function loadSimulation() {
@@ -119,21 +268,40 @@
 
         try {
             const data = JSON.parse(raw);
-            els.initial.value = data.initial;
-            els.monthly.value = data.monthly;
-            els.rate.value = data.rate;
-            els.years.value = data.years;
-
-            if (data.currency) {
-                currency = data.currency;
-                document.querySelectorAll('.currency-btn').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.currency === currency);
-                });
-            }
-
+            applySimData(data);
             return true;
         } catch (e) {
             return false;
+        }
+    }
+
+    function applySimData(data) {
+        els.initial.value = data.initial;
+        els.monthly.value = data.monthly;
+        els.rate.value = data.rate;
+        els.years.value = data.years;
+
+        if (data.currency) {
+            currency = data.currency;
+            document.querySelectorAll('.currency-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.currency === currency);
+            });
+        }
+    }
+
+    async function loadFromCloud() {
+        if (!currentUser) return;
+        try {
+            const doc = await db.collection('simulations').doc(currentUser.uid).get();
+            if (doc.exists) {
+                const data = doc.data();
+                applySimData(data);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                update();
+                showToast('Welcome back! Your simulation was loaded from the cloud.');
+            }
+        } catch (err) {
+            // Silently fail - localStorage backup exists
         }
     }
 
@@ -298,6 +466,8 @@
         els.yearsVal.textContent = years + (years === 1 ? ' year' : ' years');
 
         const result = calculate(initial, monthly, rate, years);
+        lastYearlyData = result.yearlyData;
+        lastResult = result;
 
         // Hero + Goal
         els.heroAmount.textContent = formatMoney(result.finalBalance);
@@ -319,6 +489,9 @@
         updateComparison(monthly, rate);
         updateSliderFills();
     }
+
+    // Expose update and data globally for fullscreen chart
+    window._yisGetData = () => ({ yearlyData: lastYearlyData, result: lastResult });
 
     // --- Theme ---
     function initTheme() {
@@ -387,6 +560,61 @@
         $('saveBtn').addEventListener('click', saveSimulation);
     }
 
+    // --- Fullscreen chart on double-click ---
+    function initFullscreen() {
+        const chartContainer = $('chartContainer');
+        chartContainer.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openFullscreen();
+        });
+        // Also listen on the canvas itself
+        $('growthChart').addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openFullscreen();
+        });
+
+        // Close on Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeFullscreen();
+                closeAuthModal();
+            }
+        });
+
+        // Close auth modal on overlay click
+        $('authModal').addEventListener('click', (e) => {
+            if (e.target === $('authModal')) closeAuthModal();
+        });
+    }
+
+    // --- Auth state listener ---
+    function initAuth() {
+        auth.onAuthStateChanged((user) => {
+            currentUser = user;
+            const authBtn = $('authBtn');
+            const userMenu = $('userMenu');
+            const userAvatar = $('userAvatar');
+
+            if (user) {
+                authBtn.style.display = 'none';
+                userMenu.style.display = 'flex';
+                const initials = (user.displayName || user.email || '?')
+                    .split(' ')
+                    .map(w => w[0])
+                    .join('')
+                    .substring(0, 2)
+                    .toUpperCase();
+                userAvatar.textContent = initials;
+                loadFromCloud();
+            } else {
+                authBtn.style.display = '';
+                userMenu.style.display = 'none';
+            }
+        });
+    }
+
     // --- Init ---
     function init() {
         initTheme();
@@ -394,7 +622,7 @@
         // Load saved simulation if exists
         const loaded = loadSimulation();
         if (loaded) {
-            showToast('Welcome back! Your last simulation was restored from this browser.');
+            showToast('Welcome back! Your last simulation was restored.');
         }
 
         initCurrency();
@@ -402,6 +630,8 @@
         initNavbar();
         initSmoothScroll();
         initSave();
+        initFullscreen();
+        initAuth();
 
         [els.initial, els.monthly, els.rate, els.years].forEach(s => {
             s.addEventListener('input', update);
@@ -418,3 +648,127 @@
         init();
     }
 })();
+
+// --- Fullscreen chart renderer (outside IIFE to access global) ---
+function renderFullscreenChart() {
+    const data = window._yisGetData();
+    if (!data || !data.yearlyData) return;
+
+    const canvas = document.getElementById('fullscreenCanvas');
+    const ctx = canvas.getContext('2d');
+    const formatMoney = window._yisFormatMoney;
+
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+    const textColor = isDark ? '#888' : '#666';
+    const lineColor = isDark ? '#ffffff' : '#0a0a0a';
+    const dashedColor = isDark ? '#444' : '#bbb';
+    const tooltipBg = isDark ? '#111' : '#fff';
+    const tooltipText = isDark ? '#fff' : '#000';
+    const greenColor = isDark ? '#00e676' : '#00a854';
+
+    const labels = data.yearlyData.map(d => 'Year ' + d.year);
+    const balances = data.yearlyData.map(d => d.balance);
+    const invested = data.yearlyData.map(d => d.invested);
+
+    if (fullscreenChartInstance) {
+        fullscreenChartInstance.destroy();
+    }
+
+    fullscreenChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: 'Total Value',
+                    data: balances,
+                    borderColor: greenColor,
+                    backgroundColor: isDark ? 'rgba(0,230,118,0.05)' : 'rgba(0,168,84,0.05)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.35,
+                    pointRadius: 3,
+                    pointBackgroundColor: greenColor,
+                    pointHoverRadius: 8,
+                    pointHoverBackgroundColor: greenColor,
+                },
+                {
+                    label: 'Amount Invested',
+                    data: invested,
+                    borderColor: dashedColor,
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    borderDash: [8, 4],
+                    fill: false,
+                    tension: 0,
+                    pointRadius: 2,
+                    pointHoverRadius: 6,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { intersect: false, mode: 'index' },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        color: textColor,
+                        font: { family: 'Inter', size: 14 },
+                        boxWidth: 16,
+                        padding: 24,
+                        usePointStyle: true,
+                    },
+                },
+                tooltip: {
+                    backgroundColor: tooltipBg,
+                    titleColor: tooltipText,
+                    bodyColor: textColor,
+                    borderColor: isDark ? '#333' : '#ddd',
+                    borderWidth: 1,
+                    padding: 16,
+                    cornerRadius: 10,
+                    titleFont: { family: 'Space Grotesk', weight: '600', size: 16 },
+                    bodyFont: { family: 'Inter', size: 14 },
+                    callbacks: {
+                        label: (ctx) => ctx.dataset.label + ': ' + formatMoney(ctx.parsed.y),
+                    },
+                },
+            },
+            scales: {
+                x: {
+                    grid: { color: gridColor },
+                    ticks: { color: textColor, font: { family: 'Inter', size: 13 } },
+                },
+                y: {
+                    grid: { color: gridColor },
+                    ticks: { color: textColor, font: { family: 'Inter', size: 13 }, callback: (v) => formatMoney(v, true) },
+                },
+            },
+        },
+    });
+
+    // Update fullscreen stats
+    const statsEl = document.getElementById('fullscreenStats');
+    const r = data.result;
+    statsEl.innerHTML = `
+        <div class="fullscreen-stat">
+            <div class="fullscreen-stat-value">${formatMoney(r.finalBalance)}</div>
+            <div class="fullscreen-stat-label">Final Value</div>
+        </div>
+        <div class="fullscreen-stat">
+            <div class="fullscreen-stat-value">${formatMoney(r.totalContributed)}</div>
+            <div class="fullscreen-stat-label">You Put In</div>
+        </div>
+        <div class="fullscreen-stat">
+            <div class="fullscreen-stat-value green">${formatMoney(r.totalInterest)}</div>
+            <div class="fullscreen-stat-label">Market Gave You</div>
+        </div>
+        <div class="fullscreen-stat">
+            <div class="fullscreen-stat-value green">${r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '0x'}</div>
+            <div class="fullscreen-stat-label">Money Multiplied</div>
+        </div>
+    `;
+}
