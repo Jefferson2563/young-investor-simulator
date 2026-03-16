@@ -809,7 +809,7 @@ input[type="range"]::-moz-range-thumb {
     font-style: normal;
 }
 
-/* ========== HISTORICAL RETURNS REF ========== */
+/* ========== HISTORICAL RETURNS REF (Collapsible) ========== */
 .returns-ref {
     margin-bottom: 24px;
     padding: 16px;
@@ -824,7 +824,34 @@ input[type="range"]::-moz-range-thumb {
     text-transform: uppercase;
     letter-spacing: 1px;
     color: var(--text-muted);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.returns-ref-title::-webkit-details-marker { display: none; }
+.returns-ref-title::marker { display: none; content: ''; }
+
+.returns-ref-title::after {
+    content: '+';
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-muted);
+    transition: transform var(--transition);
+}
+
+.returns-ref[open] .returns-ref-title::after {
+    content: '-';
+}
+
+.returns-ref[open] .returns-ref-title {
     margin-bottom: 12px;
+}
+
+.returns-ref-title:hover {
+    color: var(--text-secondary);
 }
 
 .returns-ref-grid {

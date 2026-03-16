@@ -110,7 +110,7 @@
             savedAt: new Date().toISOString(),
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-        showToast('Simulation saved! Come back anytime.');
+        showToast('Saved to this browser! Your settings will be here when you come back.');
     }
 
     function loadSimulation() {
@@ -394,7 +394,7 @@
         // Load saved simulation if exists
         const loaded = loadSimulation();
         if (loaded) {
-            showToast('Welcome back! Your simulation was restored.');
+            showToast('Welcome back! Your last simulation was restored from this browser.');
         }
 
         initCurrency();

@@ -40,7 +40,7 @@
                 <a href="#legends">Legends</a>
             </div>
             <div class="nav-right">
-                <button class="save-btn" id="saveBtn" title="Save your simulation">
+                <button class="save-btn" id="saveBtn" title="Saves to this browser — come back anytime to continue">
                     <span class="save-icon">💾</span>
                     <span class="save-text">Save</span>
                 </button>
@@ -124,9 +124,9 @@
                         <div class="control-range"><span>1%</span><span>25%</span></div>
                     </div>
 
-                    <!-- Historical returns reference -->
-                    <div class="returns-ref" id="returnsRef">
-                        <div class="returns-ref-title">Historical annual returns (for reference)</div>
+                    <!-- Historical returns reference (collapsible) -->
+                    <details class="returns-ref" id="returnsRef">
+                        <summary class="returns-ref-title">Historical annual returns (for reference)</summary>
                         <div class="returns-ref-grid">
                             <div class="returns-ref-item">
                                 <span class="returns-ref-label">S&P 500</span>
@@ -160,7 +160,7 @@
                             </div>
                         </div>
                         <p class="returns-ref-note">Default 10% = S&P 500 average. Conservative but realistic long-term.</p>
-                    </div>
+                    </details>
 
                     <div class="control-group">
                         <div class="control-header">
