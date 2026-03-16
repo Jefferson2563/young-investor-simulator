@@ -1,0 +1,20 @@
+{
+  "name": "young-investor-simulator",
+  "version": "1.0.0",
+  "description": "Interactive investment simulator for young people - see how time and compound interest build wealth",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve . -l 3000"
+  },
+  "keywords": [
+    "investing",
+    "simulator",
+    "youth",
+    "compound-interest",
+    "finance"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "serve": "^14.2.6"
+  }
+}
