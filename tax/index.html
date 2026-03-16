@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Optimizer | Young Investor Simulator</title>
+    <meta name="description" content="Optimize your investment taxes across countries. PEA tracker, flat tax calculator, crypto tax, and smart tax-loss harvesting alerts for France, EU, and US.">
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/coming-soon.css">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="../" class="nav-logo">
+                <img src="../assets/logo.svg" alt="" class="logo-icon">
+                <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="../#simulator" id="nav-simulator">Simulator</a>
+                <a href="../portfolio/" class="nav-soon" title="Coming Soon" id="nav-portfolio">Portfolio</a>
+                <a href="../dividends/" class="nav-soon" title="Coming Soon" id="nav-dividends">Dividends</a>
+                <a href="../goals/" class="nav-soon" title="Coming Soon" id="nav-goals">Goals</a>
+                <a href="../tax/" class="nav-active" id="nav-tax">Tax</a>
+            </div>
+            <div class="nav-right">
+                <div class="lang-dropdown" id="langDropdown">
+                    <button class="lang-btn" id="langBtn" aria-label="Change language">
+                        <span id="langFlag">EN</span>
+                    </button>
+                    <div class="lang-menu" id="langMenu">
+                        <button class="lang-option active" data-lang="en">🇺🇸 English</button>
+                        <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
+                        <button class="lang-option" data-lang="es">🇪🇸 Español</button>
+                        <button class="lang-option" data-lang="pt">🇧🇷 Português</button>
+                        <button class="lang-option" data-lang="de">🇩🇪 Deutsch</button>
+                        <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
+                        <button class="lang-option" data-lang="zh">🇨🇳 中文</button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <span id="themeIcon">☀️</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="coming-soon-page">
+        <div class="container">
+            <div class="cs-icon">🏛️</div>
+            <h1 class="cs-title" id="cs-title">Tax Optimizer</h1>
+            <p class="cs-subtitle" id="cs-subtitle">Know exactly what you owe. Keep more of what you earn.</p>
+
+            <div class="cs-features">
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">🇫🇷</span>
+                    <h3 id="feat1-title">France: PEA &amp; Flat Tax</h3>
+                    <p id="feat1-desc">PEA tracker, flat tax (30%) vs progressive (TMI) comparison, IFI wealth tax calculator.</p>
+                </div>
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">🇪🇺</span>
+                    <h3 id="feat2-title">EU Tax Overview</h3>
+                    <p id="feat2-desc">Capital gains tax rates across major EU countries. Withholding tax on dividends by country.</p>
+                </div>
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">🇺🇸</span>
+                    <h3 id="feat3-title">US Capital Gains</h3>
+                    <p id="feat3-desc">Short-term vs long-term capital gains calculator. Tax bracket optimization strategies.</p>
+                </div>
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">₿</span>
+                    <h3 id="feat4-title">Crypto Tax</h3>
+                    <p id="feat4-desc">Track crypto gains per transaction (FIFO/LIFO). Import via CSV. Tax-loss harvesting alerts.</p>
+                </div>
+            </div>
+
+            <div class="cs-cta">
+                <div class="cs-badge" id="cs-badge">Coming Soon</div>
+                <p class="cs-notify-text" id="cs-notify">We're building this right now. Go back to the simulator while you wait.</p>
+                <a href="../#simulator" class="cs-btn" id="cs-btn">Back to Simulator</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <span id="footer-text">&copy; 2026 Young Investor Simulator. Built for the next generation.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        const saved = localStorage.getItem('yis-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', saved);
+        document.getElementById('themeIcon').textContent = saved === 'dark' ? '☀️' : '🌙';
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('yis-theme', next);
+            document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+        });
+
+        // Language system
+        const translations = {
+            en: {
+                title: 'Tax Optimizer',
+                subtitle: 'Know exactly what you owe. Keep more of what you earn.',
+                feat1Title: 'France: PEA & Flat Tax',
+                feat1Desc: 'PEA tracker, flat tax (30%) vs progressive (TMI) comparison, IFI wealth tax calculator.',
+                feat2Title: 'EU Tax Overview',
+                feat2Desc: 'Capital gains tax rates across major EU countries. Withholding tax on dividends by country.',
+                feat3Title: 'US Capital Gains',
+                feat3Desc: 'Short-term vs long-term capital gains calculator. Tax bracket optimization strategies.',
+                feat4Title: 'Crypto Tax',
+                feat4Desc: 'Track crypto gains per transaction (FIFO/LIFO). Import via CSV. Tax-loss harvesting alerts.',
+                badge: 'Coming Soon',
+                notify: "We're building this right now. Go back to the simulator while you wait.",
+                btn: 'Back to Simulator',
+                navSim: 'Simulator', navPort: 'Portfolio', navDiv: 'Dividends', navGoals: 'Goals', navTax: 'Tax',
+                footer: '© 2026 Young Investor Simulator. Built for the next generation.'
+            },
+            fr: {
+                title: 'Optimiseur Fiscal',
+                subtitle: 'Sachez exactement ce que vous devez. Gardez plus de ce que vous gagnez.',
+                feat1Title: 'France : PEA & Flat Tax',
+                feat1Desc: 'Suivi PEA, comparaison flat tax (30%) vs barème progressif (TMI), calculateur IFI.',
+                feat2Title: 'Fiscalité UE',
+                feat2Desc: "Taux d'imposition sur les plus-values dans les principaux pays de l'UE. Retenue à la source sur les dividendes par pays.",
+                feat3Title: 'Plus-Values US',
+                feat3Desc: 'Calculateur de plus-values court terme vs long terme. Stratégies d\'optimisation fiscale.',
+                feat4Title: 'Fiscalité Crypto',
+                feat4Desc: 'Suivez les gains crypto par transaction (FIFO/LIFO). Import CSV. Alertes de récolte de pertes fiscales.',
+                badge: 'Bientôt disponible',
+                notify: 'Nous construisons cette fonctionnalité. Retournez au simulateur en attendant.',
+                btn: 'Retour au simulateur',
+                navSim: 'Simulateur', navPort: 'Portfolio', navDiv: 'Dividendes', navGoals: 'Objectifs', navTax: 'Impôts',
+                footer: '© 2026 Young Investor Simulator. Conçu pour la prochaine génération.'
+            },
+            es: {
+                title: 'Optimizador Fiscal',
+                subtitle: 'Sabe exactamente lo que debes. Conserva más de lo que ganas.',
+                feat1Title: 'Francia: PEA e Impuesto Fijo',
+                feat1Desc: 'Rastreador PEA, comparación impuesto fijo (30%) vs progresivo (TMI), calculadora IFI.',
+                feat2Title: 'Fiscalidad UE',
+                feat2Desc: 'Tasas de impuesto sobre ganancias de capital en los principales países de la UE. Retención sobre dividendos por país.',
+                feat3Title: 'Ganancias de Capital EEUU',
+                feat3Desc: 'Calculadora de ganancias a corto vs largo plazo. Estrategias de optimización fiscal.',
+                feat4Title: 'Impuesto Cripto',
+                feat4Desc: 'Rastrea ganancias cripto por transacción (FIFO/LIFO). Importa vía CSV. Alertas de cosecha de pérdidas.',
+                badge: 'Próximamente',
+                notify: 'Estamos construyendo esto ahora. Vuelve al simulador mientras esperas.',
+                btn: 'Volver al simulador',
+                navSim: 'Simulador', navPort: 'Portafolio', navDiv: 'Dividendos', navGoals: 'Metas', navTax: 'Impuestos',
+                footer: '© 2026 Young Investor Simulator. Hecho para la próxima generación.'
+            },
+            pt: {
+                title: 'Otimizador Fiscal',
+                subtitle: 'Saiba exatamente o que deve. Fique com mais do que ganha.',
+                feat1Title: 'França: PEA & Flat Tax',
+                feat1Desc: 'Rastreador PEA, comparação flat tax (30%) vs progressivo (TMI), calculadora IFI.',
+                feat2Title: 'Fiscalidade UE',
+                feat2Desc: 'Taxas de imposto sobre ganhos de capital nos principais países da UE. Retenção na fonte sobre dividendos por país.',
+                feat3Title: 'Ganhos de Capital EUA',
+                feat3Desc: 'Calculadora de ganhos de curto vs longo prazo. Estratégias de otimização fiscal.',
+                feat4Title: 'Imposto Cripto',
+                feat4Desc: 'Rastreie ganhos cripto por transação (FIFO/LIFO). Importe via CSV. Alertas de colheita de perdas fiscais.',
+                badge: 'Em breve',
+                notify: 'Estamos construindo isso agora. Volte ao simulador enquanto espera.',
+                btn: 'Voltar ao simulador',
+                navSim: 'Simulador', navPort: 'Portfólio', navDiv: 'Dividendos', navGoals: 'Metas', navTax: 'Impostos',
+                footer: '© 2026 Young Investor Simulator. Feito para a próxima geração.'
+            },
+            de: {
+                title: 'Steuer-Optimierer',
+                subtitle: 'Wisse genau, was du schuldest. Behalte mehr von dem, was du verdienst.',
+                feat1Title: 'Frankreich: PEA & Pauschalsteuer',
+                feat1Desc: 'PEA-Tracker, Pauschalsteuer (30%) vs progressive Steuer (TMI), IFI-Vermögenssteuer-Rechner.',
+                feat2Title: 'EU-Steuerübersicht',
+                feat2Desc: 'Kapitalertragssteuersätze in den wichtigsten EU-Ländern. Quellensteuer auf Dividenden nach Land.',
+                feat3Title: 'US-Kapitalerträge',
+                feat3Desc: 'Rechner für kurz- vs langfristige Kapitalerträge. Steueroptimierungsstrategien.',
+                feat4Title: 'Krypto-Steuer',
+                feat4Desc: 'Verfolge Krypto-Gewinne pro Transaktion (FIFO/LIFO). CSV-Import. Steuerliche Verlustverrechnung.',
+                badge: 'Kommt bald',
+                notify: 'Wir bauen das gerade. Geh zurück zum Simulator.',
+                btn: 'Zurück zum Simulator',
+                navSim: 'Simulator', navPort: 'Portfolio', navDiv: 'Dividenden', navGoals: 'Ziele', navTax: 'Steuern',
+                footer: '© 2026 Young Investor Simulator. Für die nächste Generation gebaut.'
+            },
+            ar: {
+                title: 'محسّن الضرائب',
+                subtitle: 'اعرف بالضبط ما تدين به. احتفظ بالمزيد مما تكسبه.',
+                feat1Title: 'فرنسا: PEA والضريبة الثابتة',
+                feat1Desc: 'متتبع PEA، مقارنة الضريبة الثابتة (30%) مع التصاعدية (TMI)، حاسبة ضريبة الثروة IFI.',
+                feat2Title: 'نظرة على ضرائب الاتحاد الأوروبي',
+                feat2Desc: 'معدلات ضريبة أرباح رأس المال في دول الاتحاد الأوروبي الرئيسية. ضريبة الاستقطاع على الأرباح حسب الدولة.',
+                feat3Title: 'أرباح رأس المال الأمريكية',
+                feat3Desc: 'حاسبة أرباح رأس المال قصيرة وطويلة الأجل. استراتيجيات تحسين الشرائح الضريبية.',
+                feat4Title: 'ضريبة العملات الرقمية',
+                feat4Desc: 'تتبع أرباح العملات الرقمية لكل معاملة (FIFO/LIFO). استيراد عبر CSV. تنبيهات حصاد الخسائر الضريبية.',
+                badge: 'قريبًا',
+                notify: 'نحن نبني هذا الآن. عد إلى المحاكي.',
+                btn: 'العودة إلى المحاكي',
+                navSim: 'المحاكي', navPort: 'المحفظة', navDiv: 'الأرباح', navGoals: 'الأهداف', navTax: 'الضرائب',
+                footer: '© 2026 Young Investor Simulator. صُمم للجيل القادم.'
+            },
+            zh: {
+                title: '税务优化器',
+                subtitle: '精确了解应缴税款，保留更多收益。',
+                feat1Title: '法国：PEA 与固定税率',
+                feat1Desc: 'PEA 追踪器，固定税率 (30%) 与累进税率 (TMI) 对比，IFI 财富税计算器。',
+                feat2Title: '欧盟税务概览',
+                feat2Desc: '欧盟主要国家的资本利得税率。各国股息预扣税。',
+                feat3Title: '美国资本利得',
+                feat3Desc: '短期与长期资本利得计算器。税级优化策略。',
+                feat4Title: '加密货币税',
+                feat4Desc: '按交易追踪加密货币收益（FIFO/LIFO）。CSV 导入。税损收割提醒。',
+                badge: '即将推出',
+                notify: '我们正在建设中。请先回到模拟器。',
+                btn: '返回模拟器',
+                navSim: '模拟器', navPort: '投资组合', navDiv: '股息', navGoals: '目标', navTax: '税务',
+                footer: '© 2026 Young Investor Simulator. 为下一代而建。'
+            }
+        };
+
+        const langLabels = { en: 'EN', fr: 'FR', es: 'ES', pt: 'PT', de: 'DE', ar: 'AR', zh: 'ZH' };
+
+        function applyLanguage(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.getElementById('cs-title').textContent = t.title;
+            document.getElementById('cs-subtitle').textContent = t.subtitle;
+            document.getElementById('feat1-title').textContent = t.feat1Title;
+            document.getElementById('feat1-desc').textContent = t.feat1Desc;
+            document.getElementById('feat2-title').textContent = t.feat2Title;
+            document.getElementById('feat2-desc').textContent = t.feat2Desc;
+            document.getElementById('feat3-title').textContent = t.feat3Title;
+            document.getElementById('feat3-desc').textContent = t.feat3Desc;
+            document.getElementById('feat4-title').textContent = t.feat4Title;
+            document.getElementById('feat4-desc').textContent = t.feat4Desc;
+            document.getElementById('cs-badge').textContent = t.badge;
+            document.getElementById('cs-notify').textContent = t.notify;
+            document.getElementById('cs-btn').textContent = t.btn;
+            document.getElementById('nav-simulator').textContent = t.navSim;
+            document.getElementById('nav-portfolio').textContent = t.navPort;
+            document.getElementById('nav-dividends').textContent = t.navDiv;
+            document.getElementById('nav-goals').textContent = t.navGoals;
+            document.getElementById('nav-tax').textContent = t.navTax;
+            document.getElementById('footer-text').innerHTML = t.footer;
+            document.getElementById('langFlag').textContent = langLabels[lang];
+
+            if (lang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+                document.documentElement.setAttribute('lang', 'ar');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+                document.documentElement.setAttribute('lang', lang);
+            }
+
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.lang === lang);
+            });
+
+            localStorage.setItem('yis-lang', lang);
+        }
+
+        document.getElementById('langBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('langDropdown').classList.toggle('open');
+        });
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                applyLanguage(opt.dataset.lang);
+                document.getElementById('langDropdown').classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', () => {
+            document.getElementById('langDropdown').classList.remove('open');
+        });
+
+        const savedLang = localStorage.getItem('yis-lang') || 'en';
+        applyLanguage(savedLang);
+    </script>
+</body>
+</html>

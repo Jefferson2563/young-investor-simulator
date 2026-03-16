@@ -21,7 +21,8 @@ function switchAuthTab(tab) {
     document.querySelector(`.auth-tab[data-tab="${tab}"]`).classList.add('active');
     document.getElementById('signinForm').style.display = tab === 'signin' ? 'flex' : 'none';
     document.getElementById('signupForm').style.display = tab === 'signup' ? 'flex' : 'none';
-    document.getElementById('authTitle').textContent = tab === 'signin' ? 'Sign In' : 'Create Account';
+    const _t = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
+    document.getElementById('authTitle').textContent = tab === 'signin' ? (_t.signIn || 'Sign In') : (_t.createAccount || 'Create Account');
 }
 
 async function handleSignIn(e) {
@@ -32,7 +33,8 @@ async function handleSignIn(e) {
     const btn = document.getElementById('signinSubmit');
 
     btn.disabled = true;
-    btn.textContent = 'Signing in...';
+    const _ts = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
+    btn.textContent = _ts.signingIn || 'Signing in...';
     errorEl.textContent = '';
 
     try {
@@ -42,7 +44,7 @@ async function handleSignIn(e) {
         errorEl.textContent = friendlyError(err.code);
     } finally {
         btn.disabled = false;
-        btn.textContent = 'Sign In';
+        btn.textContent = _ts.signIn || 'Sign In';
     }
 }
 
@@ -55,7 +57,8 @@ async function handleSignUp(e) {
     const btn = document.getElementById('signupSubmit');
 
     btn.disabled = true;
-    btn.textContent = 'Creating account...';
+    const _tc = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
+    btn.textContent = _tc.creatingAccount || 'Creating account...';
     errorEl.textContent = '';
 
     try {
@@ -66,7 +69,7 @@ async function handleSignUp(e) {
         errorEl.textContent = friendlyError(err.code);
     } finally {
         btn.disabled = false;
-        btn.textContent = 'Create Account';
+        btn.textContent = _tc.createAccount || 'Create Account';
     }
 }
 
@@ -90,23 +93,24 @@ function shareResults() {
     if (!data || !data.result) return;
     const r = data.result;
     const fmt = window._yisFormatMoney;
-    const text = `I just simulated my investment future!\n\n` +
-        `Final value: ${fmt(r.finalBalance)}\n` +
-        `I put in: ${fmt(r.totalContributed)}\n` +
-        `Market gave me: ${fmt(r.totalInterest)}\n` +
-        `Money multiplied: ${r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '0x'}\n\n` +
-        `Try it yourself: ${window.location.href}\n` +
+    const _ts = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
+    const text = `${_ts.shareISimulated || 'I just simulated my investment future!'}\n\n` +
+        `${_ts.shareFinalValue || 'Final value'}: ${fmt(r.finalBalance)}\n` +
+        `${_ts.shareIPutIn || 'I put in'}: ${fmt(r.totalContributed)}\n` +
+        `${_ts.shareMarketGave || 'Market gave me'}: ${fmt(r.totalInterest)}\n` +
+        `${_ts.shareMoneyMultiplied || 'Money multiplied'}: ${r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '0x'}\n\n` +
+        `${_ts.shareTryIt || 'Try it yourself'}: ${window.location.href}\n` +
         `#YoungInvestorSimulator #Investing #CompoundInterest`;
 
     if (navigator.share) {
         navigator.share({
-            title: 'My Investment Simulation',
+            title: _ts.shareTitle || 'My Investment Simulation',
             text: text,
             url: window.location.href,
         }).catch(() => {});
     } else {
         navigator.clipboard.writeText(text).then(() => {
-            window._yisShowToast('Results copied to clipboard! Share it anywhere.');
+            window._yisShowToast((_ts || {}).toastCopied || 'Results copied to clipboard!');
         }).catch(() => {
             // Fallback: select text in a prompt
             prompt('Copy your results:', text);
@@ -212,10 +216,79 @@ function closeFullscreen() {
         { text: "Wide diversification is only required when investors do not understand what they are doing.", author: "Warren Buffett" },
     ];
 
+    // --- Smart Slider Mapping ---
+    // Maps a linear slider (0-1000) to non-linear real values via breakpoints
+    const sliderMaps = {
+        initial: {
+            // [sliderPos, realValue] pairs — piecewise linear interpolation
+            points: [[0,0],[100,1000],[200,5000],[400,10000],[600,50000],[750,100000],[850,500000],[950,1000000],[1000,10000000]],
+        },
+        monthly: {
+            points: [[0,0],[100,250],[200,500],[400,1000],[600,2000],[750,5000],[850,10000],[950,25000],[1000,50000]],
+        },
+    };
+
+    function sliderToValue(map, pos) {
+        const pts = map.points;
+        if (pos <= pts[0][0]) return pts[0][1];
+        if (pos >= pts[pts.length - 1][0]) return pts[pts.length - 1][1];
+        for (let i = 1; i < pts.length; i++) {
+            if (pos <= pts[i][0]) {
+                const [x0, y0] = pts[i - 1];
+                const [x1, y1] = pts[i];
+                const t = (pos - x0) / (x1 - x0);
+                return y0 + t * (y1 - y0);
+            }
+        }
+        return pts[pts.length - 1][1];
+    }
+
+    function valueToSlider(map, val) {
+        const pts = map.points;
+        if (val <= pts[0][1]) return pts[0][0];
+        if (val >= pts[pts.length - 1][1]) return pts[pts.length - 1][0];
+        for (let i = 1; i < pts.length; i++) {
+            if (val <= pts[i][1]) {
+                const [x0, y0] = pts[i - 1];
+                const [x1, y1] = pts[i];
+                const t = (val - y0) / (y1 - y0);
+                return x0 + t * (x1 - x0);
+            }
+        }
+        return pts[pts.length - 1][0];
+    }
+
+    // Snap values to nice round numbers based on their magnitude
+    function snapValue(val) {
+        if (val <= 0) return 0;
+        if (val < 1000) return Math.round(val / 100) * 100;
+        if (val < 10000) return Math.round(val / 500) * 500;
+        if (val < 100000) return Math.round(val / 5000) * 5000;
+        if (val < 1000000) return Math.round(val / 25000) * 25000;
+        return Math.round(val / 100000) * 100000;
+    }
+
+    function getMappedValue(sliderId) {
+        const el = els[sliderId];
+        const map = sliderMaps[sliderId];
+        if (!map) return parseFloat(el.value); // annualReturn and years use raw values
+        return snapValue(sliderToValue(map, parseFloat(el.value)));
+    }
+
     // --- Utilities ---
     function formatMoney(amount, compact) {
-        if (compact && amount >= 1_000_000) return currency + (amount / 1_000_000).toFixed(1) + 'M';
-        if (compact && amount >= 100_000) return currency + (amount / 1_000).toFixed(0) + 'K';
+        const abs = Math.abs(amount);
+        // For astronomically large numbers, use exponential notation
+        if (abs >= 1e18) {
+            const exp = Math.floor(Math.log10(abs));
+            const mantissa = (amount / Math.pow(10, exp)).toFixed(1);
+            return currency + mantissa + 'e' + exp;
+        }
+        // Always use compact for very large numbers
+        if (abs >= 1_000_000_000_000) return currency + (amount / 1_000_000_000_000).toFixed(1) + 'T';
+        if ((compact || abs >= 1e12) && abs >= 1_000_000_000) return currency + (amount / 1_000_000_000).toFixed(1) + 'B';
+        if (compact && abs >= 1_000_000) return currency + (amount / 1_000_000).toFixed(1) + 'M';
+        if (compact && abs >= 100_000) return currency + (amount / 1_000).toFixed(0) + 'K';
         return currency + Math.round(amount).toLocaleString('en-US');
     }
 
@@ -246,9 +319,10 @@ function closeFullscreen() {
     }
 
     function yearsToReach(initial, monthly, rate, target) {
+        if (initial >= target) return '0';
         const monthlyRate = rate / 100 / 12;
         let balance = initial;
-        for (let m = 1; m <= 600; m++) {
+        for (let m = 1; m <= 1200; m++) {
             balance = balance * (1 + monthlyRate) + monthly;
             if (balance >= target) return (m / 12).toFixed(1);
         }
@@ -269,7 +343,9 @@ function closeFullscreen() {
     async function saveSimulation() {
         const data = {
             initial: els.initial.value,
+            initialMapped: getMappedValue('initial'),
             monthly: els.monthly.value,
+            monthlyMapped: getMappedValue('monthly'),
             rate: els.rate.value,
             years: els.years.value,
             currency: currency,
@@ -444,32 +520,58 @@ function closeFullscreen() {
     }
 
     // --- Milestones ---
-    function updateMilestones(initial, monthly, rate, years) {
-        const targets = [1000, 5000, 10000, 25000, 50000, 100000, 250000, 500000, 1000000];
-        const icons = ['🌱', '🌿', '🪴', '🌳', '🏔️', '💎', '🚀', '🏦', '👑'];
-        const result = calculate(initial, monthly, rate, years);
+    const allMilestones = [
+        { target: 1000,        icon: '🌱' },
+        { target: 5000,        icon: '🌿' },
+        { target: 10000,       icon: '🪴' },
+        { target: 25000,       icon: '🌳' },
+        { target: 50000,       icon: '🏔️' },
+        { target: 100000,      icon: '💎' },
+        { target: 250000,      icon: '🚀' },
+        { target: 500000,      icon: '🏦' },
+        { target: 1000000,     icon: '👑' },
+        { target: 2500000,     icon: '🌟' },
+        { target: 5000000,     icon: '🏆' },
+        { target: 10000000,    icon: '💰' },
+        { target: 50000000,    icon: '🏰' },
+        { target: 100000000,   icon: '🌍' },
+        { target: 1000000000,  icon: '🪐' },
+    ];
 
-        els.milestones.innerHTML = targets.map((target, i) => {
-            const yr = yearsToReach(initial, monthly, rate, target);
-            const reached = result.finalBalance >= target;
+    function updateMilestones(initial, monthly, rate, years) {
+        const result = calculate(initial, monthly, rate, years);
+        const finalBal = result.finalBalance;
+
+        // Filter milestones: show targets that are above starting amount and relevant to scale
+        // Always show ~9 milestones for good UX
+        const relevant = allMilestones.filter(m => m.target > initial * 0.5);
+        const shown = relevant.slice(0, 9);
+
+        els.milestones.innerHTML = shown.map(m => {
+            const yr = yearsToReach(initial, monthly, rate, m.target);
+            const reached = finalBal >= m.target;
             return `<div class="milestone ${reached ? 'reached' : ''}">
-                <span class="milestone-icon">${icons[i]}</span>
-                <span class="milestone-amount">${formatMoney(target, true)}</span>
-                ${reached && yr ? `<span class="milestone-year">Year ${yr}</span>` : ''}
+                <span class="milestone-icon">${m.icon}</span>
+                <span class="milestone-amount">${formatMoney(m.target, true)}</span>
+                ${reached && yr ? `<span class="milestone-year">${(translations[currentLang]||translations.en).milestoneYear} ${yr}</span>` : ''}
             </div>`;
         }).join('');
     }
 
     // --- Comparison ---
-    function updateComparison(monthly, rate) {
-        const res20 = calculate(0, monthly, rate, 30);
-        const res30 = calculate(0, monthly, rate, 20);
-        els.startAt20.textContent = formatMoney(res20.finalBalance);
-        els.startAt30.textContent = formatMoney(res30.finalBalance);
+    function updateComparison(monthly, rate, years) {
+        // Use the user's actual duration: "start at 20" gets full duration, "start at 30" gets 10 fewer years
+        const earlyYears = Math.max(years, 11); // at least 11 so the late starter has 1 year
+        const lateYears = Math.max(earlyYears - 10, 1);
+        const res20 = calculate(0, monthly, rate, earlyYears);
+        const res30 = calculate(0, monthly, rate, lateYears);
+        els.startAt20.textContent = formatMoney(res20.finalBalance, res20.finalBalance >= 1_000_000);
+        els.startAt30.textContent = formatMoney(res30.finalBalance, res30.finalBalance >= 1_000_000);
 
         const diff = res20.finalBalance - res30.finalBalance;
-        const pct = ((diff / res30.finalBalance) * 100).toFixed(0);
-        els.compDiff.innerHTML = `Starting 10 years earlier = <strong>${formatMoney(diff)}</strong> more (${pct}%). Time beats everything.`;
+        const pct = res30.finalBalance > 0 ? ((diff / res30.finalBalance) * 100).toFixed(0) : '0';
+        const ct = translations[currentLang] || translations.en;
+        els.compDiff.innerHTML = ct.compDiffStart + `<strong>${formatMoney(diff, diff >= 1_000_000)}</strong>` + ` (${pct}%)` + ct.compDiffEnd;
     }
 
     // --- Slider Fills ---
@@ -483,40 +585,63 @@ function closeFullscreen() {
         });
     }
 
+    // --- Dynamic Goal Target ---
+    // Pick the next meaningful milestone above the user's starting amount
+    function getGoalTarget(initial, finalBalance) {
+        const goalSteps = [100000, 250000, 500000, 1000000, 5000000, 10000000, 50000000, 100000000, 1000000000];
+        // Find first goal that's meaningfully above starting amount
+        for (const g of goalSteps) {
+            if (g > initial * 1.5 && g > 10000) return g;
+        }
+        return goalSteps[goalSteps.length - 1];
+    }
+
     // --- Main Update ---
     function update() {
-        const initial = parseFloat(els.initial.value);
-        const monthly = parseFloat(els.monthly.value);
+        const initial = getMappedValue('initial');
+        const monthly = getMappedValue('monthly');
         const rate = parseFloat(els.rate.value);
         const years = parseInt(els.years.value);
 
         els.initialVal.textContent = formatMoney(initial);
         els.monthlyVal.textContent = formatMoney(monthly);
         els.returnVal.textContent = rate + '%';
-        els.yearsVal.textContent = years + (years === 1 ? ' year' : ' years');
+        const t = translations[currentLang] || translations.en;
+        els.yearsVal.textContent = years + ' ' + (years === 1 ? t.year : t.years);
 
         const result = calculate(initial, monthly, rate, years);
         lastYearlyData = result.yearlyData;
         lastResult = result;
 
-        // Hero + Goal
-        els.heroAmount.textContent = formatMoney(result.finalBalance);
-        els.goalAmount.textContent = formatMoney(result.finalBalance);
-        els.goalCard.classList.toggle('hit', result.finalBalance >= 100000);
+        // Hero + Goal — use compact for very large numbers
+        const useCompact = result.finalBalance >= 1_000_000_000;
+        els.heroAmount.textContent = formatMoney(result.finalBalance, useCompact);
+        els.goalAmount.textContent = formatMoney(result.finalBalance, useCompact);
+        const goalTarget = getGoalTarget(initial, result.finalBalance);
+        els.goalCard.classList.toggle('hit', result.finalBalance >= goalTarget);
 
-        // Stats
-        els.totalInvested.textContent = formatMoney(result.totalContributed);
-        els.totalInterest.textContent = formatMoney(result.totalInterest);
-        els.multiplier.textContent = result.totalContributed > 0
-            ? (result.finalBalance / result.totalContributed).toFixed(1) + 'x'
-            : '0x';
+        // Stats — use compact for very large numbers
+        els.totalInvested.textContent = formatMoney(result.totalContributed, result.totalContributed >= 1_000_000_000);
+        els.totalInterest.textContent = formatMoney(result.totalInterest, result.totalInterest >= 1_000_000_000);
+        const mult = result.totalContributed > 0 ? result.finalBalance / result.totalContributed : 0;
+        if (mult >= 1e6) {
+            const exp = Math.floor(Math.log10(mult));
+            els.multiplier.textContent = (mult / Math.pow(10, exp)).toFixed(1) + 'e' + exp + 'x';
+        } else {
+            els.multiplier.textContent = mult.toFixed(1) + 'x';
+        }
 
-        const yrs100k = yearsToReach(initial, monthly, rate, 100000);
-        els.goalYears.textContent = yrs100k ? yrs100k + ' yrs' : '50+ yrs';
+        // Dynamic goal label
+        const goalLabel = formatMoney(goalTarget, true);
+        const goalLabelEl = document.getElementById('goalLabel');
+        const tl = translations[currentLang] || translations.en;
+        if (goalLabelEl) goalLabelEl.textContent = tl.toHitPrefix + ' ' + goalLabel;
+        const yrsGoal = yearsToReach(initial, monthly, rate, goalTarget);
+        els.goalYears.textContent = yrsGoal ? yrsGoal + ' ' + tl.yrs : '100+ ' + tl.yrs;
 
         updateChart(result.yearlyData);
         updateMilestones(initial, monthly, rate, years);
-        updateComparison(monthly, rate);
+        updateComparison(monthly, rate, years);
         updateSliderFills();
     }
 
@@ -591,15 +716,7 @@ function closeFullscreen() {
     }
 
     // --- i18n / Language selector ---
-    const translations = {
-        en: { heroTitle1: 'Your money could be', heroBadge: 'Built for Gen Z & Millennials', heroSub: 'Starting with just $500 and $100/month. No trust fund needed.', heroSub2: 'See for yourself below.', heroCta: 'Try the simulator', simTitle: 'Play with the numbers', simDesc: 'Move the sliders. Watch your future change in real-time.', starting: 'Starting amount', monthly: 'Monthly contribution', annual: 'Annual return', duration: 'Duration', youPutIn: 'You put in', marketGave: 'Market gave you', multiplied: 'Money multiplied', toHit100k: 'To hit 100K', share: 'Share my results', milestoneTitle: 'Your milestones', milestoneDesc: 'Each one brings you closer to financial freedom.', compTitle: 'Starting at 20 vs 30', compDesc: 'Same monthly amount. 10 years difference. Life-changing gap.', legendsTitle: 'They all started young', legendsDesc: "The world's greatest investors didn't wait. Neither should you.", signIn: 'Sign In', flag: 'EN' },
-        fr: { heroTitle1: 'Votre argent pourrait devenir', heroBadge: 'Fait pour la Gen Z & Millennials', heroSub: 'En commen\u00e7ant avec 500$ et 100$/mois. Pas besoin de fonds fiduciaire.', heroSub2: 'V\u00e9rifiez par vous-m\u00eame ci-dessous.', heroCta: 'Essayer le simulateur', simTitle: 'Jouez avec les chiffres', simDesc: 'Bougez les curseurs. Regardez votre avenir changer en temps r\u00e9el.', starting: 'Montant initial', monthly: 'Contribution mensuelle', annual: 'Rendement annuel', duration: 'Dur\u00e9e', youPutIn: 'Vous avez mis', marketGave: 'Le march\u00e9 vous a donn\u00e9', multiplied: 'Argent multipli\u00e9', toHit100k: 'Pour atteindre 100K', share: 'Partager mes r\u00e9sultats', milestoneTitle: 'Vos jalons', milestoneDesc: 'Chacun vous rapproche de la libert\u00e9 financi\u00e8re.', compTitle: 'Commencer \u00e0 20 vs 30 ans', compDesc: 'M\u00eame montant mensuel. 10 ans de diff\u00e9rence. \u00c9cart qui change la vie.', legendsTitle: 'Ils ont tous commenc\u00e9 jeunes', legendsDesc: "Les plus grands investisseurs n'ont pas attendu. Vous non plus.", signIn: 'Connexion', flag: 'FR' },
-        es: { heroTitle1: 'Tu dinero podr\u00eda ser', heroBadge: 'Hecho para Gen Z y Millennials', heroSub: 'Empezando con $500 y $100/mes. Sin fondo fiduciario.', heroSub2: 'Compru\u00e9balo t\u00fa mismo.', heroCta: 'Probar el simulador', simTitle: 'Juega con los n\u00fameros', simDesc: 'Mueve los controles. Mira tu futuro cambiar en tiempo real.', starting: 'Cantidad inicial', monthly: 'Contribuci\u00f3n mensual', annual: 'Rendimiento anual', duration: 'Duraci\u00f3n', youPutIn: 'Pusiste', marketGave: 'El mercado te dio', multiplied: 'Dinero multiplicado', toHit100k: 'Para llegar a 100K', share: 'Compartir mis resultados', milestoneTitle: 'Tus hitos', milestoneDesc: 'Cada uno te acerca a la libertad financiera.', compTitle: 'Empezar a los 20 vs 30', compDesc: 'Mismo monto mensual. 10 a\u00f1os de diferencia. Brecha que cambia la vida.', legendsTitle: 'Todos empezaron j\u00f3venes', legendsDesc: 'Los mayores inversores no esperaron. T\u00fa tampoco.', signIn: 'Iniciar sesi\u00f3n', flag: 'ES' },
-        pt: { heroTitle1: 'Seu dinheiro poderia ser', heroBadge: 'Feito para Gen Z & Millennials', heroSub: 'Come\u00e7ando com $500 e $100/m\u00eas. Sem fundo fiduci\u00e1rio.', heroSub2: 'Veja por si mesmo abaixo.', heroCta: 'Experimentar o simulador', simTitle: 'Brinque com os n\u00fameros', simDesc: 'Mova os controles. Veja seu futuro mudar em tempo real.', starting: 'Valor inicial', monthly: 'Contribui\u00e7\u00e3o mensal', annual: 'Retorno anual', duration: 'Dura\u00e7\u00e3o', youPutIn: 'Voc\u00ea colocou', marketGave: 'O mercado te deu', multiplied: 'Dinheiro multiplicado', toHit100k: 'Para atingir 100K', share: 'Compartilhar meus resultados', milestoneTitle: 'Seus marcos', milestoneDesc: 'Cada um te aproxima da liberdade financeira.', compTitle: 'Come\u00e7ar aos 20 vs 30', compDesc: 'Mesmo valor mensal. 10 anos de diferen\u00e7a. Diferen\u00e7a que muda a vida.', legendsTitle: 'Todos come\u00e7aram jovens', legendsDesc: 'Os maiores investidores n\u00e3o esperaram. Voc\u00ea tamb\u00e9m n\u00e3o.', signIn: 'Entrar', flag: 'PT' },
-        de: { heroTitle1: 'Dein Geld k\u00f6nnte werden', heroBadge: 'Gebaut f\u00fcr Gen Z & Millennials', heroSub: 'Starte mit $500 und $100/Monat. Kein Treuhandfonds n\u00f6tig.', heroSub2: '\u00dcberzeuge dich selbst.', heroCta: 'Simulator ausprobieren', simTitle: 'Spiel mit den Zahlen', simDesc: 'Bewege die Regler. Sieh deine Zukunft in Echtzeit.', starting: 'Startbetrag', monthly: 'Monatlicher Beitrag', annual: 'J\u00e4hrliche Rendite', duration: 'Dauer', youPutIn: 'Du hast eingezahlt', marketGave: 'Der Markt gab dir', multiplied: 'Geld multipliziert', toHit100k: 'Bis 100K', share: 'Meine Ergebnisse teilen', milestoneTitle: 'Deine Meilensteine', milestoneDesc: 'Jeder bringt dich der finanziellen Freiheit n\u00e4her.', compTitle: 'Start mit 20 vs 30', compDesc: 'Gleicher Betrag. 10 Jahre Unterschied. Lebensver\u00e4ndernde L\u00fccke.', legendsTitle: 'Sie haben alle jung angefangen', legendsDesc: 'Die gr\u00f6\u00dften Investoren haben nicht gewartet. Du auch nicht.', signIn: 'Anmelden', flag: 'DE' },
-        ar: { heroTitle1: '\u0623\u0645\u0648\u0627\u0644\u0643 \u064a\u0645\u0643\u0646 \u0623\u0646 \u062a\u0635\u0628\u062d', heroBadge: '\u0645\u0635\u0645\u0645 \u0644\u0644\u062c\u064a\u0644 \u0632\u064a \u0648\u0627\u0644\u0645\u064a\u0644\u064a\u0646\u064a\u0627\u0644', heroSub: '\u0627\u0628\u062f\u0623 \u0628\u0640 500$ \u0648 100$/\u0634\u0647\u0631.', heroSub2: '\u062c\u0631\u0628 \u0628\u0646\u0641\u0633\u0643.', heroCta: '\u062c\u0631\u0628 \u0627\u0644\u0645\u062d\u0627\u0643\u064a', simTitle: '\u0627\u0644\u0639\u0628 \u0628\u0627\u0644\u0623\u0631\u0642\u0627\u0645', simDesc: '\u062d\u0631\u0643 \u0627\u0644\u0645\u0632\u0627\u0644\u0642. \u0634\u0627\u0647\u062f \u0645\u0633\u062a\u0642\u0628\u0644\u0643 \u064a\u062a\u063a\u064a\u0631.', starting: '\u0627\u0644\u0645\u0628\u0644\u063a \u0627\u0644\u0623\u0648\u0644\u064a', monthly: '\u0627\u0644\u0645\u0633\u0627\u0647\u0645\u0629 \u0627\u0644\u0634\u0647\u0631\u064a\u0629', annual: '\u0627\u0644\u0639\u0627\u0626\u062f \u0627\u0644\u0633\u0646\u0648\u064a', duration: '\u0627\u0644\u0645\u062f\u0629', youPutIn: '\u0623\u0646\u062a \u0648\u0636\u0639\u062a', marketGave: '\u0627\u0644\u0633\u0648\u0642 \u0623\u0639\u0637\u0627\u0643', multiplied: '\u0627\u0644\u0645\u0627\u0644 \u062a\u0636\u0627\u0639\u0641', toHit100k: '\u0644\u0644\u0648\u0635\u0648\u0644 \u0644 100K', share: '\u0634\u0627\u0631\u0643 \u0646\u062a\u0627\u0626\u062c\u064a', milestoneTitle: '\u0625\u0646\u062c\u0627\u0632\u0627\u062a\u0643', milestoneDesc: '\u0643\u0644 \u0648\u0627\u062d\u062f \u064a\u0642\u0631\u0628\u0643 \u0645\u0646 \u0627\u0644\u062d\u0631\u064a\u0629 \u0627\u0644\u0645\u0627\u0644\u064a\u0629.', compTitle: '\u0627\u0644\u0628\u062f\u0621 \u0641\u064a 20 \u0645\u0642\u0627\u0628\u0644 30', compDesc: '\u0646\u0641\u0633 \u0627\u0644\u0645\u0628\u0644\u063a. 10 \u0633\u0646\u0648\u0627\u062a \u0641\u0631\u0642.', legendsTitle: '\u0643\u0644\u0647\u0645 \u0628\u062f\u0623\u0648\u0627 \u0635\u063a\u0627\u0631\u0627', legendsDesc: '\u0623\u0639\u0638\u0645 \u0627\u0644\u0645\u0633\u062a\u062b\u0645\u0631\u064a\u0646 \u0644\u0645 \u064a\u0646\u062a\u0638\u0631\u0648\u0627.', signIn: '\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062f\u062e\u0648\u0644', flag: 'AR' },
-        zh: { heroTitle1: '\u4f60\u7684\u94b1\u53ef\u4ee5\u53d8\u6210', heroBadge: '\u4e13\u4e3a Z \u4e16\u4ee3\u548c\u5343\u79a7\u4e00\u4ee3\u6253\u9020', heroSub: '\u4ece 500$ \u548c\u6bcf\u6708 100$ \u5f00\u59cb\u3002', heroSub2: '\u81ea\u5df1\u770b\u770b\u4e0b\u9762\u3002', heroCta: '\u8bd5\u8bd5\u6a21\u62df\u5668', simTitle: '\u73a9\u8f6c\u6570\u5b57', simDesc: '\u79fb\u52a8\u6ed1\u5757\u3002\u5b9e\u65f6\u89c2\u770b\u4f60\u7684\u672a\u6765\u53d8\u5316\u3002', starting: '\u8d77\u59cb\u91d1\u989d', monthly: '\u6bcf\u6708\u8d21\u732e', annual: '\u5e74\u56de\u62a5\u7387', duration: '\u65f6\u95f4', youPutIn: '\u4f60\u6295\u5165\u4e86', marketGave: '\u5e02\u573a\u7ed9\u4f60', multiplied: '\u94b1\u7ffb\u500d', toHit100k: '\u8fbe\u5230 100K', share: '\u5206\u4eab\u6211\u7684\u7ed3\u679c', milestoneTitle: '\u4f60\u7684\u91cc\u7a0b\u7891', milestoneDesc: '\u6bcf\u4e00\u4e2a\u90fd\u8ba9\u4f60\u66f4\u63a5\u8fd1\u8d22\u52a1\u81ea\u7531\u3002', compTitle: '20\u5c81 vs 30\u5c81\u5f00\u59cb', compDesc: '\u76f8\u540c\u6708\u989d\u300210\u5e74\u5dee\u8ddd\u3002\u6539\u53d8\u4eba\u751f\u7684\u5dee\u8ddd\u3002', legendsTitle: '\u4ed6\u4eec\u90fd\u5f88\u5e74\u8f7b\u5c31\u5f00\u59cb\u4e86', legendsDesc: '\u4e16\u754c\u4e0a\u6700\u4f1f\u5927\u7684\u6295\u8d44\u8005\u6ca1\u6709\u7b49\u5f85\u3002\u4f60\u4e5f\u4e0d\u5e94\u8be5\u3002', signIn: '\u767b\u5f55', flag: 'ZH' },
-    };
+    const translations = window.YIS_TRANSLATIONS || {};
 
     let currentLang = localStorage.getItem('yis-lang') || 'en';
 
@@ -616,22 +733,26 @@ function closeFullscreen() {
             o.classList.toggle('active', o.dataset.lang === lang);
         });
 
-        // Apply to key UI elements
-        const map = {
-            '.hero-badge': t.heroBadge,
-            '.hero-subtitle': t.heroSub + '<br>' + t.heroSub2,
-            '.hero-cta span:first-child': t.heroCta,
-            '#authBtn': t.signIn,
-        };
+        // RTL for Arabic
+        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
 
-        // Hero title (first part only, amount stays)
+        // --- Hero ---
+        const heroBadge = document.querySelector('.hero-badge');
+        if (heroBadge) heroBadge.textContent = t.heroBadge;
         const heroTitle = document.querySelector('.hero-title');
-        if (heroTitle) {
-            const amount = $('heroAmount').outerHTML;
-            heroTitle.innerHTML = t.heroTitle1 + '<br>' + amount;
-        }
+        if (heroTitle) heroTitle.innerHTML = t.heroTitle1 + '<br>' + $('heroAmount').outerHTML;
+        const heroSub = document.querySelector('.hero-subtitle');
+        if (heroSub) heroSub.innerHTML = t.heroSub + '<br>' + t.heroSub2;
+        const heroCta = document.querySelector('.hero-cta span:first-child');
+        if (heroCta) heroCta.textContent = t.heroCta;
 
-        // Simulator section
+        // --- Goal Banner ---
+        const goalLabel = document.querySelector('.goal-label');
+        if (goalLabel) goalLabel.textContent = t.goalLabel;
+        const goalQuote = document.querySelector('.goal-quote');
+        if (goalQuote) goalQuote.textContent = t.goalQuote;
+
+        // --- Simulator ---
         const simHeader = document.querySelector('.simulator .section-title');
         const simDesc = document.querySelector('.simulator .section-desc');
         if (simHeader) simHeader.textContent = t.simTitle;
@@ -644,46 +765,245 @@ function closeFullscreen() {
         if (labels[2]) labels[2].textContent = t.annual;
         if (labels[3]) labels[3].textContent = t.duration;
 
+        // Historical returns
+        const returnsTitle = document.querySelector('.returns-ref-title');
+        if (returnsTitle) returnsTitle.textContent = t.returnsTitle;
+        const returnsNote = document.querySelector('.returns-ref-note');
+        if (returnsNote) returnsNote.textContent = t.returnsNote;
+        const returnsLabels = document.querySelectorAll('.returns-ref-label');
+        const returnsPeriods = document.querySelectorAll('.returns-ref-period');
+        if (returnsLabels[3]) returnsLabels[3].textContent = t.returnsBonds;
+        if (returnsLabels[4]) returnsLabels[4].textContent = t.returnsSavings;
+        if (returnsLabels[5]) returnsLabels[5].textContent = t.returnsInflation;
+        if (returnsPeriods[3]) returnsPeriods[3].textContent = t.returnsBondsPeriod;
+        if (returnsPeriods[4]) returnsPeriods[4].textContent = t.returnsSavingsPeriod;
+        if (returnsPeriods[5]) returnsPeriods[5].textContent = t.returnsInflationPeriod;
+
+        // Chart expand hint
+        const chartHint = document.querySelector('.chart-expand-hint');
+        if (chartHint) chartHint.textContent = t.chartExpandHint;
+
         // Stats
         const statLabels = document.querySelectorAll('.stat-label');
         if (statLabels[0]) statLabels[0].textContent = t.youPutIn;
         if (statLabels[1]) statLabels[1].textContent = t.marketGave;
         if (statLabels[2]) statLabels[2].textContent = t.multiplied;
-        if (statLabels[3]) statLabels[3].textContent = t.toHit100k;
 
         // Share button
         const shareText = document.querySelector('[data-i18n="share"]');
         if (shareText) shareText.textContent = t.share;
 
-        // Milestones
+        // --- Milestones ---
         const msTitle = document.querySelector('.milestones-section .section-title');
         const msDesc = document.querySelector('.milestones-section .section-desc');
         if (msTitle) msTitle.textContent = t.milestoneTitle;
         if (msDesc) msDesc.textContent = t.milestoneDesc;
 
-        // Comparison
+        // --- Comparison ---
         const cmpTitle = document.querySelector('.comparison-section .section-title');
         const cmpDesc = document.querySelector('.comparison-section .section-desc');
         if (cmpTitle) cmpTitle.textContent = t.compTitle;
         if (cmpDesc) cmpDesc.textContent = t.compDesc;
+        const cmpBadge = document.querySelector('.comparison-badge');
+        if (cmpBadge) cmpBadge.textContent = t.compBadge;
+        const cmpAges = document.querySelectorAll('.comparison-age');
+        if (cmpAges[0]) cmpAges[0].textContent = t.compStartAt20;
+        if (cmpAges[1]) cmpAges[1].textContent = t.compStartAt30;
+        const cmpDetails = document.querySelectorAll('.comparison-detail');
+        if (cmpDetails[0]) cmpDetails[0].textContent = t.compByAge + ' 50';
+        if (cmpDetails[1]) cmpDetails[1].textContent = t.compByAge + ' 50';
 
-        // Legends
+        // --- Legends ---
         const legTitle = document.querySelector('.legends-section .section-title');
         const legDesc = document.querySelector('.legends-section .section-desc');
         if (legTitle) legTitle.textContent = t.legendsTitle;
         if (legDesc) legDesc.textContent = t.legendsDesc;
 
-        // Auth button
-        const authBtn = $('authBtn');
-        if (authBtn && authBtn.style.display !== 'none') {
-            authBtn.textContent = t.signIn;
+        // --- Facts ---
+        const factTexts = document.querySelectorAll('.fact-text');
+        if (factTexts[0]) factTexts[0].textContent = t.fact1;
+        if (factTexts[1]) factTexts[1].textContent = t.fact2;
+        if (factTexts[2]) factTexts[2].textContent = t.fact3;
+
+        // --- CTA Brokers ---
+        const ctaTitle = document.querySelector('.cta-title');
+        const ctaDesc = document.querySelector('.cta-desc');
+        const ctaDisclaimer = document.querySelector('.cta-disclaimer');
+        if (ctaTitle) ctaTitle.textContent = t.ctaTitle;
+        if (ctaDesc) ctaDesc.textContent = t.ctaDesc;
+        if (ctaDisclaimer) ctaDisclaimer.textContent = t.ctaDisclaimer;
+        const brokerDetails = document.querySelectorAll('.broker-detail');
+        if (brokerDetails[0]) brokerDetails[0].textContent = t.brokerTRDetail;
+        if (brokerDetails[1]) brokerDetails[1].textContent = t.brokerEtoroDetail;
+        if (brokerDetails[2]) brokerDetails[2].textContent = t.brokerDegiroDetail;
+        if (brokerDetails[3]) brokerDetails[3].textContent = t.brokerFidelityDetail;
+
+        // --- Pro Section ---
+        const proTitle = document.querySelector('.pro-section .section-title');
+        const proDesc = document.querySelector('.pro-section .section-desc');
+        if (proTitle) proTitle.textContent = t.proTitle;
+        if (proDesc) proDesc.textContent = t.proDesc;
+        const planNames = document.querySelectorAll('.plan-name');
+        if (planNames[0]) planNames[0].textContent = t.planFree;
+        if (planNames[1]) planNames[1].textContent = t.planPro;
+        const planPeriods = document.querySelectorAll('.plan-period');
+        if (planPeriods[0]) planPeriods[0].textContent = t.planForever;
+        if (planPeriods[1]) planPeriods[1].textContent = t.planMonth;
+        const proBadge = document.querySelector('.pro-badge');
+        if (proBadge) proBadge.textContent = t.planMostPopular;
+
+        // Free plan features - helper to update text while preserving icon/tag
+        function setFeatText(el, text) {
+            if (!el) return;
+            const icon = el.querySelector('.feat-icon');
+            const tag = el.querySelector('.feat-tag');
+            const iconHTML = icon ? icon.outerHTML : '';
+            const tagHTML = tag ? ' ' + tag.outerHTML : '';
+            el.innerHTML = iconHTML + ' ' + text + tagHTML;
+        }
+        const freePlanFeats = document.querySelectorAll('.plan-card:not(.pro) .plan-feat');
+        const freeKeys = ['freeFeat1','freeFeat2','freeFeat3','freeFeat4','freeFeat5','freeFeat6','freeFeat7','freeFeat8','freeNo1','freeNo2','freeNo3','freeNo4','freeNo5','freeNo6','freeNo7'];
+        freeKeys.forEach((key, i) => { if (freePlanFeats[i] && t[key]) setFeatText(freePlanFeats[i], t[key]); });
+
+        const proPlanFeats = document.querySelectorAll('.plan-card.pro .plan-feat');
+        const proKeys = ['proFeat1','proFeatHL1','proFeatHL2','proFeatHL3','proFeatHL4','proFeatHL5','proFeat2','proFeat3','proFeat4','proFeat5'];
+        proKeys.forEach((key, i) => { if (proPlanFeats[i] && t[key]) setFeatText(proPlanFeats[i], t[key]); });
+
+        // Plan buttons
+        const planBtnFree = document.querySelector('.plan-btn-free');
+        const planBtnPro = document.querySelector('.plan-btn-pro');
+        if (planBtnFree) planBtnFree.textContent = t.planBtnFree;
+        if (planBtnPro) planBtnPro.textContent = t.planBtnPro;
+        const proNote = document.querySelector('.pro-note');
+        if (proNote) proNote.textContent = t.proNote;
+
+        // Pro highlight cards
+        const hlCards = document.querySelectorAll('.pro-hl-card');
+        const hlKeys = [['proHLTax','proHLTaxDesc'],['proHLInflation','proHLInflationDesc'],['proHLFunds','proHLFundsDesc'],['proHLEducation','proHLEducationDesc']];
+        hlCards.forEach((card, i) => {
+            if (hlKeys[i]) {
+                const h4 = card.querySelector('h4');
+                const p = card.querySelector('p');
+                if (h4 && t[hlKeys[i][0]]) h4.textContent = t[hlKeys[i][0]];
+                if (p && t[hlKeys[i][1]]) p.textContent = t[hlKeys[i][1]];
+            }
+        });
+
+        // --- Footer ---
+        const footerTitle = document.querySelector('.footer-title');
+        if (footerTitle) footerTitle.innerHTML = t.footerTitle1 + '<br>' + t.footerTitle2;
+        const footerSub = document.querySelector('.footer-sub');
+        if (footerSub) footerSub.textContent = t.footerSub;
+        const footerAbout = document.querySelector('.footer-about');
+        if (footerAbout) footerAbout.textContent = t.footerAbout;
+
+        // Footer headings
+        const footerHeadings = document.querySelectorAll('.footer-heading');
+        if (footerHeadings[0]) footerHeadings[0].textContent = t.footerTools;
+        if (footerHeadings[1]) footerHeadings[1].textContent = t.footerLearn;
+        if (footerHeadings[2]) footerHeadings[2].textContent = t.footerDisclaimerHeading;
+
+        // Footer tool links
+        const toolsCol = footerHeadings[0] ? footerHeadings[0].parentElement : null;
+        if (toolsCol) {
+            const links = toolsCol.querySelectorAll('a');
+            const toolTexts = [t.footerSimulator, t.footerPortfolio, t.footerDividends, t.footerGoals, t.footerTax];
+            links.forEach((a, i) => {
+                if (toolTexts[i]) {
+                    const badge = a.querySelector('.footer-badge');
+                    a.textContent = toolTexts[i] + ' ';
+                    if (badge) a.appendChild(badge);
+                }
+            });
         }
 
-        // RTL for Arabic
-        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+        // Footer learn links
+        const learnCol = footerHeadings[1] ? footerHeadings[1].parentElement : null;
+        if (learnCol) {
+            const links = learnCol.querySelectorAll('a');
+            const learnTexts = [t.learnCompound, t.learnIndex, t.learnStart, t.learnBuffett, t.learnReturn];
+            links.forEach((a, i) => { if (learnTexts[i]) a.textContent = learnTexts[i]; });
+        }
+
+        // Footer disclaimer
+        const footerDisclaimer = document.querySelector('.footer-disclaimer');
+        if (footerDisclaimer) footerDisclaimer.textContent = t.footerDisclaimerText;
+
+        // Footer copyright
+        const footerBottom = document.querySelector('.footer-bottom span');
+        if (footerBottom) footerBottom.textContent = t.footerCopyright;
+
+        // --- Auth Modal ---
+        const authTitle = document.getElementById('authTitle');
+        if (authTitle) authTitle.textContent = t.signIn;
+        const authDescEl = document.querySelector('.modal-desc');
+        if (authDescEl) authDescEl.textContent = t.authDesc;
+        const authTabs = document.querySelectorAll('.auth-tab');
+        if (authTabs[0]) authTabs[0].textContent = t.signIn;
+        if (authTabs[1]) authTabs[1].textContent = t.signUp;
+        // Form labels
+        const signinLabels = document.querySelectorAll('#signinForm label');
+        if (signinLabels[0]) signinLabels[0].textContent = t.authEmail;
+        if (signinLabels[1]) signinLabels[1].textContent = t.authPassword;
+        const signupLabels = document.querySelectorAll('#signupForm label');
+        if (signupLabels[0]) signupLabels[0].textContent = t.authName;
+        if (signupLabels[1]) signupLabels[1].textContent = t.authEmail;
+        if (signupLabels[2]) signupLabels[2].textContent = t.authPassword;
+        // Submit buttons
+        const signinSubmit = document.getElementById('signinSubmit');
+        if (signinSubmit && !signinSubmit.disabled) signinSubmit.textContent = t.signIn;
+        const signupSubmit = document.getElementById('signupSubmit');
+        if (signupSubmit && !signupSubmit.disabled) signupSubmit.textContent = t.createAccount;
+        // Divider
+        const authDivider = document.querySelector('.auth-divider span');
+        if (authDivider) authDivider.textContent = t.authOr;
+        // Google button - preserve SVG
+        const googleBtn = document.querySelector('.google-btn');
+        if (googleBtn) {
+            const svg = googleBtn.querySelector('svg');
+            if (svg) {
+                googleBtn.textContent = '';
+                googleBtn.appendChild(svg);
+                googleBtn.appendChild(document.createTextNode(' ' + t.authGoogle));
+            }
+        }
+        // Auth footer
+        const authFooter = document.querySelector('.auth-footer');
+        if (authFooter) authFooter.textContent = t.authFooter;
+
+        // --- Fullscreen ---
+        const fsHint = document.querySelector('.fullscreen-hint');
+        if (fsHint) fsHint.textContent = t.fsHint;
+
+        // --- Nav Links ---
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const navTexts = [t.navSimulator, t.navPortfolio, t.navDividends, t.navGoals, t.navTax, t.navLegends];
+        navLinks.forEach((a, i) => { if (navTexts[i]) a.textContent = navTexts[i]; });
+
+        // --- Auth button ---
+        const authBtn = $('authBtn');
+        if (authBtn && authBtn.style.display !== 'none') authBtn.textContent = t.signIn;
+
+        // Sign Out button
+        const signOutBtn = document.getElementById('signOutBtn');
+        if (signOutBtn) signOutBtn.textContent = t.signOut;
+
+        // --- Save button ---
+        const saveTextEl = document.querySelector('.save-text');
+        if (saveTextEl) saveTextEl.textContent = t.saveText;
+
+        // --- Update chart labels ---
+        if (typeof chart !== 'undefined' && chart) {
+            chart.data.datasets[0].label = t.chartTotal;
+            chart.data.datasets[1].label = t.chartInvested;
+            chart.update('none');
+        }
 
         // Close menu
         $('langDropdown').classList.remove('open');
+
+        // Re-run update to refresh dynamic text
+        if (typeof update === 'function') update();
     }
 
     function initLanguage() {
@@ -707,11 +1027,7 @@ function closeFullscreen() {
         });
 
         // Apply saved language
-        if (currentLang !== 'en') {
-            applyLanguage(currentLang);
-        } else {
-            $('langFlag').textContent = 'EN';
-        }
+        applyLanguage(currentLang);
     }
 
     // --- Fullscreen chart on double-click ---
@@ -776,7 +1092,7 @@ function closeFullscreen() {
         // Load saved simulation if exists
         const loaded = loadSimulation();
         if (loaded) {
-            showToast('Welcome back! Your last simulation was restored.');
+            showToast((translations[currentLang]||translations.en).toastWelcome || 'Welcome back! Your last simulation was restored.');
         }
 
         initCurrency();
@@ -822,7 +1138,8 @@ function renderFullscreenChart() {
     const tooltipText = isDark ? '#fff' : '#000';
     const greenColor = isDark ? '#00e676' : '#00a854';
 
-    const labels = data.yearlyData.map(d => 'Year ' + d.year);
+    const _ft = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
+    const labels = data.yearlyData.map(d => (_ft.milestoneYear || 'Year') + ' ' + d.year);
     const balances = data.yearlyData.map(d => d.balance);
     const invested = data.yearlyData.map(d => d.invested);
 
@@ -836,7 +1153,7 @@ function renderFullscreenChart() {
             labels,
             datasets: [
                 {
-                    label: 'Total Value',
+                    label: _ft.chartTotal || 'Total Value',
                     data: balances,
                     borderColor: greenColor,
                     backgroundColor: isDark ? 'rgba(0,230,118,0.05)' : 'rgba(0,168,84,0.05)',
@@ -849,7 +1166,7 @@ function renderFullscreenChart() {
                     pointHoverBackgroundColor: greenColor,
                 },
                 {
-                    label: 'Amount Invested',
+                    label: _ft.chartInvested || 'Amount Invested',
                     data: invested,
                     borderColor: dashedColor,
                     backgroundColor: 'transparent',
@@ -911,19 +1228,19 @@ function renderFullscreenChart() {
     statsEl.innerHTML = `
         <div class="fullscreen-stat">
             <div class="fullscreen-stat-value">${formatMoney(r.finalBalance)}</div>
-            <div class="fullscreen-stat-label">Final Value</div>
+            <div class="fullscreen-stat-label">${_ft.fsFinalValue || 'Final Value'}</div>
         </div>
         <div class="fullscreen-stat">
             <div class="fullscreen-stat-value">${formatMoney(r.totalContributed)}</div>
-            <div class="fullscreen-stat-label">You Put In</div>
+            <div class="fullscreen-stat-label">${_ft.fsYouPutIn || 'You Put In'}</div>
         </div>
         <div class="fullscreen-stat">
             <div class="fullscreen-stat-value green">${formatMoney(r.totalInterest)}</div>
-            <div class="fullscreen-stat-label">Market Gave You</div>
+            <div class="fullscreen-stat-label">${_ft.fsMarketGave || 'Market Gave You'}</div>
         </div>
         <div class="fullscreen-stat">
             <div class="fullscreen-stat-value green">${r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '0x'}</div>
-            <div class="fullscreen-stat-label">Money Multiplied</div>
+            <div class="fullscreen-stat-label">${_ft.fsMultiplied || 'Money Multiplied'}</div>
         </div>
     `;
 }

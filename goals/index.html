@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Savings Goals | Young Investor Simulator</title>
+    <meta name="description" content="Set savings goals, track your progress automatically, and celebrate milestones. Multiple goals with priorities, smart suggestions, and couples mode.">
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/coming-soon.css">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="../" class="nav-logo">
+                <img src="../assets/logo.svg" alt="" class="logo-icon">
+                <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="../#simulator" id="nav-simulator">Simulator</a>
+                <a href="../portfolio/" class="nav-soon" title="Coming Soon" id="nav-portfolio">Portfolio</a>
+                <a href="../dividends/" class="nav-soon" title="Coming Soon" id="nav-dividends">Dividends</a>
+                <a href="../goals/" class="nav-active" id="nav-goals">Goals</a>
+                <a href="../tax/" class="nav-soon" title="Coming Soon" id="nav-tax">Tax</a>
+            </div>
+            <div class="nav-right">
+                <div class="lang-dropdown" id="langDropdown">
+                    <button class="lang-btn" id="langBtn" aria-label="Change language">
+                        <span id="langFlag">EN</span>
+                    </button>
+                    <div class="lang-menu" id="langMenu">
+                        <button class="lang-option active" data-lang="en">🇺🇸 English</button>
+                        <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
+                        <button class="lang-option" data-lang="es">🇪🇸 Español</button>
+                        <button class="lang-option" data-lang="pt">🇧🇷 Português</button>
+                        <button class="lang-option" data-lang="de">🇩🇪 Deutsch</button>
+                        <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
+                        <button class="lang-option" data-lang="zh">🇨🇳 中文</button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <span id="themeIcon">☀️</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="coming-soon-page">
+        <div class="container">
+            <div class="cs-icon">🎯</div>
+            <h1 class="cs-title" id="cs-title">Savings Goals</h1>
+            <p class="cs-subtitle" id="cs-subtitle">Set goals. Track progress. Celebrate wins.</p>
+
+            <div class="cs-features">
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">📋</span>
+                    <h3 id="feat1-title">Multiple Goals</h3>
+                    <p id="feat1-desc">Emergency fund, vacation, down payment — manage all your goals with priorities and deadlines.</p>
+                </div>
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">🤖</span>
+                    <h3 id="feat2-title">Smart Suggestions</h3>
+                    <p id="feat2-desc">AI-powered suggestions based on your income and spending patterns to optimize savings.</p>
+                </div>
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">🎉</span>
+                    <h3 id="feat3-title">Milestone Celebrations</h3>
+                    <p id="feat3-desc">Hit 25%, 50%, 75% of your goal? Confetti time! Share your progress with friends.</p>
+                </div>
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">👫</span>
+                    <h3 id="feat4-title">Couples Mode</h3>
+                    <p id="feat4-desc">Share goals with your partner. Track joint savings progress together in real-time.</p>
+                </div>
+            </div>
+
+            <div class="cs-cta">
+                <div class="cs-badge" id="cs-badge">Coming Soon</div>
+                <p class="cs-notify-text" id="cs-notify">We're building this right now. Go back to the simulator while you wait.</p>
+                <a href="../#simulator" class="cs-btn" id="cs-btn">Back to Simulator</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <span id="footer-text">&copy; 2026 Young Investor Simulator. Built for the next generation.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        const saved = localStorage.getItem('yis-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', saved);
+        document.getElementById('themeIcon').textContent = saved === 'dark' ? '☀️' : '🌙';
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('yis-theme', next);
+            document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+        });
+
+        // Language system
+        const translations = {
+            en: {
+                title: 'Savings Goals',
+                subtitle: 'Set goals. Track progress. Celebrate wins.',
+                feat1Title: 'Multiple Goals',
+                feat1Desc: 'Emergency fund, vacation, down payment — manage all your goals with priorities and deadlines.',
+                feat2Title: 'Smart Suggestions',
+                feat2Desc: 'AI-powered suggestions based on your income and spending patterns to optimize savings.',
+                feat3Title: 'Milestone Celebrations',
+                feat3Desc: 'Hit 25%, 50%, 75% of your goal? Confetti time! Share your progress with friends.',
+                feat4Title: 'Couples Mode',
+                feat4Desc: 'Share goals with your partner. Track joint savings progress together in real-time.',
+                badge: 'Coming Soon',
+                notify: "We're building this right now. Go back to the simulator while you wait.",
+                btn: 'Back to Simulator',
+                navSim: 'Simulator', navPort: 'Portfolio', navDiv: 'Dividends', navGoals: 'Goals', navTax: 'Tax',
+                footer: '© 2026 Young Investor Simulator. Built for the next generation.'
+            },
+            fr: {
+                title: "Objectifs d'Épargne",
+                subtitle: 'Fixez des objectifs. Suivez vos progrès. Célébrez vos victoires.',
+                feat1Title: 'Objectifs Multiples',
+                feat1Desc: "Fonds d'urgence, vacances, apport immobilier — gérez tous vos objectifs avec priorités et échéances.",
+                feat2Title: 'Suggestions Intelligentes',
+                feat2Desc: "Suggestions basées sur l'IA selon vos revenus et habitudes de dépenses pour optimiser votre épargne.",
+                feat3Title: 'Célébrations de Jalons',
+                feat3Desc: 'Atteint 25%, 50%, 75% de votre objectif ? Confettis ! Partagez vos progrès avec vos amis.',
+                feat4Title: 'Mode Couple',
+                feat4Desc: 'Partagez vos objectifs avec votre partenaire. Suivez vos économies communes en temps réel.',
+                badge: 'Bientôt disponible',
+                notify: 'Nous construisons cette fonctionnalité. Retournez au simulateur en attendant.',
+                btn: 'Retour au simulateur',
+                navSim: 'Simulateur', navPort: 'Portfolio', navDiv: 'Dividendes', navGoals: 'Objectifs', navTax: 'Impôts',
+                footer: '© 2026 Young Investor Simulator. Conçu pour la prochaine génération.'
+            },
+            es: {
+                title: 'Metas de Ahorro',
+                subtitle: 'Fija metas. Sigue tu progreso. Celebra tus logros.',
+                feat1Title: 'Metas Múltiples',
+                feat1Desc: 'Fondo de emergencia, vacaciones, entrada de piso — gestiona todas tus metas con prioridades y plazos.',
+                feat2Title: 'Sugerencias Inteligentes',
+                feat2Desc: 'Sugerencias impulsadas por IA basadas en tus ingresos y patrones de gasto para optimizar el ahorro.',
+                feat3Title: 'Celebraciones de Hitos',
+                feat3Desc: '¿Alcanzaste el 25%, 50%, 75% de tu meta? ¡Confeti! Comparte tu progreso con amigos.',
+                feat4Title: 'Modo Pareja',
+                feat4Desc: 'Comparte metas con tu pareja. Sigue el progreso del ahorro conjunto en tiempo real.',
+                badge: 'Próximamente',
+                notify: 'Estamos construyendo esto ahora. Vuelve al simulador mientras esperas.',
+                btn: 'Volver al simulador',
+                navSim: 'Simulador', navPort: 'Portafolio', navDiv: 'Dividendos', navGoals: 'Metas', navTax: 'Impuestos',
+                footer: '© 2026 Young Investor Simulator. Hecho para la próxima generación.'
+            },
+            pt: {
+                title: 'Metas de Poupança',
+                subtitle: 'Defina metas. Acompanhe o progresso. Celebre conquistas.',
+                feat1Title: 'Metas Múltiplas',
+                feat1Desc: 'Fundo de emergência, férias, entrada do imóvel — gerencie todas as suas metas com prioridades e prazos.',
+                feat2Title: 'Sugestões Inteligentes',
+                feat2Desc: 'Sugestões baseadas em IA segundo sua renda e padrões de gastos para otimizar a poupança.',
+                feat3Title: 'Celebrações de Marcos',
+                feat3Desc: 'Atingiu 25%, 50%, 75% da meta? Hora do confete! Compartilhe seu progresso com amigos.',
+                feat4Title: 'Modo Casal',
+                feat4Desc: 'Compartilhe metas com seu parceiro. Acompanhem juntos o progresso da poupança em tempo real.',
+                badge: 'Em breve',
+                notify: 'Estamos construindo isso agora. Volte ao simulador enquanto espera.',
+                btn: 'Voltar ao simulador',
+                navSim: 'Simulador', navPort: 'Portfólio', navDiv: 'Dividendos', navGoals: 'Metas', navTax: 'Impostos',
+                footer: '© 2026 Young Investor Simulator. Feito para a próxima geração.'
+            },
+            de: {
+                title: 'Sparziele',
+                subtitle: 'Setze Ziele. Verfolge den Fortschritt. Feiere Erfolge.',
+                feat1Title: 'Mehrere Ziele',
+                feat1Desc: 'Notfallfonds, Urlaub, Anzahlung — verwalte alle Ziele mit Prioritäten und Fristen.',
+                feat2Title: 'Intelligente Vorschläge',
+                feat2Desc: 'KI-gestützte Vorschläge basierend auf deinem Einkommen und Ausgabeverhalten zur Sparoptimierung.',
+                feat3Title: 'Meilenstein-Feiern',
+                feat3Desc: '25%, 50%, 75% deines Ziels erreicht? Konfetti-Zeit! Teile deinen Fortschritt mit Freunden.',
+                feat4Title: 'Paar-Modus',
+                feat4Desc: 'Teile Ziele mit deinem Partner. Verfolgt gemeinsam den Sparfortschritt in Echtzeit.',
+                badge: 'Kommt bald',
+                notify: 'Wir bauen das gerade. Geh zurück zum Simulator.',
+                btn: 'Zurück zum Simulator',
+                navSim: 'Simulator', navPort: 'Portfolio', navDiv: 'Dividenden', navGoals: 'Ziele', navTax: 'Steuern',
+                footer: '© 2026 Young Investor Simulator. Für die nächste Generation gebaut.'
+            },
+            ar: {
+                title: 'أهداف الادخار',
+                subtitle: 'حدد أهدافك. تابع تقدمك. احتفل بإنجازاتك.',
+                feat1Title: 'أهداف متعددة',
+                feat1Desc: 'صندوق طوارئ، إجازة، دفعة أولى — أدر جميع أهدافك مع الأولويات والمواعيد النهائية.',
+                feat2Title: 'اقتراحات ذكية',
+                feat2Desc: 'اقتراحات مدعومة بالذكاء الاصطناعي بناءً على دخلك وأنماط إنفاقك لتحسين الادخار.',
+                feat3Title: 'احتفالات الإنجازات',
+                feat3Desc: 'وصلت إلى 25%، 50%، 75% من هدفك؟ وقت الاحتفال! شارك تقدمك مع أصدقائك.',
+                feat4Title: 'وضع الشريكين',
+                feat4Desc: 'شارك الأهداف مع شريكك. تابعوا تقدم الادخار معاً في الوقت الفعلي.',
+                badge: 'قريبًا',
+                notify: 'نحن نبني هذا الآن. عد إلى المحاكي.',
+                btn: 'العودة إلى المحاكي',
+                navSim: 'المحاكي', navPort: 'المحفظة', navDiv: 'الأرباح', navGoals: 'الأهداف', navTax: 'الضرائب',
+                footer: '© 2026 Young Investor Simulator. صُمم للجيل القادم.'
+            },
+            zh: {
+                title: '储蓄目标',
+                subtitle: '设定目标，追踪进度，庆祝胜利。',
+                feat1Title: '多重目标',
+                feat1Desc: '应急基金、度假、首付款 — 管理所有目标，设置优先级和截止日期。',
+                feat2Title: '智能建议',
+                feat2Desc: '基于你的收入和消费模式，AI 智能建议帮你优化储蓄。',
+                feat3Title: '里程碑庆祝',
+                feat3Desc: '达到目标的25%、50%、75%？撒花庆祝！与朋友分享你的进度。',
+                feat4Title: '伴侣模式',
+                feat4Desc: '与伴侣共享目标，实时追踪共同储蓄进度。',
+                badge: '即将推出',
+                notify: '我们正在建设中。请先回到模拟器。',
+                btn: '返回模拟器',
+                navSim: '模拟器', navPort: '投资组合', navDiv: '股息', navGoals: '目标', navTax: '税务',
+                footer: '© 2026 Young Investor Simulator. 为下一代而建。'
+            }
+        };
+
+        const langLabels = { en: 'EN', fr: 'FR', es: 'ES', pt: 'PT', de: 'DE', ar: 'AR', zh: 'ZH' };
+
+        function applyLanguage(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.getElementById('cs-title').textContent = t.title;
+            document.getElementById('cs-subtitle').textContent = t.subtitle;
+            document.getElementById('feat1-title').textContent = t.feat1Title;
+            document.getElementById('feat1-desc').textContent = t.feat1Desc;
+            document.getElementById('feat2-title').textContent = t.feat2Title;
+            document.getElementById('feat2-desc').textContent = t.feat2Desc;
+            document.getElementById('feat3-title').textContent = t.feat3Title;
+            document.getElementById('feat3-desc').textContent = t.feat3Desc;
+            document.getElementById('feat4-title').textContent = t.feat4Title;
+            document.getElementById('feat4-desc').textContent = t.feat4Desc;
+            document.getElementById('cs-badge').textContent = t.badge;
+            document.getElementById('cs-notify').textContent = t.notify;
+            document.getElementById('cs-btn').textContent = t.btn;
+            document.getElementById('nav-simulator').textContent = t.navSim;
+            document.getElementById('nav-portfolio').textContent = t.navPort;
+            document.getElementById('nav-dividends').textContent = t.navDiv;
+            document.getElementById('nav-goals').textContent = t.navGoals;
+            document.getElementById('nav-tax').textContent = t.navTax;
+            document.getElementById('footer-text').innerHTML = t.footer;
+            document.getElementById('langFlag').textContent = langLabels[lang];
+
+            if (lang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+                document.documentElement.setAttribute('lang', 'ar');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+                document.documentElement.setAttribute('lang', lang);
+            }
+
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.lang === lang);
+            });
+
+            localStorage.setItem('yis-lang', lang);
+        }
+
+        document.getElementById('langBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('langDropdown').classList.toggle('open');
+        });
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                applyLanguage(opt.dataset.lang);
+                document.getElementById('langDropdown').classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', () => {
+            document.getElementById('langDropdown').classList.remove('open');
+        });
+
+        const savedLang = localStorage.getItem('yis-lang') || 'en';
+        applyLanguage(savedLang);
+    </script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dividend Income Manager | Young Investor Simulator</title>
+    <meta name="description" content="Track your dividend income, project future payouts, and optimize your dividend portfolio. Calendar view, DRIP calculator, and smart notifications.">
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/coming-soon.css">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="../" class="nav-logo">
+                <img src="../assets/logo.svg" alt="" class="logo-icon">
+                <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="../#simulator" id="nav-simulator">Simulator</a>
+                <a href="../portfolio/" class="nav-soon" title="Coming Soon" id="nav-portfolio">Portfolio</a>
+                <a href="../dividends/" class="nav-active" id="nav-dividends">Dividends</a>
+                <a href="../goals/" class="nav-soon" title="Coming Soon" id="nav-goals">Goals</a>
+                <a href="../tax/" class="nav-soon" title="Coming Soon" id="nav-tax">Tax</a>
+            </div>
+            <div class="nav-right">
+                <div class="lang-dropdown" id="langDropdown">
+                    <button class="lang-btn" id="langBtn" aria-label="Change language">
+                        <span id="langFlag">EN</span>
+                    </button>
+                    <div class="lang-menu" id="langMenu">
+                        <button class="lang-option active" data-lang="en">🇺🇸 English</button>
+                        <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
+                        <button class="lang-option" data-lang="es">🇪🇸 Español</button>
+                        <button class="lang-option" data-lang="pt">🇧🇷 Português</button>
+                        <button class="lang-option" data-lang="de">🇩🇪 Deutsch</button>
+                        <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
+                        <button class="lang-option" data-lang="zh">🇨🇳 中文</button>
+                    </div>
+                </div>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <span id="themeIcon">☀️</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="coming-soon-page">
+        <div class="container">
+            <div class="cs-icon">💸</div>
+            <h1 class="cs-title" id="cs-title">Dividend Manager</h1>
+            <p class="cs-subtitle" id="cs-subtitle">Track every dividend. Project your passive income.</p>
+
+            <div class="cs-features">
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">📅</span>
+                    <h3 id="feat1-title">Dividend Calendar</h3>
+                    <p id="feat1-desc">See upcoming payouts in a calendar view. Export to Google Calendar. Never miss a dividend.</p>
+                </div>
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">🔄</span>
+                    <h3 id="feat2-title">DRIP Calculator</h3>
+                    <p id="feat2-desc">See how dividend reinvestment accelerates your wealth with compound growth projections.</p>
+                </div>
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">📊</span>
+                    <h3 id="feat3-title">Income Projections</h3>
+                    <p id="feat3-desc">Project monthly and annual dividend income based on your current holdings and yield.</p>
+                </div>
+                <div class="cs-feature">
+                    <span class="cs-feat-icon">🔔</span>
+                    <h3 id="feat4-title">Smart Notifications</h3>
+                    <p id="feat4-desc">Get alerts 3 days before payouts, on payout day, and monthly income summaries.</p>
+                </div>
+            </div>
+
+            <div class="cs-cta">
+                <div class="cs-badge" id="cs-badge">Coming Soon</div>
+                <p class="cs-notify-text" id="cs-notify">We're building this right now. Go back to the simulator while you wait.</p>
+                <a href="../#simulator" class="cs-btn" id="cs-btn">Back to Simulator</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <span id="footer-text">&copy; 2026 Young Investor Simulator. Built for the next generation.</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle
+        const saved = localStorage.getItem('yis-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', saved);
+        document.getElementById('themeIcon').textContent = saved === 'dark' ? '☀️' : '🌙';
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('yis-theme', next);
+            document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+        });
+
+        // Language system
+        const translations = {
+            en: {
+                title: 'Dividend Manager',
+                subtitle: 'Track every dividend. Project your passive income.',
+                feat1Title: 'Dividend Calendar',
+                feat1Desc: 'See upcoming payouts in a calendar view. Export to Google Calendar. Never miss a dividend.',
+                feat2Title: 'DRIP Calculator',
+                feat2Desc: 'See how dividend reinvestment accelerates your wealth with compound growth projections.',
+                feat3Title: 'Income Projections',
+                feat3Desc: 'Project monthly and annual dividend income based on your current holdings and yield.',
+                feat4Title: 'Smart Notifications',
+                feat4Desc: 'Get alerts 3 days before payouts, on payout day, and monthly income summaries.',
+                badge: 'Coming Soon',
+                notify: "We're building this right now. Go back to the simulator while you wait.",
+                btn: 'Back to Simulator',
+                navSim: 'Simulator', navPort: 'Portfolio', navDiv: 'Dividends', navGoals: 'Goals', navTax: 'Tax',
+                footer: '© 2026 Young Investor Simulator. Built for the next generation.'
+            },
+            fr: {
+                title: 'Gestionnaire de Dividendes',
+                subtitle: 'Suivez chaque dividende. Projetez vos revenus passifs.',
+                feat1Title: 'Calendrier des Dividendes',
+                feat1Desc: 'Visualisez les versements à venir. Exportez vers Google Calendar. Ne manquez aucun dividende.',
+                feat2Title: 'Calculateur DRIP',
+                feat2Desc: 'Découvrez comment le réinvestissement des dividendes accélère votre patrimoine grâce aux intérêts composés.',
+                feat3Title: 'Projections de Revenus',
+                feat3Desc: 'Projetez vos revenus mensuels et annuels de dividendes selon vos positions et rendements actuels.',
+                feat4Title: 'Notifications Intelligentes',
+                feat4Desc: 'Recevez des alertes 3 jours avant les versements, le jour du paiement et des résumés mensuels.',
+                badge: 'Bientôt disponible',
+                notify: 'Nous construisons cette fonctionnalité. Retournez au simulateur en attendant.',
+                btn: 'Retour au simulateur',
+                navSim: 'Simulateur', navPort: 'Portfolio', navDiv: 'Dividendes', navGoals: 'Objectifs', navTax: 'Impôts',
+                footer: '© 2026 Young Investor Simulator. Conçu pour la prochaine génération.'
+            },
+            es: {
+                title: 'Gestor de Dividendos',
+                subtitle: 'Rastrea cada dividendo. Proyecta tus ingresos pasivos.',
+                feat1Title: 'Calendario de Dividendos',
+                feat1Desc: 'Ve los próximos pagos en vista de calendario. Exporta a Google Calendar. No te pierdas ningún dividendo.',
+                feat2Title: 'Calculadora DRIP',
+                feat2Desc: 'Descubre cómo la reinversión de dividendos acelera tu patrimonio con proyecciones de crecimiento compuesto.',
+                feat3Title: 'Proyecciones de Ingresos',
+                feat3Desc: 'Proyecta ingresos mensuales y anuales por dividendos según tus posiciones y rendimiento actuales.',
+                feat4Title: 'Notificaciones Inteligentes',
+                feat4Desc: 'Recibe alertas 3 días antes de los pagos, el día del pago y resúmenes mensuales de ingresos.',
+                badge: 'Próximamente',
+                notify: 'Estamos construyendo esto ahora. Vuelve al simulador mientras esperas.',
+                btn: 'Volver al simulador',
+                navSim: 'Simulador', navPort: 'Portafolio', navDiv: 'Dividendos', navGoals: 'Metas', navTax: 'Impuestos',
+                footer: '© 2026 Young Investor Simulator. Hecho para la próxima generación.'
+            },
+            pt: {
+                title: 'Gestor de Dividendos',
+                subtitle: 'Acompanhe cada dividendo. Projete sua renda passiva.',
+                feat1Title: 'Calendário de Dividendos',
+                feat1Desc: 'Veja os próximos pagamentos em vista de calendário. Exporte para o Google Calendar. Nunca perca um dividendo.',
+                feat2Title: 'Calculadora DRIP',
+                feat2Desc: 'Veja como o reinvestimento de dividendos acelera seu patrimônio com projeções de crescimento composto.',
+                feat3Title: 'Projeções de Renda',
+                feat3Desc: 'Projete renda mensal e anual de dividendos com base nas suas posições e rendimento atuais.',
+                feat4Title: 'Notificações Inteligentes',
+                feat4Desc: 'Receba alertas 3 dias antes dos pagamentos, no dia do pagamento e resumos mensais de renda.',
+                badge: 'Em breve',
+                notify: 'Estamos construindo isso agora. Volte ao simulador enquanto espera.',
+                btn: 'Voltar ao simulador',
+                navSim: 'Simulador', navPort: 'Portfólio', navDiv: 'Dividendos', navGoals: 'Metas', navTax: 'Impostos',
+                footer: '© 2026 Young Investor Simulator. Feito para a próxima geração.'
+            },
+            de: {
+                title: 'Dividenden-Manager',
+                subtitle: 'Verfolge jede Dividende. Projiziere dein passives Einkommen.',
+                feat1Title: 'Dividendenkalender',
+                feat1Desc: 'Sieh kommende Ausschüttungen in der Kalenderansicht. Export zu Google Calendar. Verpasse keine Dividende.',
+                feat2Title: 'DRIP-Rechner',
+                feat2Desc: 'Sieh, wie Dividenden-Reinvestition dein Vermögen durch Zinseszinseffekte beschleunigt.',
+                feat3Title: 'Einkommensprognosen',
+                feat3Desc: 'Projiziere monatliche und jährliche Dividendeneinkünfte basierend auf deinen aktuellen Positionen.',
+                feat4Title: 'Intelligente Benachrichtigungen',
+                feat4Desc: 'Erhalte Benachrichtigungen 3 Tage vor Ausschüttungen, am Zahltag und monatliche Zusammenfassungen.',
+                badge: 'Kommt bald',
+                notify: 'Wir bauen das gerade. Geh zurück zum Simulator.',
+                btn: 'Zurück zum Simulator',
+                navSim: 'Simulator', navPort: 'Portfolio', navDiv: 'Dividenden', navGoals: 'Ziele', navTax: 'Steuern',
+                footer: '© 2026 Young Investor Simulator. Für die nächste Generation gebaut.'
+            },
+            ar: {
+                title: 'مدير الأرباح الموزعة',
+                subtitle: 'تتبع كل توزيعات الأرباح. توقع دخلك السلبي.',
+                feat1Title: 'تقويم الأرباح',
+                feat1Desc: 'شاهد المدفوعات القادمة في عرض التقويم. صدّر إلى Google Calendar. لا تفوّت أي توزيع.',
+                feat2Title: 'حاسبة إعادة الاستثمار',
+                feat2Desc: 'اكتشف كيف تسرّع إعادة استثمار الأرباح ثروتك من خلال توقعات النمو المركب.',
+                feat3Title: 'توقعات الدخل',
+                feat3Desc: 'توقع دخل الأرباح الشهري والسنوي بناءً على ممتلكاتك وعائداتك الحالية.',
+                feat4Title: 'إشعارات ذكية',
+                feat4Desc: 'احصل على تنبيهات قبل 3 أيام من المدفوعات، في يوم الدفع، وملخصات شهرية للدخل.',
+                badge: 'قريبًا',
+                notify: 'نحن نبني هذا الآن. عد إلى المحاكي.',
+                btn: 'العودة إلى المحاكي',
+                navSim: 'المحاكي', navPort: 'المحفظة', navDiv: 'الأرباح', navGoals: 'الأهداف', navTax: 'الضرائب',
+                footer: '© 2026 Young Investor Simulator. صُمم للجيل القادم.'
+            },
+            zh: {
+                title: '股息管理器',
+                subtitle: '追踪每笔股息，规划你的被动收入。',
+                feat1Title: '股息日历',
+                feat1Desc: '在日历视图中查看即将到来的派息。导出到 Google Calendar，不错过任何股息。',
+                feat2Title: 'DRIP 计算器',
+                feat2Desc: '了解股息再投资如何通过复利增长加速你的财富积累。',
+                feat3Title: '收入预测',
+                feat3Desc: '根据你当前的持仓和收益率，预测每月和每年的股息收入。',
+                feat4Title: '智能通知',
+                feat4Desc: '在派息前3天、派息当天收到提醒，以及每月收入汇总。',
+                badge: '即将推出',
+                notify: '我们正在建设中。请先回到模拟器。',
+                btn: '返回模拟器',
+                navSim: '模拟器', navPort: '投资组合', navDiv: '股息', navGoals: '目标', navTax: '税务',
+                footer: '© 2026 Young Investor Simulator. 为下一代而建。'
+            }
+        };
+
+        const langLabels = { en: 'EN', fr: 'FR', es: 'ES', pt: 'PT', de: 'DE', ar: 'AR', zh: 'ZH' };
+
+        function applyLanguage(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.getElementById('cs-title').textContent = t.title;
+            document.getElementById('cs-subtitle').textContent = t.subtitle;
+            document.getElementById('feat1-title').textContent = t.feat1Title;
+            document.getElementById('feat1-desc').textContent = t.feat1Desc;
+            document.getElementById('feat2-title').textContent = t.feat2Title;
+            document.getElementById('feat2-desc').textContent = t.feat2Desc;
+            document.getElementById('feat3-title').textContent = t.feat3Title;
+            document.getElementById('feat3-desc').textContent = t.feat3Desc;
+            document.getElementById('feat4-title').textContent = t.feat4Title;
+            document.getElementById('feat4-desc').textContent = t.feat4Desc;
+            document.getElementById('cs-badge').textContent = t.badge;
+            document.getElementById('cs-notify').textContent = t.notify;
+            document.getElementById('cs-btn').textContent = t.btn;
+            document.getElementById('nav-simulator').textContent = t.navSim;
+            document.getElementById('nav-portfolio').textContent = t.navPort;
+            document.getElementById('nav-dividends').textContent = t.navDiv;
+            document.getElementById('nav-goals').textContent = t.navGoals;
+            document.getElementById('nav-tax').textContent = t.navTax;
+            document.getElementById('footer-text').innerHTML = t.footer;
+            document.getElementById('langFlag').textContent = langLabels[lang];
+
+            if (lang === 'ar') {
+                document.documentElement.setAttribute('dir', 'rtl');
+                document.documentElement.setAttribute('lang', 'ar');
+            } else {
+                document.documentElement.setAttribute('dir', 'ltr');
+                document.documentElement.setAttribute('lang', lang);
+            }
+
+            document.querySelectorAll('.lang-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.lang === lang);
+            });
+
+            localStorage.setItem('yis-lang', lang);
+        }
+
+        document.getElementById('langBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('langDropdown').classList.toggle('open');
+        });
+
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.addEventListener('click', () => {
+                applyLanguage(opt.dataset.lang);
+                document.getElementById('langDropdown').classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', () => {
+            document.getElementById('langDropdown').classList.remove('open');
+        });
+
+        const savedLang = localStorage.getItem('yis-lang') || 'en';
+        applyLanguage(savedLang);
+    </script>
+</body>
+</html>

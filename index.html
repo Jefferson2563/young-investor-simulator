@@ -35,8 +35,11 @@
                 <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
             </a>
             <div class="nav-links">
-                <a href="#simulator">Simulator</a>
-                <a href="#learn">Learn</a>
+                <a href="#simulator" class="nav-active">Simulator</a>
+                <a href="portfolio/" class="nav-soon" title="Coming Soon">Portfolio</a>
+                <a href="dividends/" class="nav-soon" title="Coming Soon">Dividends</a>
+                <a href="goals/" class="nav-soon" title="Coming Soon">Goals</a>
+                <a href="tax/" class="nav-soon" title="Coming Soon">Tax</a>
                 <a href="#legends">Legends</a>
             </div>
             <div class="nav-right">
@@ -195,8 +198,8 @@
                             <label for="initialInvestment">Starting amount</label>
                             <span class="control-value" id="initialValue">$500</span>
                         </div>
-                        <input type="range" id="initialInvestment" min="0" max="10000" step="100" value="500">
-                        <div class="control-range"><span>$0</span><span>$10,000</span></div>
+                        <input type="range" id="initialInvestment" min="0" max="1000" step="1" value="50">
+                        <div class="control-range"><span>$0</span><span>$10M</span></div>
                     </div>
 
                     <div class="control-group">
@@ -204,8 +207,8 @@
                             <label for="monthlyContribution">Monthly contribution</label>
                             <span class="control-value" id="monthlyValue">$100</span>
                         </div>
-                        <input type="range" id="monthlyContribution" min="0" max="2000" step="25" value="100">
-                        <div class="control-range"><span>$0</span><span>$2,000</span></div>
+                        <input type="range" id="monthlyContribution" min="0" max="1000" step="1" value="40">
+                        <div class="control-range"><span>$0</span><span>$50K</span></div>
                     </div>
 
                     <div class="control-group">
@@ -213,8 +216,8 @@
                             <label for="annualReturn">Annual return</label>
                             <span class="control-value" id="returnValue">10%</span>
                         </div>
-                        <input type="range" id="annualReturn" min="1" max="25" step="0.5" value="10">
-                        <div class="control-range"><span>1%</span><span>25%</span></div>
+                        <input type="range" id="annualReturn" min="1" max="100" step="0.5" value="10">
+                        <div class="control-range"><span>1%</span><span>100%</span></div>
                     </div>
 
                     <!-- Historical returns reference (collapsible) -->
@@ -260,8 +263,8 @@
                             <label for="years">Duration</label>
                             <span class="control-value" id="yearsValue">30 years</span>
                         </div>
-                        <input type="range" id="years" min="1" max="50" step="1" value="30">
-                        <div class="control-range"><span>1 yr</span><span>50 yrs</span></div>
+                        <input type="range" id="years" min="1" max="100" step="1" value="30">
+                        <div class="control-range"><span>1 yr</span><span>100 yrs</span></div>
                     </div>
 
                     <div class="currency-toggle">
@@ -291,7 +294,7 @@
                         </div>
                         <div class="stat-card">
                             <div class="stat-value" id="goalYears">-</div>
-                            <div class="stat-label">To hit 100K</div>
+                            <div class="stat-label" id="goalLabel">To hit $100K</div>
                         </div>
                     </div>
                     <!-- Share Button -->
@@ -581,11 +584,12 @@
                     <p class="footer-about">A free tool built to show young people the power of starting early. Sign up to save your progress and track your journey.</p>
                 </div>
                 <div class="footer-col">
-                    <h4 class="footer-heading">Navigate</h4>
-                    <a href="#hero">Home</a>
+                    <h4 class="footer-heading">Tools</h4>
                     <a href="#simulator">Simulator</a>
-                    <a href="#learn">Learn</a>
-                    <a href="#legends">Legends</a>
+                    <a href="portfolio/">Portfolio Tracker <span class="footer-badge">Soon</span></a>
+                    <a href="dividends/">Dividend Manager <span class="footer-badge">Soon</span></a>
+                    <a href="goals/">Savings Goals <span class="footer-badge">Soon</span></a>
+                    <a href="tax/">Tax Optimizer <span class="footer-badge">Soon</span></a>
                 </div>
                 <div class="footer-col">
                     <h4 class="footer-heading">Learn to invest</h4>
@@ -616,6 +620,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script src="js/firebase-config.js"></script>
+    <script src="js/i18n.js"></script>
     <script src="js/app.js"></script>
 </body>
 </html>
