@@ -10,14 +10,17 @@
    6. Enable Cloud Firestore > Create database > Start in test mode
    ============================================ */
 
+
+// Web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBn4T2jDsbYlr4ZgMmMkmXZAO8b400hJaw",
+  authDomain: "young-investor-simulator.firebaseapp.com",
+  projectId: "young-investor-simulator",
+  storageBucket: "young-investor-simulator.firebasestorage.app",
+  messagingSenderId: "194230791250",
+  appId: "1:194230791250:web:9a178198af1011c411038b"
 };
+
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
