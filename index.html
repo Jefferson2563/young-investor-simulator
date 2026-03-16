@@ -3,128 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Young Investor Simulator | Start Now, Thank Yourself Later</title>
-    <meta name="description" content="See how much wealth you can build by starting to invest young. Interactive simulator for the next generation of investors.">
+    <title>Young Investor Simulator | See How Much Wealth You Can Build Starting Now</title>
+    <meta name="description" content="Free interactive investment simulator for young people. See how compound interest turns small monthly contributions into massive wealth. Start with $100/month and watch it grow.">
+    <meta name="keywords" content="young investor simulator, investment calculator, compound interest, youth investing, investment simulator, how to invest young, wealth building">
+    <meta name="author" content="Young Investor Simulator">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Young Investor Simulator">
+    <meta property="og:description" content="See how much wealth you can build by starting to invest now. Interactive simulator for the next generation.">
+    <meta property="og:type" content="website">
+
+    <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📈</text></svg>">
-    <link rel="stylesheet" href="style.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Theme Toggle -->
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-        <span class="theme-icon" id="themeIcon">☀️</span>
-    </button>
 
-    <!-- Hero Section -->
-    <header class="hero">
-        <div class="container">
-            <p class="hero-tag">You're young. Use it.</p>
-            <h1 class="hero-title">Investment<br>Simulator</h1>
-            <p class="hero-subtitle">See what happens when time is on your side.</p>
+    <!-- ========== NAVBAR ========== -->
+    <nav class="navbar" id="navbar">
+        <div class="container nav-inner">
+            <a href="#" class="nav-logo">
+                <span class="logo-icon">📈</span>
+                <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
+            </a>
+            <div class="nav-links">
+                <a href="#simulator">Simulator</a>
+                <a href="#learn">Learn</a>
+                <a href="#legends">Legends</a>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <span id="themeIcon">☀️</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========== HERO ========== -->
+    <header class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="container hero-content">
+            <div class="hero-badge">Built for Gen Z & Millennials</div>
+            <h1 class="hero-title">
+                Your money could be<br>
+                <span class="hero-highlight" id="heroAmount">$736,098</span>
+            </h1>
+            <p class="hero-subtitle">Starting with just $500 and $100/month. No trust fund needed.<br>See for yourself below.</p>
+            <a href="#simulator" class="hero-cta">
+                <span>Try the simulator</span>
+                <span class="cta-arrow">↓</span>
+            </a>
         </div>
     </header>
 
-    <!-- Big Goal Section -->
-    <section class="goal-section">
+    <!-- ========== GOAL BANNER ========== -->
+    <section class="goal-banner">
         <div class="container">
             <div class="goal-card" id="goalCard">
-                <div class="goal-amount" id="goalAmount">$0</div>
-                <div class="goal-label">Your projected wealth</div>
-                <p class="goal-quote">"With $100K+ invested in the market, you're basically guaranteed to never stress about money again. And it's way simpler than you think."</p>
+                <div class="goal-top">
+                    <div class="goal-amount" id="goalAmount">$736,098</div>
+                    <div class="goal-label">Your projected wealth</div>
+                </div>
+                <div class="goal-bottom">
+                    <p class="goal-quote">"With 100K+ of patrimoine invested in the stock market, you're basically guaranteed to never stress about money again. And it's way simpler than you think."</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Simulator Section -->
-    <section class="simulator">
+    <!-- ========== SIMULATOR ========== -->
+    <section class="simulator" id="simulator">
         <div class="container">
-            <div class="sim-grid">
-                <!-- Controls -->
-                <div class="controls">
-                    <h2 class="section-title">Play with the numbers</h2>
-                    <p class="section-desc">Adjust the sliders and watch your future change in real-time.</p>
+            <div class="section-header">
+                <h2 class="section-title">Play with the numbers</h2>
+                <p class="section-desc">Move the sliders. Watch your future change in real-time.</p>
+            </div>
 
+            <div class="sim-grid">
+                <!-- Controls Panel -->
+                <div class="controls-panel">
                     <div class="control-group">
                         <div class="control-header">
                             <label for="initialInvestment">Starting amount</label>
-                            <div class="control-value">
-                                <span id="initialValue">$500</span>
-                            </div>
+                            <span class="control-value" id="initialValue">$500</span>
                         </div>
                         <input type="range" id="initialInvestment" min="0" max="10000" step="100" value="500">
-                        <div class="control-range">
-                            <span>$0</span><span>$10,000</span>
-                        </div>
+                        <div class="control-range"><span>$0</span><span>$10,000</span></div>
                     </div>
 
                     <div class="control-group">
                         <div class="control-header">
                             <label for="monthlyContribution">Monthly contribution</label>
-                            <div class="control-value">
-                                <span id="monthlyValue">$100</span>
-                            </div>
+                            <span class="control-value" id="monthlyValue">$100</span>
                         </div>
                         <input type="range" id="monthlyContribution" min="0" max="2000" step="25" value="100">
-                        <div class="control-range">
-                            <span>$0</span><span>$2,000</span>
-                        </div>
+                        <div class="control-range"><span>$0</span><span>$2,000</span></div>
                     </div>
 
                     <div class="control-group">
                         <div class="control-header">
-                            <label for="annualReturn">Expected annual return</label>
-                            <div class="control-value">
-                                <span id="returnValue">15%</span>
-                            </div>
+                            <label for="annualReturn">Annual return</label>
+                            <span class="control-value" id="returnValue">15%</span>
                         </div>
                         <input type="range" id="annualReturn" min="1" max="25" step="0.5" value="15">
-                        <div class="control-range">
-                            <span>1%</span><span>25%</span>
-                        </div>
+                        <div class="control-range"><span>1%</span><span>25%</span></div>
                     </div>
 
                     <div class="control-group">
                         <div class="control-header">
-                            <label for="years">Investment duration</label>
-                            <div class="control-value">
-                                <span id="yearsValue">30 years</span>
-                            </div>
+                            <label for="years">Duration</label>
+                            <span class="control-value" id="yearsValue">30 years</span>
                         </div>
                         <input type="range" id="years" min="1" max="50" step="1" value="30">
-                        <div class="control-range">
-                            <span>1 year</span><span>50 years</span>
-                        </div>
+                        <div class="control-range"><span>1 yr</span><span>50 yrs</span></div>
                     </div>
 
-                    <!-- Currency Toggle -->
                     <div class="currency-toggle">
                         <button class="currency-btn active" data-currency="$">$ USD</button>
                         <button class="currency-btn" data-currency="€">€ EUR</button>
                     </div>
                 </div>
 
-                <!-- Chart -->
+                <!-- Chart + Stats -->
                 <div class="chart-area">
                     <div class="chart-container">
                         <canvas id="growthChart"></canvas>
                     </div>
-
-                    <!-- Stats Cards -->
                     <div class="stats-grid">
                         <div class="stat-card">
                             <div class="stat-value" id="totalInvested">$0</div>
-                            <div class="stat-label">Total you invested</div>
+                            <div class="stat-label">You put in</div>
                         </div>
                         <div class="stat-card accent">
                             <div class="stat-value" id="totalInterest">$0</div>
-                            <div class="stat-label">Money earned (interest)</div>
+                            <div class="stat-label">Market gave you</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-value" id="multiplier">0x</div>
-                            <div class="stat-label">Your money multiplied</div>
+                            <div class="stat-label">Money multiplied</div>
                         </div>
                         <div class="stat-card">
                             <div class="stat-value" id="goalYears">-</div>
-                            <div class="stat-label">Years to reach $100K</div>
+                            <div class="stat-label">To hit 100K</div>
                         </div>
                     </div>
                 </div>
@@ -132,73 +158,187 @@
         </div>
     </section>
 
-    <!-- Milestone Timeline -->
+    <!-- ========== MILESTONES ========== -->
     <section class="milestones-section">
         <div class="container">
-            <h2 class="section-title center">Your milestones</h2>
-            <p class="section-desc center">Watch your money hit these targets along the way.</p>
+            <div class="section-header center">
+                <h2 class="section-title">Your milestones</h2>
+                <p class="section-desc">Each one brings you closer to financial freedom.</p>
+            </div>
             <div class="milestones" id="milestones"></div>
         </div>
     </section>
 
-    <!-- Comparison Section -->
-    <section class="comparison-section">
+    <!-- ========== AGE COMPARISON ========== -->
+    <section class="comparison-section" id="learn">
         <div class="container">
-            <h2 class="section-title center">Starting at 20 vs 30</h2>
-            <p class="section-desc center">Same monthly investment. 10 years difference. Mind-blowing results.</p>
+            <div class="section-header center">
+                <h2 class="section-title">Starting at 20 vs 30</h2>
+                <p class="section-desc">Same monthly amount. 10 years difference. Life-changing gap.</p>
+            </div>
             <div class="comparison-grid">
-                <div class="comparison-card">
+                <div class="comparison-card winner">
+                    <div class="comparison-badge">You (starting now)</div>
                     <div class="comparison-age">Start at 20</div>
                     <div class="comparison-amount" id="startAt20">$0</div>
                     <div class="comparison-detail">by age 50</div>
                 </div>
                 <div class="comparison-vs">VS</div>
-                <div class="comparison-card dimmed">
+                <div class="comparison-card loser">
                     <div class="comparison-age">Start at 30</div>
                     <div class="comparison-amount" id="startAt30">$0</div>
                     <div class="comparison-detail">by age 50</div>
                 </div>
             </div>
-            <div class="comparison-diff" id="comparisonDiff"></div>
+            <p class="comparison-diff" id="comparisonDiff"></p>
         </div>
     </section>
 
-    <!-- Motivation Section -->
-    <section class="motivation-section">
+    <!-- ========== INVESTOR LEGENDS ========== -->
+    <section class="legends-section" id="legends">
         <div class="container">
-            <div class="quote-carousel" id="quoteCarousel">
-                <blockquote class="big-quote" id="bigQuote"></blockquote>
-                <cite class="quote-author" id="quoteAuthor"></cite>
+            <div class="section-header center">
+                <h2 class="section-title">They all started young</h2>
+                <p class="section-desc">The world's greatest investors didn't wait. Neither should you.</p>
             </div>
+            <div class="legends-grid">
+                <div class="legend-card">
+                    <div class="legend-avatar" data-initials="WB"></div>
+                    <div class="legend-info">
+                        <h3 class="legend-name">Warren Buffett</h3>
+                        <div class="legend-title">CEO, Berkshire Hathaway</div>
+                        <div class="legend-stat">Bought his first stock at <strong>age 11</strong></div>
+                        <blockquote class="legend-quote">"Someone's sitting in the shade today because someone planted a tree a long time ago."</blockquote>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-avatar" data-initials="MZ"></div>
+                    <div class="legend-info">
+                        <h3 class="legend-name">Mark Zuckerberg</h3>
+                        <div class="legend-title">CEO, Meta</div>
+                        <div class="legend-stat">Built Facebook at <strong>age 19</strong></div>
+                        <blockquote class="legend-quote">"The biggest risk is not taking any risk."</blockquote>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-avatar" data-initials="JB"></div>
+                    <div class="legend-info">
+                        <h3 class="legend-name">Jeff Bezos</h3>
+                        <div class="legend-title">Founder, Amazon</div>
+                        <div class="legend-stat">Started Amazon at <strong>age 30</strong></div>
+                        <blockquote class="legend-quote">"I knew that if I failed I wouldn't regret that. I knew the one thing I might regret is not trying."</blockquote>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-avatar" data-initials="EM"></div>
+                    <div class="legend-info">
+                        <h3 class="legend-name">Elon Musk</h3>
+                        <div class="legend-title">CEO, Tesla & SpaceX</div>
+                        <div class="legend-stat">Sold first code at <strong>age 12</strong></div>
+                        <blockquote class="legend-quote">"When something is important enough, you do it even if the odds are not in your favor."</blockquote>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-avatar" data-initials="RD"></div>
+                    <div class="legend-info">
+                        <h3 class="legend-name">Ray Dalio</h3>
+                        <div class="legend-title">Founder, Bridgewater Associates</div>
+                        <div class="legend-stat">Bought first stock at <strong>age 12</strong></div>
+                        <blockquote class="legend-quote">"He who lives by the crystal ball will eat shattered glass."</blockquote>
+                    </div>
+                </div>
+
+                <div class="legend-card">
+                    <div class="legend-avatar" data-initials="PL"></div>
+                    <div class="legend-info">
+                        <h3 class="legend-name">Peter Lynch</h3>
+                        <div class="legend-title">Former Manager, Fidelity</div>
+                        <div class="legend-stat">Averaged <strong>29% returns</strong> per year</div>
+                        <blockquote class="legend-quote">"Know what you own, and know why you own it."</blockquote>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== KEY FACTS ========== -->
+    <section class="facts-section">
+        <div class="container">
             <div class="facts-grid">
                 <div class="fact-card">
                     <div class="fact-number">92%</div>
-                    <div class="fact-text">of millionaires built their wealth through consistent investing, not inheritance</div>
+                    <div class="fact-text">of millionaires built wealth through consistent investing, not inheritance</div>
                 </div>
                 <div class="fact-card">
                     <div class="fact-number">$1.2M</div>
-                    <div class="fact-text">what $200/month becomes in 40 years at 10% annual return</div>
+                    <div class="fact-text">what $200/month becomes in 40 years at market average returns</div>
                 </div>
                 <div class="fact-card">
-                    <div class="fact-number">25</div>
-                    <div class="fact-text">the average age the world's best investors started investing</div>
+                    <div class="fact-number">8.5x</div>
+                    <div class="fact-text">more wealth for someone who starts at 20 vs 35, with the same monthly amount</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Footer -->
+    <!-- ========== QUOTE CAROUSEL ========== -->
+    <section class="quote-section">
+        <div class="container">
+            <div class="quote-carousel">
+                <div class="quote-marks">"</div>
+                <blockquote class="big-quote" id="bigQuote"></blockquote>
+                <cite class="quote-author" id="quoteAuthor"></cite>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
     <footer class="footer">
         <div class="container">
-            <h2 class="footer-title">The best time to start was yesterday.<br>The second best time is <span class="underline">now</span>.</h2>
-            <p class="footer-sub">You have the most powerful asset in investing: time. Don't waste it.</p>
-            <div class="footer-links">
-                <span>Built for the next generation of investors</span>
+            <div class="footer-cta">
+                <h2 class="footer-title">The best time to start was yesterday.<br>The second best time is <span class="underline">now</span>.</h2>
+                <p class="footer-sub">You have the most powerful asset in investing: time. Don't waste it.</p>
+            </div>
+
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <span class="logo-icon">📈</span>
+                        <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
+                    </div>
+                    <p class="footer-about">A free tool built to show young people the power of starting early. No sign-up. No ads. Just math.</p>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Navigate</h4>
+                    <a href="#hero">Home</a>
+                    <a href="#simulator">Simulator</a>
+                    <a href="#learn">Learn</a>
+                    <a href="#legends">Legends</a>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Resources</h4>
+                    <a href="https://www.investopedia.com/terms/c/compoundinterest.asp" target="_blank" rel="noopener">What is compound interest?</a>
+                    <a href="https://www.investopedia.com/terms/i/index-investing.asp" target="_blank" rel="noopener">What is index investing?</a>
+                    <a href="https://www.investopedia.com/articles/basics/06/invest1000.asp" target="_blank" rel="noopener">How to start with $1000</a>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-heading">Disclaimer</h4>
+                    <p class="footer-disclaimer">This simulator is for educational purposes only. Past returns do not guarantee future results. Always do your own research before investing.</p>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <span>&copy; 2026 Young Investor Simulator. Built for the next generation.</span>
             </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-    <script src="app.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
