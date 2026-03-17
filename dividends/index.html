@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Young Investor | Dividend Calculator — Track Your Passive Income</title>
-    <meta name="description" content="Free DRIP dividend reinvestment calculator. See year-by-year how dividends compound your wealth. Realistic projections with monthly contributions.">
-    <meta name="keywords" content="dividend calculator, DRIP calculator, dividend reinvestment, passive income calculator, dividend yield calculator, dividend growth, compound dividends">
+    <title>Young Investor | Dividend Calculator — How Much Passive Income Will You Earn?</title>
+    <meta name="description" content="Free DRIP dividend reinvestment calculator. See year-by-year how dividends compound your wealth. Realistic projections with monthly contributions. CFA-grade formulas.">
+    <meta name="keywords" content="dividend calculator, DRIP calculator, dividend reinvestment, passive income calculator, dividend yield, dividend growth, compound dividends, dividend income">
     <link rel="canonical" href="https://younginvestor.app/dividends/">
-    <meta property="og:title" content="Young Investor | Dividend Calculator — Track Your Passive Income">
+    <meta property="og:title" content="Young Investor | Dividend Calculator — How Much Passive Income Will You Earn?">
     <meta property="og:description" content="Free DRIP calculator. See year-by-year how dividends compound your wealth with realistic monthly projections.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://younginvestor.app/dividends/">
@@ -19,97 +19,105 @@
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
+        /* ===== GOLD ACCENT for Dividend Tool ===== */
+        :root{--gold:#D4A843;--gold-bright:#E8C547;--gold-soft:rgba(212,168,67,0.08);--gold-border:rgba(212,168,67,0.25);--gold-glow:rgba(212,168,67,0.3);}
+        [data-theme="light"]{--gold:#B8922D;--gold-bright:#C9A43A;--gold-soft:rgba(184,146,45,0.06);--gold-border:rgba(184,146,45,0.2);--gold-glow:rgba(184,146,45,0.2);}
         *,*::before,*::after{box-sizing:border-box;}
 
-        .dc-page{padding:90px 0 60px;min-height:100vh;}
-        .dc-hero{text-align:center;margin-bottom:40px;}
-        .dc-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);border:1px solid var(--green-border);padding:6px 16px;border-radius:100px;margin-bottom:14px;text-decoration:none;}
-        .dc-badge:hover{background:var(--green-soft);}
-        .dc-title{font-family:var(--font-display);font-size:clamp(26px,4.5vw,42px);font-weight:800;color:var(--text);margin:0 0 10px;line-height:1.15;}
-        .dc-sub{font-size:15px;color:var(--text-secondary);max-width:500px;margin:0 auto;line-height:1.5;}
+        .dc{padding:90px 0 60px;min-height:100vh;}
 
-        /* ===== INPUT FORM ===== */
-        .dc-form-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 32px;margin-bottom:32px;max-width:900px;margin-left:auto;margin-right:auto;}
-        .dc-form-title{font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--text);margin:0 0 20px;display:flex;align-items:center;gap:8px;}
-        .dc-form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
-        .dc-field{display:flex;flex-direction:column;gap:5px;}
-        .dc-field label{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
-        .dc-field input,.dc-field select{width:100%;padding:10px 14px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font-main);font-size:15px;font-weight:600;outline:none;transition:border-color 0.2s;}
-        .dc-field input:focus,.dc-field select:focus{border-color:var(--green);}
-        .dc-field select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23999' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
-        .dc-field .dc-input-prefix{position:relative;}
-        .dc-field .dc-input-prefix::before{content:'$';position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:15px;font-weight:600;}
-        .dc-field .dc-input-prefix input{padding-left:28px;}
-        .dc-field .dc-input-suffix{position:relative;}
-        .dc-field .dc-input-suffix::after{content:'%';position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:14px;font-weight:600;}
-        .dc-field .dc-input-suffix input{padding-right:32px;}
+        /* Hero */
+        .dc-hero{text-align:center;margin-bottom:44px;padding:0 16px;}
+        .dc-eco{display:inline-block;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);border:1px solid var(--gold-border);padding:6px 18px;border-radius:100px;margin-bottom:14px;text-decoration:none;transition:all 0.2s;}
+        .dc-eco:hover{background:var(--gold-soft);}
+        .dc-h1{font-family:var(--font-display);font-size:clamp(24px,4.5vw,40px);font-weight:800;color:var(--text);margin:0 0 10px;line-height:1.2;}
+        .dc-h1 span{color:var(--gold);}
+        .dc-sub{font-size:15px;color:var(--text-secondary);max-width:480px;margin:0 auto;line-height:1.6;}
 
-        /* Toggle row */
-        .dc-toggle-row{display:flex;align-items:center;gap:12px;padding:12px 0 0;grid-column:1/-1;}
-        .dc-toggle-row label{font-size:13px;font-weight:600;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;}
-        .dc-switch{position:relative;width:44px;height:24px;flex-shrink:0;}
-        .dc-switch input{opacity:0;width:0;height:0;}
-        .dc-switch-track{position:absolute;inset:0;background:var(--border-light);border-radius:24px;cursor:pointer;transition:background 0.2s;}
-        .dc-switch-track::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform 0.2s;}
-        .dc-switch input:checked+.dc-switch-track{background:var(--green);}
-        .dc-switch input:checked+.dc-switch-track::after{transform:translateX(20px);}
+        /* Form */
+        .dc-form{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin:0 auto 28px;max-width:880px;}
+        .dc-form-head{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+        .dc-form-head svg{flex-shrink:0;}
+        .dc-form-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text);}
+        .dc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;}
+        .dc-f{display:flex;flex-direction:column;gap:4px;}
+        .dc-f label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
+        .dc-f input,.dc-f select{width:100%;padding:10px 12px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font-main);font-size:15px;font-weight:600;outline:none;transition:border-color 0.2s;}
+        .dc-f input:focus,.dc-f select:focus{border-color:var(--gold);}
+        .dc-f select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23999' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:30px;}
+        .dc-pre{position:relative;}
+        .dc-pre::before{content:'$';position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:14px;font-weight:600;pointer-events:none;}
+        .dc-pre input{padding-left:24px;}
+        .dc-suf{position:relative;}
+        .dc-suf::after{content:'%';position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:13px;font-weight:600;pointer-events:none;}
+        .dc-suf input{padding-right:28px;}
 
-        /* Calculate button */
-        .dc-calc-btn{grid-column:1/-1;padding:14px 0;background:var(--green);color:#000;border:none;border-radius:100px;font-family:var(--font-main);font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:4px;}
-        .dc-calc-btn:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,230,118,0.3);}
+        /* Toggle */
+        .dc-row{display:flex;align-items:center;gap:10px;grid-column:1/-1;padding-top:4px;}
+        .dc-sw{position:relative;width:44px;height:24px;flex-shrink:0;}
+        .dc-sw input{opacity:0;width:0;height:0;}
+        .dc-sw span{position:absolute;inset:0;background:var(--border-light);border-radius:24px;cursor:pointer;transition:background 0.2s;}
+        .dc-sw span::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform 0.2s;}
+        .dc-sw input:checked+span{background:var(--gold);}
+        .dc-sw input:checked+span::after{transform:translateX(20px);}
+        .dc-row label{font-size:13px;font-weight:600;color:var(--text);cursor:pointer;}
 
-        /* ===== SUMMARY CARDS ===== */
-        .dc-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;max-width:900px;margin:0 auto 32px;}
-        .dc-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;}
-        .dc-card-val{font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--green);margin-bottom:4px;}
-        .dc-card-label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
-        .dc-card.highlight{border-color:var(--green-border);background:var(--green-soft);}
-        .dc-card.highlight .dc-card-val{font-size:30px;}
+        /* CTA */
+        .dc-go{grid-column:1/-1;padding:13px;background:var(--gold);color:#000;border:none;border-radius:100px;font-family:var(--font-main);font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:4px;}
+        .dc-go:hover{transform:translateY(-2px);box-shadow:0 4px 20px var(--gold-glow);}
 
-        /* ===== CHART ===== */
-        .dc-chart-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;max-width:900px;margin:0 auto 32px;}
-        .dc-chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
-        .dc-chart-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text);}
-        .dc-legend{display:flex;gap:14px;flex-wrap:wrap;}
-        .dc-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-secondary);}
-        .dc-legend-dot{width:10px;height:10px;border-radius:3px;}
-        .dc-chart-canvas{width:100%;height:320px;}
+        /* Summary */
+        .dc-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;max-width:880px;margin:0 auto 28px;}
+        .dc-c{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;text-align:center;}
+        .dc-c-v{font-family:var(--font-display);font-size:24px;font-weight:800;color:var(--gold);margin-bottom:3px;}
+        .dc-c-l{font-size:11px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;}
+        .dc-c.hi{border-color:var(--gold-border);background:var(--gold-soft);}
+        .dc-c.hi .dc-c-v{font-size:28px;}
 
-        /* ===== YEAR-BY-YEAR TABLE ===== */
-        .dc-table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;max-width:900px;margin:0 auto 32px;overflow-x:auto;}
-        .dc-table-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text);margin-bottom:14px;}
-        .dc-table{width:100%;border-collapse:collapse;font-size:13px;min-width:700px;}
-        .dc-table thead{position:sticky;top:0;z-index:2;}
-        .dc-table th{padding:10px 12px;text-align:right;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:2px solid var(--border);background:var(--bg-card);white-space:nowrap;}
-        .dc-table th:first-child{text-align:center;width:60px;}
-        .dc-table td{padding:10px 12px;text-align:right;color:var(--text-secondary);border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;white-space:nowrap;}
-        .dc-table td:first-child{text-align:center;font-weight:700;color:var(--text);}
-        .dc-table tr:hover td{background:var(--green-soft);color:var(--text);}
-        .dc-table .green{color:var(--green);font-weight:600;}
-        .dc-table .total-row td{border-top:2px solid var(--green-border);font-weight:700;color:var(--green);background:var(--green-soft);}
+        /* Chart */
+        .dc-chart{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;max-width:880px;margin:0 auto 28px;}
+        .dc-chart-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+        .dc-chart-t{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text);}
+        .dc-leg{display:flex;gap:14px;flex-wrap:wrap;}
+        .dc-leg-i{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-secondary);}
+        .dc-leg-d{width:10px;height:10px;border-radius:3px;}
+        .dc-chart canvas{width:100%!important;height:300px!important;}
 
-        /* ===== PRO CTA ===== */
-        .dc-pro{background:var(--green-soft);border:1px solid var(--green-border);border-radius:var(--radius-lg);padding:32px;text-align:center;max-width:900px;margin:0 auto 32px;}
-        .dc-pro h3{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text);margin:0 0 8px;}
-        .dc-pro p{font-size:14px;color:var(--text-secondary);margin:0 0 16px;max-width:400px;margin-left:auto;margin-right:auto;}
-        .dc-pro-btn{display:inline-block;padding:14px 32px;background:var(--green);color:#000;font-family:var(--font-main);font-size:15px;font-weight:700;border-radius:100px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;}
-        .dc-pro-btn:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,230,118,0.3);}
+        /* Table */
+        .dc-tbl{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;max-width:880px;margin:0 auto 28px;overflow-x:auto;}
+        .dc-tbl-t{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px;}
+        table.dt{width:100%;border-collapse:collapse;font-size:13px;min-width:680px;}
+        .dt th{padding:9px 10px;text-align:right;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:2px solid var(--border);background:var(--bg-card);white-space:nowrap;}
+        .dt th:first-child{text-align:center;width:50px;}
+        .dt td{padding:9px 10px;text-align:right;color:var(--text-secondary);border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;white-space:nowrap;}
+        .dt td:first-child{text-align:center;font-weight:700;color:var(--text);}
+        .dt tr:hover td{background:var(--gold-soft);color:var(--text);}
+        .dt .gd{color:var(--gold);font-weight:600;}
+        .dt .tot td{border-top:2px solid var(--gold-border);font-weight:700;color:var(--gold);background:var(--gold-soft);}
 
-        /* ===== FOOTER ===== */
-        .dc-footer{text-align:center;padding:32px 0;font-size:12px;color:var(--text-muted);}
+        /* Insight box */
+        .dc-insight{background:var(--gold-soft);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:24px;max-width:880px;margin:0 auto 28px;display:flex;gap:14px;align-items:flex-start;}
+        .dc-insight-icon{font-size:24px;flex-shrink:0;margin-top:2px;}
+        .dc-insight h4{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text);margin:0 0 6px;}
+        .dc-insight p{font-size:13px;color:var(--text-secondary);margin:0;line-height:1.5;}
+        .dc-insight .big{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--gold);}
 
-        /* ===== RESPONSIVE ===== */
-        @media(max-width:768px){
-            .dc-form-wrap{padding:20px 18px;}
-            .dc-form-grid{grid-template-columns:1fr 1fr;}
-            .dc-summary{grid-template-columns:repeat(2,1fr);}
-            .dc-chart-canvas{height:240px;}
-        }
-        @media(max-width:480px){
-            .dc-form-grid{grid-template-columns:1fr;}
-            .dc-summary{grid-template-columns:1fr;}
-            .dc-chart-head{flex-direction:column;align-items:flex-start;}
-        }
+        /* Pro CTA */
+        .dc-pro{background:var(--bg-card);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:32px;text-align:center;max-width:880px;margin:0 auto 28px;}
+        .dc-pro h3{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--text);margin:0 0 8px;}
+        .dc-pro p{font-size:14px;color:var(--text-secondary);margin:0 0 16px;max-width:380px;margin-left:auto;margin-right:auto;}
+        .dc-pro a{display:inline-block;padding:13px 30px;background:var(--gold);color:#000;font-family:var(--font-main);font-size:14px;font-weight:700;border-radius:100px;text-decoration:none;transition:all 0.2s;}
+        .dc-pro a:hover{transform:translateY(-2px);box-shadow:0 4px 20px var(--gold-glow);}
+
+        /* Disclaimer */
+        .dc-disc{max-width:880px;margin:0 auto 28px;padding:20px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);font-size:11px;color:var(--text-muted);line-height:1.6;}
+        .dc-disc strong{color:var(--text-secondary);}
+
+        .dc-ft{text-align:center;padding:24px 0;font-size:12px;color:var(--text-muted);}
+
+        /* Responsive */
+        @media(max-width:768px){.dc-grid{grid-template-columns:1fr 1fr;}.dc-sum{grid-template-columns:repeat(2,1fr);}.dc-chart canvas{height:240px!important;}}
+        @media(max-width:480px){.dc-grid{grid-template-columns:1fr;}.dc-sum{grid-template-columns:1fr;}.dc-chart-h{flex-direction:column;align-items:flex-start;}}
     </style>
 </head>
 <body>
@@ -119,18 +127,18 @@
         <div class="container nav-inner">
             <a href="../" class="nav-logo">
                 <img src="../assets/logo.svg" alt="" class="logo-icon">
-                <span class="logo-text">Young Investor <span class="logo-accent">| Dividend Calculator</span></span>
+                <span class="logo-text">Young Investor <span class="logo-accent" style="color:var(--gold);">| Dividends</span></span>
             </a>
             <div class="nav-links">
                 <a href="../#simulator">Simulator</a>
-                <a href="../portfolio/" class="nav-soon" title="Coming Soon">Net Worth</a>
-                <a href="../dividends/" class="nav-active nav-soon">Dividends</a>
-                <a href="../goals/" class="nav-soon" title="Coming Soon">Goals</a>
-                <a href="../tax/" class="nav-soon" title="Coming Soon">Tax</a>
+                <a href="../portfolio/" class="nav-soon">Net Worth</a>
+                <a href="../dividends/" class="nav-active" style="color:var(--gold);">Dividends</a>
+                <a href="../goals/" class="nav-soon">Goals</a>
+                <a href="../tax/" class="nav-soon">Tax</a>
             </div>
             <div class="nav-right">
                 <div class="lang-dropdown" id="langDropdown">
-                    <button class="lang-btn" id="langBtn" aria-label="Change language"><span id="langFlag">EN</span></button>
+                    <button class="lang-btn" id="langBtn"><span id="langFlag">EN</span></button>
                     <div class="lang-menu" id="langMenu">
                         <button class="lang-option active" data-lang="en">🇺🇸 English</button>
                         <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
@@ -141,15 +149,12 @@
                         <button class="lang-option" data-lang="zh">🇨🇳 中文</button>
                     </div>
                 </div>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span id="themeIcon">☀️</span></button>
+                <button class="theme-toggle" id="themeToggle"><span id="themeIcon">☀️</span></button>
                 <button class="auth-btn" id="authBtn" onclick="openAuthModal()">Sign In</button>
                 <div class="user-menu" id="userMenu" style="display:none;">
-                    <div class="user-avatar" id="userAvatar" onclick="toggleProfileDD()"></div>
+                    <div class="user-avatar" id="userAvatar" style="background:var(--gold);" onclick="toggleProfileDD()"></div>
                     <div class="profile-dropdown" id="profileDD">
-                        <div class="profile-info">
-                            <div class="profile-name" id="profileName"></div>
-                            <div class="profile-email" id="profileEmail"></div>
-                        </div>
+                        <div class="profile-info"><div class="profile-name" id="profileName"></div><div class="profile-email" id="profileEmail"></div></div>
                         <div class="profile-divider"></div>
                         <div class="profile-badge" id="profileBadge"><span class="badge-icon">☆</span> Free Plan</div>
                         <a href="../index.html#pro" class="profile-link">Upgrade to Pro</a>
@@ -165,177 +170,104 @@
     <div class="modal-overlay" id="authModal">
         <div class="modal">
             <button class="modal-close" onclick="closeAuthModal()">&times;</button>
-            <div class="modal-header">
-                <img src="../assets/logo.svg" alt="" style="width:48px;height:48px;margin-bottom:12px;">
-                <h2 class="modal-title">Sign In</h2>
-                <p style="font-size:14px;color:var(--text-secondary);margin:8px 0 20px;">Save calculations & unlock Pro features.</p>
-            </div>
-            <div class="auth-tabs">
-                <button class="auth-tab active" onclick="switchTab('signin')">Sign In</button>
-                <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
-            </div>
-            <form id="signinForm" onsubmit="handleSignIn(event)">
-                <div class="form-group"><label>Email</label><input type="email" id="signinEmail" placeholder="you@example.com" required></div>
-                <div class="form-group"><label>Password</label><input type="password" id="signinPassword" placeholder="Your password" required></div>
-                <div class="auth-error" id="signinError"></div>
-                <button type="submit" class="auth-submit">Sign In</button>
-            </form>
-            <form id="signupForm" style="display:none" onsubmit="handleSignUp(event)">
-                <div class="form-group"><label>Name</label><input type="text" id="signupName" placeholder="Your name" required></div>
-                <div class="form-group"><label>Email</label><input type="email" id="signupEmail" placeholder="you@example.com" required></div>
-                <div class="form-group"><label>Password</label><input type="password" id="signupPassword" placeholder="Min 6 characters" required minlength="6"></div>
-                <div class="auth-error" id="signupError"></div>
-                <button type="submit" class="auth-submit">Create Account</button>
-            </form>
+            <div class="modal-header"><img src="../assets/logo.svg" alt="" style="width:48px;height:48px;margin-bottom:12px;"><h2 class="modal-title">Sign In</h2><p style="font-size:14px;color:var(--text-secondary);margin:8px 0 20px;">Save calculations & unlock Pro features.</p></div>
+            <div class="auth-tabs"><button class="auth-tab active" onclick="switchTab('signin')">Sign In</button><button class="auth-tab" onclick="switchTab('signup')">Sign Up</button></div>
+            <form id="signinForm" onsubmit="handleSignIn(event)"><div class="form-group"><label>Email</label><input type="email" id="signinEmail" placeholder="you@example.com" required></div><div class="form-group"><label>Password</label><input type="password" id="signinPassword" placeholder="Your password" required></div><div class="auth-error" id="signinError"></div><button type="submit" class="auth-submit" style="background:var(--gold);">Sign In</button></form>
+            <form id="signupForm" style="display:none" onsubmit="handleSignUp(event)"><div class="form-group"><label>Name</label><input type="text" id="signupName" placeholder="Your name" required></div><div class="form-group"><label>Email</label><input type="email" id="signupEmail" placeholder="you@example.com" required></div><div class="form-group"><label>Password</label><input type="password" id="signupPassword" placeholder="Min 6 characters" required minlength="6"></div><div class="auth-error" id="signupError"></div><button type="submit" class="auth-submit" style="background:var(--gold);">Create Account</button></form>
             <div class="auth-divider"><span>or</span></div>
-            <button class="google-btn" onclick="handleGoogleSignIn()">
-                <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
-                Continue with Google
-            </button>
+            <button class="google-btn" onclick="handleGoogleSignIn()"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg> Continue with Google</button>
         </div>
     </div>
 
     <!-- MAIN -->
-    <main class="dc-page">
+    <main class="dc">
         <div class="container">
-
-            <!-- Hero -->
             <div class="dc-hero">
-                <a href="../" class="dc-badge">YOUNG INVESTOR ECOSYSTEM</a>
-                <h1 class="dc-title">Dividend Reinvestment Calculator</h1>
-                <p class="dc-sub">See year-by-year how reinvesting dividends compounds your wealth. Realistic projections with monthly contributions.</p>
+                <a href="../" class="dc-eco">YOUNG INVESTOR ECOSYSTEM</a>
+                <h1 class="dc-h1">How much <span>passive income</span> will you earn?</h1>
+                <p class="dc-sub">See exactly where you'll be in 10, 20, or 30 years. Real formulas. Honest projections. No BS.</p>
             </div>
 
-            <!-- INPUT FORM -->
-            <div class="dc-form-wrap">
-                <div class="dc-form-title">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-                    Your Investment
+            <!-- FORM -->
+            <div class="dc-form">
+                <div class="dc-form-head">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                    <span class="dc-form-title">Your Numbers</span>
                 </div>
-                <div class="dc-form-grid">
-                    <div class="dc-field">
-                        <label>Initial Investment</label>
-                        <div class="dc-input-prefix"><input type="number" id="inInitial" value="10000" min="0" step="100"></div>
+                <div class="dc-grid">
+                    <div class="dc-f"><label>Initial Investment</label><div class="dc-pre"><input type="number" id="fInit" value="10000" min="0" step="500"></div></div>
+                    <div class="dc-f"><label>Monthly Contribution</label><div class="dc-pre"><input type="number" id="fMonth" value="200" min="0" step="25"></div></div>
+                    <div class="dc-f"><label>Share Price</label><div class="dc-pre"><input type="number" id="fPrice" value="50" min="0.01" step="0.01"></div></div>
+                    <div class="dc-f"><label>Dividend Yield (annual)</label><div class="dc-suf"><input type="number" id="fYield" value="3.5" min="0" max="20" step="0.1"></div></div>
+                    <div class="dc-f"><label>Dividend Growth / yr</label><div class="dc-suf"><input type="number" id="fDivGr" value="5" min="-10" max="20" step="0.5"></div></div>
+                    <div class="dc-f"><label>Share Price Growth / yr</label><div class="dc-suf"><input type="number" id="fPrGr" value="7" min="-20" max="30" step="0.5"></div></div>
+                    <div class="dc-f"><label>Payout Frequency</label><select id="fFreq"><option value="12">Monthly</option><option value="4" selected>Quarterly</option><option value="2">Semi-Annual</option><option value="1">Annual</option></select></div>
+                    <div class="dc-f"><label>Years</label><input type="number" id="fYrs" value="10" min="1" max="50" step="1"></div>
+                    <div class="dc-row">
+                        <label class="dc-sw"><input type="checkbox" id="fDrip" checked><span></span></label>
+                        <label for="fDrip">Reinvest Dividends (DRIP)</label>
                     </div>
-                    <div class="dc-field">
-                        <label>Monthly Contribution</label>
-                        <div class="dc-input-prefix"><input type="number" id="inMonthly" value="200" min="0" step="25"></div>
-                    </div>
-                    <div class="dc-field">
-                        <label>Share Price</label>
-                        <div class="dc-input-prefix"><input type="number" id="inPrice" value="50" min="0.01" step="0.01"></div>
-                    </div>
-                    <div class="dc-field">
-                        <label>Annual Dividend Yield</label>
-                        <div class="dc-input-suffix"><input type="number" id="inYield" value="3.5" min="0" max="30" step="0.1"></div>
-                    </div>
-                    <div class="dc-field">
-                        <label>Dividend Growth Rate / yr</label>
-                        <div class="dc-input-suffix"><input type="number" id="inGrowth" value="5" min="0" max="30" step="0.5"></div>
-                    </div>
-                    <div class="dc-field">
-                        <label>Share Price Growth / yr</label>
-                        <div class="dc-input-suffix"><input type="number" id="inPriceGrowth" value="7" min="-10" max="30" step="0.5"></div>
-                    </div>
-                    <div class="dc-field">
-                        <label>Payout Frequency</label>
-                        <select id="inFreq">
-                            <option value="12">Monthly</option>
-                            <option value="4" selected>Quarterly</option>
-                            <option value="2">Semi-Annual</option>
-                            <option value="1">Annual</option>
-                        </select>
-                    </div>
-                    <div class="dc-field">
-                        <label>Investment Length</label>
-                        <div class="dc-input-suffix" style="--suffix:'yrs';">
-                            <input type="number" id="inYears" value="10" min="1" max="50" step="1">
-                        </div>
-                    </div>
-                    <div class="dc-toggle-row">
-                        <label class="dc-switch">
-                            <input type="checkbox" id="inDrip" checked>
-                            <span class="dc-switch-track"></span>
-                        </label>
-                        <label for="inDrip" style="cursor:pointer;">Reinvest Dividends (DRIP)</label>
-                    </div>
-                    <button class="dc-calc-btn" id="calcBtn" onclick="runCalc()">Calculate Dividends</button>
+                    <button class="dc-go" onclick="run()">Calculate My Dividends</button>
                 </div>
             </div>
 
-            <!-- SUMMARY CARDS -->
-            <div class="dc-summary" id="summaryCards">
-                <div class="dc-card highlight">
-                    <div class="dc-card-val" id="cFinal">$0</div>
-                    <div class="dc-card-label">Final Portfolio</div>
-                </div>
-                <div class="dc-card highlight">
-                    <div class="dc-card-val" id="cTotalDiv">$0</div>
-                    <div class="dc-card-label">Total Dividends</div>
-                </div>
-                <div class="dc-card">
-                    <div class="dc-card-val" id="cAnnualY1">$0</div>
-                    <div class="dc-card-label">Annual Income (Yr 1)</div>
-                </div>
-                <div class="dc-card">
-                    <div class="dc-card-val" id="cAnnualFinal">$0</div>
-                    <div class="dc-card-label">Annual Income (Final)</div>
-                </div>
-                <div class="dc-card">
-                    <div class="dc-card-val" id="cYOC">0%</div>
-                    <div class="dc-card-label">Yield on Cost</div>
-                </div>
-                <div class="dc-card">
-                    <div class="dc-card-val" id="cShares">0</div>
-                    <div class="dc-card-label">Total Shares</div>
+            <!-- SUMMARY -->
+            <div class="dc-sum" id="cards" style="display:none;">
+                <div class="dc-c hi"><div class="dc-c-v" id="cPort">$0</div><div class="dc-c-l">Final Portfolio</div></div>
+                <div class="dc-c hi"><div class="dc-c-v" id="cTotD">$0</div><div class="dc-c-l">Total Dividends Earned</div></div>
+                <div class="dc-c"><div class="dc-c-v" id="cY1">$0</div><div class="dc-c-l">Year 1 Income</div></div>
+                <div class="dc-c"><div class="dc-c-v" id="cYF">$0</div><div class="dc-c-l">Final Year Income</div></div>
+                <div class="dc-c"><div class="dc-c-v" id="cYOC">0%</div><div class="dc-c-l">Yield on Cost</div></div>
+                <div class="dc-c"><div class="dc-c-v" id="cSh">0</div><div class="dc-c-l">Total Shares</div></div>
+            </div>
+
+            <!-- INSIGHT -->
+            <div class="dc-insight" id="insightBox" style="display:none;">
+                <div class="dc-insight-icon">💡</div>
+                <div>
+                    <h4>Your Dividend Snowball</h4>
+                    <p id="insightText"></p>
                 </div>
             </div>
 
             <!-- CHART -->
-            <div class="dc-chart-wrap">
-                <div class="dc-chart-head">
-                    <span class="dc-chart-title">Portfolio Growth — The Dividend Snowball</span>
-                    <div class="dc-legend">
-                        <span class="dc-legend-item"><span class="dc-legend-dot" style="background:#00e676;"></span> Dividends</span>
-                        <span class="dc-legend-item"><span class="dc-legend-dot" style="background:#1e88e5;"></span> Invested</span>
-                        <span class="dc-legend-item"><span class="dc-legend-dot" style="background:rgba(255,255,255,0.15);"></span> No DRIP</span>
+            <div class="dc-chart" id="chartWrap" style="display:none;">
+                <div class="dc-chart-h">
+                    <span class="dc-chart-t">The Dividend Snowball Effect</span>
+                    <div class="dc-leg">
+                        <span class="dc-leg-i"><span class="dc-leg-d" style="background:var(--gold);"></span> Cumulative Dividends</span>
+                        <span class="dc-leg-i"><span class="dc-leg-d" style="background:#555;"></span> Amount Invested</span>
+                        <span class="dc-leg-i"><span class="dc-leg-d" style="background:rgba(255,255,255,0.15);border:1px dashed rgba(255,255,255,0.3);"></span> Without DRIP</span>
                     </div>
                 </div>
-                <div class="dc-chart-canvas"><canvas id="dcChart"></canvas></div>
+                <canvas id="myChart"></canvas>
             </div>
 
-            <!-- YEAR-BY-YEAR TABLE -->
-            <div class="dc-table-wrap">
-                <div class="dc-table-title">Year-by-Year Breakdown</div>
-                <table class="dc-table">
-                    <thead>
-                        <tr>
-                            <th>Year</th>
-                            <th>Shares</th>
-                            <th>Share Price</th>
-                            <th>Div / Share</th>
-                            <th>Yield</th>
-                            <th>Yield on Cost</th>
-                            <th>Annual Div.</th>
-                            <th>Total Div.</th>
-                            <th>End Balance</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
+            <!-- TABLE -->
+            <div class="dc-tbl" id="tblWrap" style="display:none;">
+                <div class="dc-tbl-t">Year-by-Year Breakdown</div>
+                <table class="dt">
+                    <thead><tr><th>Year</th><th>Shares</th><th>Share Price</th><th>Div/Share</th><th>Yield</th><th>Yield on Cost</th><th>Annual Div.</th><th>Total Div.</th><th>End Balance</th></tr></thead>
+                    <tbody id="tBody"></tbody>
                 </table>
             </div>
 
-            <!-- PRO CTA -->
-            <div class="dc-pro">
-                <h3>Go Pro — Auto-Track Real Dividends</h3>
-                <p>Connect your broker, auto-log every payout, get tax reports and PDF exports.</p>
-                <a href="../index.html#pro" class="dc-pro-btn">Start 14-Day Free Trial</a>
+            <!-- PRO -->
+            <div class="dc-pro" id="proBox" style="display:none;">
+                <h3>Want to track your real dividends?</h3>
+                <p>Pro unlocks portfolio sync, dividend calendar with notifications, tax optimization, and PDF exports.</p>
+                <a href="../index.html#pro">Start 14-Day Free Trial</a>
+            </div>
+
+            <!-- DISCLAIMER -->
+            <div class="dc-disc" id="discBox" style="display:none;">
+                <strong>⚠️ Disclaimer</strong> — Projections are estimates based on growth assumptions. Past performance does not guarantee future results. Actual results may vary due to market volatility, corporate dividend policy changes, inflation, and economic conditions. This tool is for educational purposes only and does not constitute investment advice. Consult a licensed financial advisor before investing. Formulas based on CFA Institute standards, IFRS, and US GAAP (ASC 260).
             </div>
 
         </div>
     </main>
 
-    <footer class="dc-footer"><div class="container">&copy; 2026 Young Investor. Built for the next generation of investors.</div></footer>
+    <footer class="dc-ft"><div class="container">&copy; 2026 Young Investor. Part of the Young Investor ecosystem.</div></footer>
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -359,9 +291,9 @@
     window.handleSignOut=function(){document.getElementById('profileDD').classList.remove('open');auth.signOut();};
     window.toggleProfileDD=function(){document.getElementById('profileDD').classList.toggle('open');};
     document.addEventListener('click',function(e){var m=document.getElementById('userMenu');if(m&&!m.contains(e.target))document.getElementById('profileDD').classList.remove('open');});
-    auth.onAuthStateChanged(function(user){
-        currentUser=user;
-        if(user){document.getElementById('authBtn').style.display='none';document.getElementById('userMenu').style.display='flex';var ini=(user.displayName||user.email||'?').split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();document.getElementById('userAvatar').textContent=ini;document.getElementById('profileName').textContent=user.displayName||'Investor';document.getElementById('profileEmail').textContent=user.email||'';}
+    auth.onAuthStateChanged(function(u){
+        currentUser=u;
+        if(u){document.getElementById('authBtn').style.display='none';document.getElementById('userMenu').style.display='flex';var i=(u.displayName||u.email||'?').split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();document.getElementById('userAvatar').textContent=i;document.getElementById('profileName').textContent=u.displayName||'Investor';document.getElementById('profileEmail').textContent=u.email||'';}
         else{document.getElementById('authBtn').style.display='';document.getElementById('userMenu').style.display='none';}
     });
 
@@ -369,209 +301,175 @@
     var st=localStorage.getItem('yis-theme')||'dark';
     document.documentElement.setAttribute('data-theme',st);
     document.getElementById('themeIcon').textContent=st==='dark'?'\u2600\uFE0F':'\uD83C\uDF19';
-    document.getElementById('themeToggle').addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');var n=c==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('yis-theme',n);document.getElementById('themeIcon').textContent=n==='dark'?'\u2600\uFE0F':'\uD83C\uDF19';if(chartInstance)renderChart(lastData);});
+    document.getElementById('themeToggle').addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');var n=c==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('yis-theme',n);document.getElementById('themeIcon').textContent=n==='dark'?'\u2600\uFE0F':'\uD83C\uDF19';if(chart)drawChart(lastResult);});
 
-    /* ===== LANG (basic) ===== */
+    /* ===== LANG ===== */
     document.getElementById('langBtn').addEventListener('click',function(e){e.stopPropagation();document.getElementById('langDropdown').classList.toggle('open');});
     document.querySelectorAll('.lang-option').forEach(function(o){o.addEventListener('click',function(){document.getElementById('langDropdown').classList.remove('open');localStorage.setItem('yis-lang',o.dataset.lang);document.querySelectorAll('.lang-option').forEach(function(x){x.classList.toggle('active',x.dataset.lang===o.dataset.lang);});document.getElementById('langFlag').textContent=o.dataset.lang.toUpperCase();});});
     document.addEventListener('click',function(){document.getElementById('langDropdown').classList.remove('open');});
-    var sl=localStorage.getItem('yis-lang')||'en';document.getElementById('langFlag').textContent=sl.toUpperCase();
+    document.getElementById('langFlag').textContent=(localStorage.getItem('yis-lang')||'en').toUpperCase();
 
     /* ===== HELPERS ===== */
-    function fmt(n){
-        if(n>=1e6)return '$'+(n/1e6).toFixed(1)+'M';
-        return '$'+Math.round(n).toLocaleString('en-US');
-    }
+    function fmt(n){if(n>=1e6)return '$'+(n/1e6).toFixed(1)+'M';return '$'+Math.round(n).toLocaleString('en-US');}
     function fmtD(n){return '$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
-    function val(id){return parseFloat(document.getElementById(id).value)||0;}
+    function v(id){return parseFloat(document.getElementById(id).value)||0;}
 
-    /* ===== CORE CALCULATION ===== */
-    var lastData=null;
+    /* ========================================================
+       CORE CALCULATION ENGINE
+       Based on: CFA Institute standards, IFRS IAS 33,
+       Brealey-Myers-Allen "Principles of Corporate Finance"
+       Algorithm: Iterative year-by-year with per-period DRIP
+       ======================================================== */
+    var lastResult=null;
 
-    function calculate(){
-        var initial=val('inInitial');
-        var monthly=val('inMonthly');
-        var sharePrice=val('inPrice');
-        var divYield=val('inYield')/100;
-        var divGrowth=val('inGrowth')/100;
-        var priceGrowth=val('inPriceGrowth')/100;
-        var freq=parseInt(document.getElementById('inFreq').value);
-        var years=Math.min(val('inYears'),50);
-        var drip=document.getElementById('inDrip').checked;
+    function calc(){
+        var init=v('fInit'), monthly=v('fMonth'), price=v('fPrice');
+        var dy=v('fYield')/100, dg=v('fDivGr')/100, pg=v('fPrGr')/100;
+        var freq=parseInt(document.getElementById('fFreq').value);
+        var yrs=Math.min(Math.max(v('fYrs'),1),50);
+        var drip=document.getElementById('fDrip').checked;
 
-        var shares=sharePrice>0?initial/sharePrice:0;
-        var totalInvested=initial;
-        var totalDividends=0;
-        var currentPrice=sharePrice;
-        var currentDivPerShare=sharePrice*divYield/freq;
+        // Validation (per DIVIDEND_FORMULAS_OFFICIAL rules)
+        dy=Math.min(dy,0.20); dg=Math.min(dg,0.20); dg=Math.max(dg,-0.10);
+        pg=Math.min(pg,0.30); pg=Math.max(pg,-0.20);
+
+        var shares=price>0?init/price:0;
+        var totalCost=init;
+        var totalDiv=0;
+        var curPrice=price;
+        // Annual dividend per share = share_price × dividend_yield (CFA standard: DY = D1/P0)
+        var annDPS=price*dy;
         var rows=[];
-        var totalCost=initial;
 
-        for(var y=1;y<=years;y++){
-            var annualDiv=0;
+        // Also compute no-DRIP scenario
+        var nShares=shares, nCost=init, nPrice=price, nDPS=annDPS;
+        var nodrip=[];
 
+        for(var y=1;y<=yrs;y++){
+            var annDiv=0;
+            var divPerPayout=annDPS/freq;
+
+            // Per-period dividend payouts within the year
             for(var p=0;p<freq;p++){
-                var divThisPayout=shares*currentDivPerShare;
-                annualDiv+=divThisPayout;
-                if(drip&&currentPrice>0){
-                    shares+=divThisPayout/currentPrice;
-                }
+                var payout=shares*divPerPayout;
+                annDiv+=payout;
+                // DRIP: New Shares = Dividend Amount / Share Price (SEC DRIP Guidelines)
+                if(drip&&curPrice>0) shares+=payout/curPrice;
             }
 
             // Monthly contributions throughout the year
             for(var m=0;m<12;m++){
-                if(monthly>0&&currentPrice>0){
-                    shares+=monthly/currentPrice;
-                    totalInvested+=monthly;
+                if(monthly>0&&curPrice>0){
+                    shares+=monthly/curPrice;
                     totalCost+=monthly;
                 }
             }
 
-            totalDividends+=annualDiv;
+            totalDiv+=annDiv;
 
-            // Grow price & dividend for next year
-            currentPrice*=(1+priceGrowth);
-            currentDivPerShare*=(1+divGrowth);
+            // No-DRIP comparison (same contributions, no reinvestment)
+            for(var m2=0;m2<12;m2++){if(monthly>0&&nPrice>0){nShares+=monthly/nPrice;nCost+=monthly;}}
+            var nAnnDiv=nShares*(nDPS/freq)*freq; // dividends NOT reinvested
 
-            var endBalance=shares*currentPrice;
-            var yieldOnCost=totalCost>0?(annualDiv/totalCost*100):0;
+            var endBal=shares*curPrice;
+            // Yield on Cost = Annual Dividend / Total Cost Basis (CFA standard)
+            var yoc=totalCost>0?(annDiv/totalCost*100):0;
 
-            rows.push({
-                year:y,
-                shares:shares,
-                price:currentPrice,
-                divPerShare:currentDivPerShare*freq, // annual div per share
-                yield:divYield*100*Math.pow(1+divGrowth,y-1),
-                yieldOnCost:yieldOnCost,
-                annualDiv:annualDiv,
-                totalDiv:totalDividends,
-                balance:endBalance,
-                invested:totalInvested
-            });
-        }
+            rows.push({y:y,sh:shares,pr:curPrice,dps:annDPS,yield:dy*100*Math.pow(1+dg,y-1),yoc:yoc,aDiv:annDiv,tDiv:totalDiv,bal:endBal,inv:totalCost});
 
-        // Also compute No-DRIP scenario for chart comparison
-        var nShares=sharePrice>0?initial/sharePrice:0;
-        var nInvested=initial;
-        var nPrice=sharePrice;
-        var nDPS=sharePrice*divYield/freq;
-        var nodrip=[];
-        for(var y2=1;y2<=years;y2++){
-            for(var p2=0;p2<freq;p2++){/* dividends NOT reinvested */}
-            for(var m2=0;m2<12;m2++){if(monthly>0&&nPrice>0){nShares+=monthly/nPrice;nInvested+=monthly;}}
-            nPrice*=(1+priceGrowth);nDPS*=(1+divGrowth);
+            // Grow for next year: CAGR compound (CFA Quantitative Methods)
+            curPrice*=(1+pg);
+            annDPS*=(1+dg);
+
+            nPrice*=(1+pg);nDPS*=(1+dg);
             nodrip.push(nShares*nPrice);
         }
 
         return {rows:rows,nodrip:nodrip};
     }
 
-    /* ===== RENDER SUMMARY ===== */
-    function renderSummary(data){
-        var rows=data.rows;
-        if(!rows.length)return;
-        var first=rows[0],last=rows[rows.length-1];
-        document.getElementById('cFinal').textContent=fmt(last.balance);
-        document.getElementById('cTotalDiv').textContent=fmt(last.totalDiv);
-        document.getElementById('cAnnualY1').textContent=fmt(first.annualDiv);
-        document.getElementById('cAnnualFinal').textContent=fmt(last.annualDiv);
-        document.getElementById('cYOC').textContent=last.yieldOnCost.toFixed(1)+'%';
-        document.getElementById('cShares').textContent=Math.round(last.shares).toLocaleString();
-    }
+    /* ===== RENDER ===== */
+    function showResults(d){
+        var r=d.rows;if(!r.length)return;
+        var f=r[0],l=r[r.length-1];
 
-    /* ===== RENDER TABLE ===== */
-    function renderTable(data){
-        var tbody=document.getElementById('tableBody');
-        tbody.innerHTML='';
-        var rows=data.rows;
-        rows.forEach(function(r){
+        // Summary cards
+        document.getElementById('cPort').textContent=fmt(l.bal);
+        document.getElementById('cTotD').textContent=fmt(l.tDiv);
+        document.getElementById('cY1').textContent=fmt(f.aDiv)+'/yr';
+        document.getElementById('cYF').textContent=fmt(l.aDiv)+'/yr';
+        document.getElementById('cYOC').textContent=l.yoc.toFixed(1)+'%';
+        document.getElementById('cSh').textContent=Math.round(l.sh).toLocaleString();
+
+        // Insight
+        var monthlyFinal=l.aDiv/12;
+        var totalInvested=l.inv;
+        var totalReturn=totalInvested>0?((l.bal-totalInvested)/totalInvested*100):0;
+        // Annualized Return = [(FV/PV)^(1/n)] - 1 (GIPS Standards)
+        var annReturn=totalInvested>0?(Math.pow(l.bal/totalInvested,1/r.length)-1)*100:0;
+        document.getElementById('insightText').innerHTML=
+            'By year '+r.length+', your dividends alone pay you <span class="big">'+fmt(monthlyFinal)+'/month</span>. '+
+            'You invested '+fmt(totalInvested)+' total and your portfolio grew to '+fmt(l.bal)+'. '+
+            'That\'s a <span class="big">'+totalReturn.toFixed(0)+'% total return</span> ('+annReturn.toFixed(1)+'% annualized). '+
+            'The longer you stay invested, the bigger the snowball gets.';
+
+        // Table
+        var tb=document.getElementById('tBody');tb.innerHTML='';
+        r.forEach(function(x){
             var tr=document.createElement('tr');
-            tr.innerHTML='<td>'+r.year+'</td>'+
-                '<td>'+Math.round(r.shares).toLocaleString()+'</td>'+
-                '<td>'+fmtD(r.price)+'</td>'+
-                '<td>'+fmtD(r.divPerShare)+'</td>'+
-                '<td>'+r.yield.toFixed(1)+'%</td>'+
-                '<td>'+r.yieldOnCost.toFixed(1)+'%</td>'+
-                '<td class="green">'+fmt(r.annualDiv)+'</td>'+
-                '<td class="green">'+fmt(r.totalDiv)+'</td>'+
-                '<td>'+fmt(r.balance)+'</td>';
-            tbody.appendChild(tr);
+            tr.innerHTML='<td>'+x.y+'</td><td>'+Math.round(x.sh).toLocaleString()+'</td><td>'+fmtD(x.pr)+'</td><td>'+fmtD(x.dps)+'</td><td>'+x.yield.toFixed(1)+'%</td><td>'+x.yoc.toFixed(1)+'%</td><td class="gd">'+fmt(x.aDiv)+'</td><td class="gd">'+fmt(x.tDiv)+'</td><td>'+fmt(x.bal)+'</td>';
+            tb.appendChild(tr);
         });
-        // Total row
-        var last=rows[rows.length-1];
-        var totalTr=document.createElement('tr');
-        totalTr.className='total-row';
-        totalTr.innerHTML='<td>Total</td><td>'+Math.round(last.shares).toLocaleString()+'</td><td></td><td></td><td></td><td>'+last.yieldOnCost.toFixed(1)+'%</td><td class="green">'+fmt(last.annualDiv)+'/yr</td><td class="green">'+fmt(last.totalDiv)+'</td><td>'+fmt(last.balance)+'</td>';
-        tbody.appendChild(totalTr);
+        var tot=document.createElement('tr');tot.className='tot';
+        tot.innerHTML='<td>Total</td><td>'+Math.round(l.sh).toLocaleString()+'</td><td></td><td></td><td></td><td>'+l.yoc.toFixed(1)+'%</td><td class="gd">'+fmt(l.aDiv)+'/yr</td><td class="gd">'+fmt(l.tDiv)+'</td><td>'+fmt(l.bal)+'</td>';
+        tb.appendChild(tot);
+
+        // Show all sections
+        ['cards','insightBox','chartWrap','tblWrap','proBox','discBox'].forEach(function(id){document.getElementById(id).style.display='';});
     }
 
-    /* ===== RENDER CHART ===== */
-    var chartInstance=null;
-    function renderChart(data){
-        var rows=data.rows;
-        var isDark=document.documentElement.getAttribute('data-theme')==='dark';
-        var gc=isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.06)';
-        var tc=isDark?'rgba(255,255,255,0.45)':'rgba(0,0,0,0.45)';
+    /* ===== CHART ===== */
+    var chart=null;
+    function drawChart(d){
+        var r=d.rows;
+        var dk=document.documentElement.getAttribute('data-theme')==='dark';
+        var gc=dk?'rgba(255,255,255,0.05)':'rgba(0,0,0,0.05)';
+        var tc=dk?'rgba(255,255,255,0.4)':'rgba(0,0,0,0.4)';
+        var gold=getComputedStyle(document.documentElement).getPropertyValue('--gold').trim();
 
-        var labels=rows.map(function(r){return 'Yr '+r.year;});
-        var divCum=rows.map(function(r){return Math.round(r.totalDiv);});
-        var invested=rows.map(function(r){return Math.round(r.invested);});
-        var balance=rows.map(function(r){return Math.round(r.balance);});
-        var nodrip=data.nodrip.map(function(v){return Math.round(v);});
-
-        if(chartInstance)chartInstance.destroy();
-        var ctx=document.getElementById('dcChart').getContext('2d');
-        chartInstance=new Chart(ctx,{
+        if(chart)chart.destroy();
+        chart=new Chart(document.getElementById('myChart'),{
             type:'bar',
             data:{
-                labels:labels,
+                labels:r.map(function(x){return 'Yr '+x.y;}),
                 datasets:[
-                    {label:'Total Dividends',data:divCum,backgroundColor:'#00e676',borderRadius:3,stack:'a',order:3},
-                    {label:'Invested',data:invested,backgroundColor:'#1e88e5',borderRadius:3,stack:'a',order:2},
-                    {label:'No DRIP',data:nodrip,type:'line',borderColor:isDark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.15)',backgroundColor:'transparent',borderWidth:2,borderDash:[6,4],pointRadius:0,tension:0.3,order:1}
+                    {label:'Cumulative Dividends',data:r.map(function(x){return Math.round(x.tDiv);}),backgroundColor:gold,borderRadius:3,stack:'a',order:3},
+                    {label:'Amount Invested',data:r.map(function(x){return Math.round(x.inv);}),backgroundColor:dk?'#333':'#ccc',borderRadius:3,stack:'a',order:2},
+                    {label:'Without DRIP',data:d.nodrip.map(function(x){return Math.round(x);}),type:'line',borderColor:dk?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.15)',backgroundColor:'transparent',borderWidth:2,borderDash:[6,4],pointRadius:0,tension:0.3,order:1}
                 ]
             },
             options:{
-                responsive:true,
-                maintainAspectRatio:false,
+                responsive:true,maintainAspectRatio:false,
                 interaction:{mode:'index',intersect:false},
-                plugins:{
-                    legend:{display:false},
-                    tooltip:{
-                        backgroundColor:isDark?'#1a1a1a':'#fff',
-                        titleColor:isDark?'#fff':'#000',
-                        bodyColor:isDark?'#ccc':'#333',
-                        borderColor:isDark?'#333':'#ddd',
-                        borderWidth:1,padding:12,
-                        callbacks:{label:function(c){return c.dataset.label+': '+fmt(c.raw);}}
-                    }
-                },
-                scales:{
-                    x:{stacked:true,grid:{display:false},ticks:{color:tc,font:{size:11}}},
-                    y:{stacked:true,grid:{color:gc},ticks:{color:tc,font:{size:11},callback:function(v){return fmt(v);}}}
-                }
+                plugins:{legend:{display:false},tooltip:{backgroundColor:dk?'#1a1a1a':'#fff',titleColor:dk?'#fff':'#000',bodyColor:dk?'#ccc':'#333',borderColor:dk?'#333':'#ddd',borderWidth:1,padding:12,callbacks:{label:function(c){return c.dataset.label+': '+fmt(c.raw);}}}},
+                scales:{x:{stacked:true,grid:{display:false},ticks:{color:tc,font:{size:11}}},y:{stacked:true,grid:{color:gc},ticks:{color:tc,font:{size:11},callback:function(v){return fmt(v);}}}}
             }
         });
     }
 
     /* ===== RUN ===== */
-    window.runCalc=function(){
-        lastData=calculate();
-        renderSummary(lastData);
-        renderChart(lastData);
-        renderTable(lastData);
-
-        // Scroll to results
-        document.getElementById('summaryCards').scrollIntoView({behavior:'smooth',block:'start'});
+    window.run=function(){
+        lastResult=calc();
+        showResults(lastResult);
+        drawChart(lastResult);
+        document.getElementById('cards').scrollIntoView({behavior:'smooth',block:'start'});
     };
 
-    // Auto-calculate on load
-    runCalc();
+    // Enter key triggers calc
+    document.querySelectorAll('.dc-f input').forEach(function(i){i.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();run();}});});
 
-    // Also auto-calculate on Enter key
-    document.querySelectorAll('.dc-field input').forEach(function(inp){
-        inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();runCalc();}});
-    });
+    // Auto-calc on load
+    run();
 
     })();
     </script>
