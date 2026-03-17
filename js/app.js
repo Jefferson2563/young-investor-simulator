@@ -262,21 +262,17 @@ function shareResults() {
     }, 'image/png');
 }
 
-function handleUpgradePro() {
-    // Require login first
-    if (!currentUser) {
-        openAuthModal();
-        return;
-    }
+// Stripe Payment Links (each button → direct to correct Stripe page)
+const STRIPE_MONTHLY = 'https://buy.stripe.com/9B6eVc9dw8yI5Ej11ofAc02';
+const STRIPE_ANNUAL = 'https://buy.stripe.com/14A14m61kdT27Mr5hEfAc03';
 
-    // Stripe Checkout links (monthly + annual)
-    const STRIPE_MONTHLY = 'https://buy.stripe.com/14A14m61kdT27Mr5hEfAc03';
-    const STRIPE_ANNUAL = 'https://buy.stripe.com/9B6eVc9dw8yI5Ej11ofAc02';
+function handleUpgradeMonthly() { _openStripe(STRIPE_MONTHLY); }
+function handleUpgradeAnnual() { _openStripe(STRIPE_ANNUAL); }
+// Keep old name as fallback for tool pages
+function handleUpgradePro() { _openStripe(STRIPE_MONTHLY); }
 
-    const isAnnual = document.getElementById('pricingAnnual').classList.contains('active');
-    const link = isAnnual ? STRIPE_ANNUAL : STRIPE_MONTHLY;
-
-    // Pass user email to Stripe for matching
+function _openStripe(link) {
+    if (!currentUser) { openAuthModal(); return; }
     const email = currentUser.email ? `?prefilled_email=${encodeURIComponent(currentUser.email)}` : '';
     window.open(link + email, '_blank');
 }
@@ -298,29 +294,7 @@ function handleUpgradePro() {
     }
 })();
 
-// Pricing toggle handler
-document.addEventListener('DOMContentLoaded', function() {
-    const monthlyBtn = document.getElementById('pricingMonthly');
-    const annualBtn = document.getElementById('pricingAnnual');
-    if (monthlyBtn && annualBtn) {
-        monthlyBtn.addEventListener('click', function() {
-            monthlyBtn.classList.add('active');
-            annualBtn.classList.remove('active');
-            document.getElementById('proPrice').textContent = '$4.99';
-            const _t = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
-            document.getElementById('proPeriod').textContent = _t.planMonth || '/month';
-            document.getElementById('annualNote').style.display = 'none';
-        });
-        annualBtn.addEventListener('click', function() {
-            annualBtn.classList.add('active');
-            monthlyBtn.classList.remove('active');
-            document.getElementById('proPrice').textContent = '$49.99';
-            const _t = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
-            document.getElementById('proPeriod').textContent = _t.planYear || '/year';
-            document.getElementById('annualNote').style.display = 'block';
-        });
-    }
-});
+// Pricing toggle handler removed — two separate buttons now
 
 function friendlyError(code) {
     const messages = {
@@ -1062,35 +1036,17 @@ function closeFullscreen() {
         const proKeys = ['proFeat1','proFeatHL1','proFeatHL2','proFeatHL3','proFeatHL4','proFeatHL5','proFeat2','proFeat3','proFeat4','proFeat5'];
         proKeys.forEach((key, i) => { if (proPlanFeats[i] && t[key]) setFeatText(proPlanFeats[i], t[key]); });
 
-        // Plan buttons
+        // Plan buttons — two separate CTA buttons
         const planBtnFree = document.querySelector('.plan-btn-free');
-        const planBtnPro = document.querySelector('.plan-btn-pro');
-        if (planBtnFree) planBtnFree.textContent = t.planBtnFree;
-        if (planBtnPro) planBtnPro.textContent = t.planBtnPro;
+        if (planBtnFree && t.planBtnFree) planBtnFree.textContent = t.planBtnFree;
+        const btnMonthly = document.getElementById('btnProMonthly');
+        const btnAnnual = document.getElementById('btnProAnnual');
+        if (btnMonthly) btnMonthly.textContent = '$4.99' + (t.planMonth || '/month') + ' — ' + (t.planBtnPro || 'Start free trial');
+        if (btnAnnual) btnAnnual.textContent = '$49.99' + (t.planYear || '/year') + ' — ' + (t.planSaveTag || 'Save 17%');
         const proNote = document.querySelector('.pro-note');
-        if (proNote) proNote.textContent = t.proNote;
-
-        // Pricing toggle
-        const pricingMonthly = document.getElementById('pricingMonthly');
-        const pricingAnnual = document.getElementById('pricingAnnual');
-        if (pricingMonthly && t.planMonthly) {
-            pricingMonthly.childNodes[0].textContent = t.planMonthly;
-        }
-        if (pricingAnnual && t.planAnnual) {
-            const saveTag = pricingAnnual.querySelector('.save-tag');
-            pricingAnnual.childNodes[0].textContent = t.planAnnual + ' ';
-            if (saveTag && t.planSaveTag) saveTag.textContent = t.planSaveTag;
-        }
-        const annualNote = document.getElementById('annualNote');
-        if (annualNote && t.planAnnualNote) {
-            const span = annualNote.querySelector('span');
-            if (span) span.textContent = t.planAnnualNote;
-        }
-        // Update period text based on current toggle state
-        if (planPeriods[1]) {
-            const isAnnual = pricingAnnual && pricingAnnual.classList.contains('active');
-            planPeriods[1].textContent = isAnnual ? (t.planYear || '/year') : (t.planMonth || '/month');
-        }
+        if (proNote && t.proNote) proNote.textContent = t.proNote;
+        // Update Pro price display
+        if (planPeriods[1]) planPeriods[1].textContent = t.planMonth || '/month';
 
         // Pro highlight cards
         const hlCards = document.querySelectorAll('.pro-hl-card');

@@ -510,68 +510,68 @@
                 <p class="section-desc">Start free. Upgrade when you're ready to unlock the full ecosystem.</p>
             </div>
 
-            <!-- Pricing Toggle -->
-            <div class="pricing-toggle" id="pricingToggle">
-                <button class="pricing-btn active" data-plan="monthly" id="pricingMonthly">Monthly</button>
-                <button class="pricing-btn" data-plan="annual" id="pricingAnnual">Annual <span class="save-tag">Save 17%</span></button>
-            </div>
-
             <div class="plans-grid">
                 <!-- FREE PLAN -->
                 <div class="plan-card">
                     <div class="plan-header">
-                        <h3 class="plan-name">Free</h3>
+                        <h3 class="plan-name" id="planFreeName">Free</h3>
                         <div class="plan-price-row">
                             <span class="plan-price">$0</span>
-                            <span class="plan-period">forever</span>
+                            <span class="plan-period" id="planFreePeriod">forever</span>
                         </div>
                     </div>
                     <div class="plan-features">
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Investment simulator</div>
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Compound interest chart</div>
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Milestones tracker</div>
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Age comparison (20 vs 30)</div>
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Share your results</div>
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Multi-language support</div>
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Save 1 simulation (local)</div>
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Historical returns reference</div>
-                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Dividend Calculator</div>
-                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Tax Wizard</div>
-                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Net Worth Tracker</div>
-                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Dream Fund</div>
-                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Cloud sync + unlimited saves</div>
-                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Export PDF reports</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Investment simulator</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Compound interest chart</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Milestones tracker</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Age comparison (20 vs 30)</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Share your results</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Multi-language support</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Save 1 simulation (local)</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Historical returns reference</span></div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> <span>Dividend Calculator</span></div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> <span>Tax Wizard</span></div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> <span>Net Worth Tracker</span></div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> <span>Dream Fund</span></div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> <span>Cloud sync + unlimited saves</span></div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> <span>Export PDF reports</span></div>
                     </div>
-                    <a href="#simulator" class="plan-btn plan-btn-free">Start for free</a>
+                    <a href="#simulator" class="plan-btn plan-btn-free" id="planBtnFree">Start for free</a>
                 </div>
 
                 <!-- PRO PLAN -->
                 <div class="plan-card pro">
-                    <div class="pro-badge">MOST POPULAR</div>
+                    <div class="pro-badge" id="proBadge">MOST POPULAR</div>
                     <div class="plan-header">
-                        <h3 class="plan-name">Pro</h3>
+                        <h3 class="plan-name" id="planProName">Pro</h3>
                         <div class="plan-price-row">
                             <span class="plan-price" id="proPrice">$4.99</span>
                             <span class="plan-period" id="proPeriod">/month</span>
                         </div>
-                        <div class="plan-annual-note" id="annualNote" style="display:none;">
-                            <span>$49.99/year — save 17%</span>
-                        </div>
                     </div>
                     <div class="plan-features">
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Everything in Free</div>
-                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Dividend Calculator <span class="feat-tag">PRO</span></div>
-                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Tax Wizard <span class="feat-tag">PRO</span></div>
-                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Net Worth Tracker <span class="feat-tag">PRO</span></div>
-                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Dream Fund <span class="feat-tag">PRO</span></div>
-                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> S&amp;P 500 / NASDAQ / MSCI comparison <span class="feat-tag">PRO</span></div>
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Cloud sync across all devices</div>
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Unlimited simulations saved</div>
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Export reports as PDF</div>
-                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Priority support</div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Everything in Free</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> <span>Dividend Calculator</span> <span class="feat-tag">PRO</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> <span>Tax Wizard</span> <span class="feat-tag">PRO</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> <span>Net Worth Tracker</span> <span class="feat-tag">PRO</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> <span>Dream Fund</span> <span class="feat-tag">PRO</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> <span>S&amp;P 500 / NASDAQ / MSCI comparison</span> <span class="feat-tag">PRO</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Cloud sync across all devices</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Unlimited simulations saved</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Export reports as PDF</span></div>
+                        <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> <span>Priority support</span></div>
                     </div>
-                    <button class="plan-btn plan-btn-pro" onclick="handleUpgradePro()">Start 14-day free trial</button>
-                    <p class="pro-note">14-day free trial. Cancel anytime before it ends — you won't be charged.</p>
+
+                    <!-- TWO CLEAR BUTTONS — no toggle confusion -->
+                    <div class="pro-cta-buttons">
+                        <button class="plan-btn plan-btn-pro" id="btnProMonthly" onclick="handleUpgradeMonthly()">
+                            $4.99/month — Start free trial
+                        </button>
+                        <button class="plan-btn plan-btn-annual" id="btnProAnnual" onclick="handleUpgradeAnnual()">
+                            $49.99/year — Save 17%
+                        </button>
+                    </div>
+                    <p class="pro-note" id="proNote">14-day free trial. Cancel anytime before it ends — you won't be charged.</p>
                 </div>
             </div>
 

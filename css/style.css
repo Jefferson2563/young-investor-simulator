@@ -1764,14 +1764,43 @@ input[type="range"]::-moz-range-thumb {
     color: var(--bg);
 }
 
+.pro-cta-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
 .plan-btn-pro {
     background: var(--green);
     color: #000;
+    font-weight: 700;
+    font-size: 14px;
 }
 
 .plan-btn-pro:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 24px rgba(0,230,118,0.3);
+}
+
+.plan-btn-annual {
+    display: inline-block;
+    padding: 12px 24px;
+    border-radius: var(--radius);
+    font-weight: 700;
+    font-size: 13px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1.5px solid var(--green);
+    background: transparent;
+    color: var(--green);
+    font-family: var(--font-main);
+}
+
+.plan-btn-annual:hover {
+    background: var(--green-soft);
+    transform: translateY(-2px);
 }
 
 .pro-note {
