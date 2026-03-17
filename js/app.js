@@ -87,47 +87,240 @@ function handleSignOut() {
     auth.signOut();
 }
 
-// --- Share results ---
+// --- Share results (visual card) ---
 function shareResults() {
     const data = window._yisGetData();
     if (!data || !data.result) return;
     const r = data.result;
     const fmt = window._yisFormatMoney;
     const _ts = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
-    const text = `${_ts.shareISimulated || 'I just simulated my investment future!'}\n\n` +
-        `${_ts.shareFinalValue || 'Final value'}: ${fmt(r.finalBalance)}\n` +
-        `${_ts.shareIPutIn || 'I put in'}: ${fmt(r.totalContributed)}\n` +
-        `${_ts.shareMarketGave || 'Market gave me'}: ${fmt(r.totalInterest)}\n` +
-        `${_ts.shareMoneyMultiplied || 'Money multiplied'}: ${r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '0x'}\n\n` +
-        `${_ts.shareTryIt || 'Try it yourself'}: ${window.location.href}\n` +
-        `#YoungInvestorSimulator #Investing #CompoundInterest`;
 
-    if (navigator.share) {
-        navigator.share({
-            title: _ts.shareTitle || 'My Investment Simulation',
-            text: text,
-            url: window.location.href,
-        }).catch(() => {});
-    } else {
-        navigator.clipboard.writeText(text).then(() => {
-            window._yisShowToast((_ts || {}).toastCopied || 'Results copied to clipboard!');
-        }).catch(() => {
-            // Fallback: select text in a prompt
-            prompt('Copy your results:', text);
-        });
-    }
+    // Create canvas card
+    const W = 1080, H = 1080;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // Background gradient (dark)
+    const bg = ctx.createLinearGradient(0, 0, W, H);
+    bg.addColorStop(0, '#0a0f0d');
+    bg.addColorStop(0.5, '#0d1a14');
+    bg.addColorStop(1, '#0a0f0d');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    // Decorative glow circle
+    const glow = ctx.createRadialGradient(540, 400, 50, 540, 400, 400);
+    glow.addColorStop(0, 'rgba(0, 230, 118, 0.12)');
+    glow.addColorStop(1, 'rgba(0, 230, 118, 0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, W, H);
+
+    // Border
+    ctx.strokeStyle = 'rgba(0, 230, 118, 0.2)';
+    ctx.lineWidth = 2;
+    ctx.roundRect(24, 24, W - 48, H - 48, 24);
+    ctx.stroke();
+
+    // Inner border accent
+    ctx.strokeStyle = 'rgba(0, 230, 118, 0.08)';
+    ctx.lineWidth = 1;
+    ctx.roundRect(40, 40, W - 80, H - 80, 20);
+    ctx.stroke();
+
+    // Top badge
+    ctx.fillStyle = 'rgba(0, 230, 118, 0.15)';
+    const badgeText = 'YOUNG INVESTOR SIMULATOR';
+    ctx.font = '700 16px "Inter", "SF Pro Display", system-ui, sans-serif';
+    const badgeW = ctx.measureText(badgeText).width + 40;
+    ctx.roundRect((W - badgeW) / 2, 80, badgeW, 36, 18);
+    ctx.fill();
+    ctx.fillStyle = '#00e676';
+    ctx.textAlign = 'center';
+    ctx.fillText(badgeText, W / 2, 104);
+
+    // Headline
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '800 42px "Space Grotesk", "Inter", system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(_ts.shareISimulated || 'My Investment Simulation', W / 2, 180);
+
+    // Final value (big number)
+    ctx.fillStyle = '#00e676';
+    ctx.font = '800 96px "Space Grotesk", "Inter", system-ui, sans-serif';
+    ctx.fillText(fmt(r.finalBalance), W / 2, 320);
+
+    // Subtitle
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '500 22px "Inter", system-ui, sans-serif';
+    ctx.fillText(_ts.shareFinalValue || 'Final Portfolio Value', W / 2, 365);
+
+    // Divider line
+    ctx.strokeStyle = 'rgba(0, 230, 118, 0.2)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(160, 410);
+    ctx.lineTo(W - 160, 410);
+    ctx.stroke();
+
+    // Stats grid (3 columns)
+    const stats = [
+        { label: _ts.shareIPutIn || 'Invested', value: fmt(r.totalContributed), color: '#ffffff' },
+        { label: _ts.shareMarketGave || 'Interest Earned', value: fmt(r.totalInterest), color: '#00e676' },
+        { label: _ts.shareMoneyMultiplied || 'Multiplier', value: r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '—', color: '#00e676' }
+    ];
+
+    const statY = 470;
+    const colW = (W - 200) / 3;
+    stats.forEach((s, i) => {
+        const cx = 100 + colW * i + colW / 2;
+
+        // Stat card background
+        ctx.fillStyle = 'rgba(255,255,255,0.04)';
+        ctx.beginPath();
+        ctx.roundRect(100 + colW * i + 10, statY - 30, colW - 20, 120, 16);
+        ctx.fill();
+
+        // Value
+        ctx.fillStyle = s.color;
+        ctx.font = '800 36px "Space Grotesk", "Inter", system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(s.value, cx, statY + 20);
+
+        // Label
+        ctx.fillStyle = 'rgba(255,255,255,0.45)';
+        ctx.font = '500 16px "Inter", system-ui, sans-serif';
+        ctx.fillText(s.label, cx, statY + 55);
+    });
+
+    // Parameters bar
+    const paramsY = 650;
+    ctx.fillStyle = 'rgba(0, 230, 118, 0.06)';
+    ctx.beginPath();
+    ctx.roundRect(100, paramsY, W - 200, 80, 16);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0, 230, 118, 0.15)';
+    ctx.lineWidth = 1;
+    ctx.roundRect(100, paramsY, W - 200, 80, 16);
+    ctx.stroke();
+
+    const sliders = window._yisGetData();
+    const paramTexts = [
+        fmt(sliders.startingAmount || 0) + ' start',
+        fmt(sliders.monthlyContribution || 0) + '/mo',
+        (sliders.annualReturn || 0) + '% return',
+        (sliders.years || 0) + ' years'
+    ];
+    const paramColW = (W - 240) / 4;
+    ctx.font = '600 18px "Inter", system-ui, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.textAlign = 'center';
+    paramTexts.forEach((t, i) => {
+        ctx.fillText(t, 140 + paramColW * i + paramColW / 2, paramsY + 47);
+    });
+
+    // Motivational quote area
+    const quotes = [
+        '"Compound interest is the eighth wonder of the world." — Einstein',
+        '"The best time to invest was yesterday. The second best is now."',
+        '"Don\'t save what\'s left after spending. Spend what\'s left after saving."',
+        '"Time in the market beats timing the market."'
+    ];
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = 'italic 18px "Inter", system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(quote, W / 2, 810);
+
+    // Bottom CTA
+    ctx.fillStyle = 'rgba(0, 230, 118, 0.12)';
+    ctx.beginPath();
+    ctx.roundRect(240, 870, W - 480, 56, 28);
+    ctx.fill();
+    ctx.fillStyle = '#00e676';
+    ctx.font = '700 20px "Inter", system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Try it free → younginvestor.app', W / 2, 905);
+
+    // Watermark
+    ctx.fillStyle = 'rgba(255,255,255,0.15)';
+    ctx.font = '500 13px "Inter", system-ui, sans-serif';
+    ctx.fillText('Young Investor Simulator · Free Tool', W / 2, 980);
+
+    // Convert to blob and share
+    canvas.toBlob(function(blob) {
+        if (!blob) return;
+        const file = new File([blob], 'my-investment-simulation.png', { type: 'image/png' });
+
+        const textFallback = `${_ts.shareISimulated || 'I just simulated my investment future!'}\n` +
+            `💰 ${fmt(r.finalBalance)} from ${fmt(r.totalContributed)} invested\n` +
+            `📈 ${r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '0x'} return\n\n` +
+            `Try it: ${window.location.href}\n#YoungInvestorSimulator`;
+
+        if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({
+                title: _ts.shareTitle || 'My Investment Simulation',
+                text: textFallback,
+                files: [file]
+            }).catch(() => {});
+        } else if (navigator.share) {
+            navigator.share({
+                title: _ts.shareTitle || 'My Investment Simulation',
+                text: textFallback,
+                url: window.location.href
+            }).catch(() => {});
+        } else {
+            // Fallback: download the image
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'my-investment-simulation.png';
+            a.click();
+            URL.revokeObjectURL(a.href);
+            window._yisShowToast((_ts || {}).toastCopied || 'Card downloaded!');
+        }
+    }, 'image/png');
 }
 
 function handleUpgradePro() {
-    // Stripe Checkout integration
-    // Replace with your Stripe payment link when you set up Stripe
-    const STRIPE_LINK = 'https://buy.stripe.com/test_00wcN4dA23hc1vSa2o00000';
-    if (STRIPE_LINK.includes('YOUR_PAYMENT_LINK')) {
-        alert('Stripe payment not configured yet. See js/firebase-config.js for setup instructions.');
+    // Require login first
+    if (!currentUser) {
+        openAuthModal();
         return;
     }
-    window.open(STRIPE_LINK, '_blank');
+
+    // Stripe Checkout links (monthly + annual)
+    const STRIPE_MONTHLY = 'https://buy.stripe.com/test_00wcN4dA23hc1vSa2o00000';
+    const STRIPE_ANNUAL = 'https://buy.stripe.com/test_00wcN4dA23hc1vSa2o00000'; // Replace with annual link
+
+    const isAnnual = document.getElementById('pricingAnnual').classList.contains('active');
+    const link = isAnnual ? STRIPE_ANNUAL : STRIPE_MONTHLY;
+
+    // Pass user email to Stripe for matching
+    const email = currentUser.email ? `?prefilled_email=${encodeURIComponent(currentUser.email)}` : '';
+    window.open(link + email, '_blank');
 }
+
+// Pricing toggle handler
+document.addEventListener('DOMContentLoaded', function() {
+    const monthlyBtn = document.getElementById('pricingMonthly');
+    const annualBtn = document.getElementById('pricingAnnual');
+    if (monthlyBtn && annualBtn) {
+        monthlyBtn.addEventListener('click', function() {
+            monthlyBtn.classList.add('active');
+            annualBtn.classList.remove('active');
+            document.getElementById('proPrice').textContent = '$4.99';
+            document.getElementById('proPeriod').textContent = '/month';
+            document.getElementById('annualNote').style.display = 'none';
+        });
+        annualBtn.addEventListener('click', function() {
+            annualBtn.classList.add('active');
+            monthlyBtn.classList.remove('active');
+            document.getElementById('proPrice').textContent = '$49.99';
+            document.getElementById('proPeriod').textContent = '/year';
+            document.getElementById('annualNote').style.display = 'block';
+        });
+    }
+});
 
 function friendlyError(code) {
     const messages = {

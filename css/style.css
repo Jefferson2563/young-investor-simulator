@@ -1317,7 +1317,8 @@ input[type="range"]::-moz-range-thumb {
 .nav-right {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    flex-shrink: 0;
 }
 
 .save-btn {
@@ -1546,6 +1547,62 @@ input[type="range"]::-moz-range-thumb {
     background: var(--bg-secondary);
 }
 
+/* Pricing Toggle */
+.pricing-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 36px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pricing-btn {
+    flex: 1;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 100px;
+    background: transparent;
+    color: var(--text-secondary);
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.pricing-btn.active {
+    background: var(--green);
+    color: #000;
+}
+
+.save-tag {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--green);
+    background: var(--green-soft);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+}
+
+.pricing-btn.active .save-tag {
+    color: #000;
+    background: rgba(0,0,0,0.15);
+}
+
+.plan-annual-note {
+    font-size: 12px;
+    color: var(--green);
+    margin-top: 4px;
+    font-weight: 500;
+}
+
 .plans-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1711,6 +1768,7 @@ input[type="range"]::-moz-range-thumb {
     gap: 16px;
 }
 
+a.pro-hl-card,
 .pro-hl-card {
     padding: 24px 20px;
     border: 1px solid var(--border);
@@ -1718,6 +1776,9 @@ input[type="range"]::-moz-range-thumb {
     background: var(--bg-card);
     text-align: center;
     transition: all var(--transition);
+    text-decoration: none;
+    color: inherit;
+    display: block;
 }
 
 .pro-hl-card:hover {
@@ -1862,27 +1923,114 @@ input[type="range"]::-moz-range-thumb {
     .fullscreen-stats { flex-wrap: wrap; gap: 16px; }
     .plans-grid { grid-template-columns: 1fr; max-width: 440px; }
     .pro-highlights { grid-template-columns: repeat(2, 1fr); }
+    .nav-inner { padding: 0 16px; }
+    .nav-logo { font-size: 16px; }
+    .nav-logo .logo-accent { display: none; }
 }
 
 @media (max-width: 600px) {
-    .hero { padding: 100px 20px 60px; min-height: 90vh; }
-    .hero-title { letter-spacing: -1px; }
-    .goal-top { padding: 32px 24px 16px; }
-    .goal-bottom { padding: 16px 24px 32px; }
-    .chart-container { aspect-ratio: 4 / 3; }
-    .stats-grid { grid-template-columns: 1fr; }
-    .comparison-card { padding: 28px 20px; min-width: unset; }
-    .facts-grid { grid-template-columns: 1fr; }
-    .footer-grid { grid-template-columns: 1fr; }
-    .legend-card { flex-direction: column; align-items: center; text-align: center; }
-    .legend-quote { border-left: none; padding-left: 0; }
-    .returns-ref-grid { grid-template-columns: repeat(2, 1fr); }
-    .brokers-grid { grid-template-columns: 1fr; }
-    .cta-card { padding: 32px 20px; }
-    .modal { padding: 28px 20px; margin: 16px; }
-    .plan-card { padding: 28px 20px; }
-    .pro-highlights { grid-template-columns: 1fr; }
+    /* Navbar mobile */
+    .navbar { padding: 10px 0; }
+    .nav-inner { padding: 0 12px; }
+    .nav-logo { font-size: 14px; gap: 6px; }
+    .logo-icon { width: 26px; height: 26px; }
+    .nav-right { gap: 4px; }
+    .nav-right .theme-toggle,
+    .nav-right .lang-toggle,
+    .nav-right .currency-toggle { width: 34px; height: 34px; font-size: 15px; }
+    .save-btn { padding: 6px 10px; font-size: 12px; }
     .signout-btn { display: none; }
+    .auth-btn { padding: 6px 14px; font-size: 12px; }
+
+    /* Hero mobile */
+    .hero { padding: 90px 16px 48px; min-height: auto; }
+    .hero-title { font-size: clamp(28px, 8vw, 44px); letter-spacing: -1px; }
+    .hero-subtitle { font-size: 15px; margin-bottom: 28px; }
+    .hero-cta { padding: 12px 24px; font-size: 14px; }
+
+    /* Simulator mobile */
+    .section { padding: 48px 0; }
+    .section-title { font-size: clamp(24px, 6vw, 36px); }
+
+    /* Slider labels — prevent overflow */
+    .slider-label { font-size: 13px; }
+    .slider-value { font-size: 13px; word-break: break-word; }
+    .slider-group { margin-bottom: 20px; }
+
+    /* Goal card */
+    .goal-top { padding: 24px 16px 12px; }
+    .goal-bottom { padding: 12px 16px 24px; }
+    .goal-card { margin: 0 16px; }
+
+    /* Chart */
+    .chart-container { aspect-ratio: 4 / 3; }
+    .chart-toggles { flex-wrap: wrap; gap: 6px; }
+    .chart-toggle { font-size: 11px; padding: 5px 10px; }
+
+    /* Stats grid */
+    .stats-grid { grid-template-columns: 1fr; gap: 12px; }
+    .stat-card { padding: 16px; }
+
+    /* Milestones */
+    .milestones-grid { gap: 8px; }
+
+    /* Comparison */
+    .comparison-card { padding: 24px 16px; min-width: unset; }
+
+    /* Facts */
+    .facts-grid { grid-template-columns: 1fr; }
+
+    /* Legends */
+    .legend-card { flex-direction: column; align-items: center; text-align: center; padding: 20px 16px; }
+    .legend-quote { border-left: none; padding-left: 0; font-size: 14px; }
+
+    /* Returns reference */
+    .returns-ref-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+
+    /* Brokers */
+    .brokers-grid { grid-template-columns: 1fr; }
+
+    /* Pro section mobile */
+    .pro-section { padding: 48px 0; }
+    .pricing-toggle { max-width: 280px; }
+    .pricing-btn { padding: 8px 12px; font-size: 13px; }
+    .plan-card { padding: 24px 16px; }
+    .plan-price { font-size: clamp(36px, 10vw, 52px); }
+    .pro-highlights { grid-template-columns: 1fr; gap: 12px; }
+    .pro-hl-card { padding: 16px; }
+
+    /* CTA */
+    .cta-card { padding: 28px 16px; }
+    .cta-title { font-size: clamp(22px, 6vw, 32px); }
+
+    /* Footer */
+    .footer-grid { grid-template-columns: 1fr; gap: 24px; }
+    .footer { padding: 48px 0 24px; }
+
+    /* Modal */
+    .modal { padding: 24px 16px; margin: 12px; max-width: calc(100vw - 24px); }
+    .modal input { font-size: 16px; /* prevents iOS zoom */ }
+
+    /* Fullscreen chart mobile */
+    .fullscreen-chart-wrap { height: 50vh; }
+    .fullscreen-stats { gap: 12px; }
+    .fullscreen-stat { font-size: 13px; }
+
+    /* General overflow prevention */
+    body { overflow-x: hidden; }
+    .container { padding: 0 16px; }
+}
+
+@media (max-width: 380px) {
+    /* Very small screens */
+    .hero-title { font-size: 26px; }
+    .nav-logo span:not(.logo-accent) { font-size: 13px; }
+    .nav-right .theme-toggle,
+    .nav-right .lang-toggle,
+    .nav-right .currency-toggle { width: 30px; height: 30px; font-size: 13px; }
+    .pricing-toggle { max-width: 240px; }
+    .plan-feat { font-size: 13px; }
+    .returns-ref-grid { grid-template-columns: 1fr; }
 }
 
 /* ========== SCROLLBAR ========== */

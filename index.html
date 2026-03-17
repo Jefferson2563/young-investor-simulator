@@ -10,9 +10,22 @@
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Young Investor Simulator">
-    <meta property="og:description" content="See how much wealth you can build by starting to invest now. Interactive simulator for the next generation.">
+    <meta property="og:title" content="Young Investor Simulator — See How Much Wealth You Can Build">
+    <meta property="og:description" content="Free investment simulator. See how $100/month becomes $1M+ with compound interest. Try it now — no signup required.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://younginvestor.app/">
+    <meta property="og:site_name" content="Young Investor">
+    <meta property="og:image" content="https://younginvestor.app/assets/og-card.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Young Investor Simulator — See How Much Wealth You Can Build">
+    <meta name="twitter:description" content="Free investment simulator. See how $100/month becomes $1M+ with compound interest. Try it now.">
+    <meta name="twitter:image" content="https://younginvestor.app/assets/og-card.png">
+
+    <link rel="canonical" href="https://younginvestor.app/">
 
     <!-- Favicon -->
     <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
@@ -481,7 +494,13 @@
         <div class="container">
             <div class="section-header center">
                 <h2 class="section-title">Free vs Pro</h2>
-                <p class="section-desc">Start free. Upgrade when you're ready to go deeper.</p>
+                <p class="section-desc">Start free. Upgrade when you're ready to unlock the full ecosystem.</p>
+            </div>
+
+            <!-- Pricing Toggle -->
+            <div class="pricing-toggle" id="pricingToggle">
+                <button class="pricing-btn active" data-plan="monthly" id="pricingMonthly">Monthly</button>
+                <button class="pricing-btn" data-plan="annual" id="pricingAnnual">Annual <span class="save-tag">Save 17%</span></button>
             </div>
 
             <div class="plans-grid">
@@ -503,13 +522,12 @@
                         <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Multi-language support</div>
                         <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Save 1 simulation (local)</div>
                         <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Historical returns reference</div>
-                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Tax impact simulator</div>
-                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Inflation-adjusted projections</div>
-                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Index fund comparisons</div>
-                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Historical market data overlay</div>
-                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Education hub access</div>
-                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Cloud sync + unlimited saves</div>
-                        <div class="plan-feat no"><span class="feat-icon">&mdash;</span> Export PDF reports</div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Dividend Calculator</div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Tax Impact Calculator</div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Net Worth Tracker</div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Goal Crusher</div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Cloud sync + unlimited saves</div>
+                        <div class="plan-feat no"><span class="feat-icon">&#128274;</span> Export PDF reports</div>
                     </div>
                     <a href="#simulator" class="plan-btn plan-btn-free">Start for free</a>
                 </div>
@@ -520,49 +538,52 @@
                     <div class="plan-header">
                         <h3 class="plan-name">Pro</h3>
                         <div class="plan-price-row">
-                            <span class="plan-price">$4.99</span>
-                            <span class="plan-period">/month</span>
+                            <span class="plan-price" id="proPrice">$4.99</span>
+                            <span class="plan-period" id="proPeriod">/month</span>
+                        </div>
+                        <div class="plan-annual-note" id="annualNote" style="display:none;">
+                            <span>$49.99/year (save $10)</span>
                         </div>
                     </div>
                     <div class="plan-features">
                         <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Everything in Free</div>
-                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Tax impact simulator <span class="feat-tag">NEW</span></div>
-                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Inflation-adjusted projections <span class="feat-tag">NEW</span></div>
-                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> S&P 500 / NASDAQ / MSCI comparison <span class="feat-tag">NEW</span></div>
-                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Historical market data overlay <span class="feat-tag">NEW</span></div>
-                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Education hub: courses, YouTube, blogs <span class="feat-tag">NEW</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Dividend Calculator <span class="feat-tag">PRO</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Tax Impact Calculator <span class="feat-tag">PRO</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Net Worth Tracker <span class="feat-tag">PRO</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> Goal Crusher <span class="feat-tag">PRO</span></div>
+                        <div class="plan-feat yes highlight"><span class="feat-icon">&#10003;</span> S&amp;P 500 / NASDAQ / MSCI comparison <span class="feat-tag">PRO</span></div>
                         <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Cloud sync across all devices</div>
                         <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Unlimited simulations saved</div>
                         <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Export reports as PDF</div>
                         <div class="plan-feat yes"><span class="feat-icon">&#10003;</span> Priority support</div>
                     </div>
-                    <button class="plan-btn plan-btn-pro" onclick="handleUpgradePro()">Start 7-day free trial</button>
-                    <p class="pro-note">Cancel anytime. No credit card required to try.</p>
+                    <button class="plan-btn plan-btn-pro" onclick="handleUpgradePro()">Start 14-day free trial</button>
+                    <p class="pro-note">Cancel anytime. 14-day free trial, then billed monthly.</p>
                 </div>
             </div>
 
-            <!-- Pro Feature Highlights -->
+            <!-- Pro Feature Highlights — Ecosystem Tools -->
             <div class="pro-highlights">
-                <div class="pro-hl-card">
-                    <div class="pro-hl-icon">🏛️</div>
-                    <h4>Tax Simulator</h4>
-                    <p>Simulate taxes by country. US, EU, UK, Asia — all regulations covered.</p>
-                </div>
-                <div class="pro-hl-card">
-                    <div class="pro-hl-icon">📉</div>
-                    <h4>Inflation Impact</h4>
-                    <p>See what your money is really worth after inflation eats into returns.</p>
-                </div>
-                <div class="pro-hl-card">
-                    <div class="pro-hl-icon">📊</div>
-                    <h4>Fund Comparisons</h4>
-                    <p>Compare S&P 500, NASDAQ, MSCI World side by side with your simulation.</p>
-                </div>
-                <div class="pro-hl-card">
-                    <div class="pro-hl-icon">🎓</div>
-                    <h4>Education Hub</h4>
-                    <p>Curated courses, YouTube playlists, weekly blogs — learn investing from zero.</p>
-                </div>
+                <a href="dividends/" class="pro-hl-card">
+                    <div class="pro-hl-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+                    <h4>Dividend Calculator</h4>
+                    <p>Track payouts. Project passive income. DRIP calculator included.</p>
+                </a>
+                <a href="tax/" class="pro-hl-card">
+                    <div class="pro-hl-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+                    <h4>Tax Impact Calculator</h4>
+                    <p>US, EU, France, crypto. Know what you owe before you sell.</p>
+                </a>
+                <a href="portfolio/" class="pro-hl-card">
+                    <div class="pro-hl-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+                    <h4>My Net Worth</h4>
+                    <p>Connect brokers. See all your investments in one dashboard.</p>
+                </a>
+                <a href="goals/" class="pro-hl-card">
+                    <div class="pro-hl-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+                    <h4>Goal Crusher</h4>
+                    <p>Set savings goals. Track progress. Celebrate milestones.</p>
+                </a>
             </div>
         </div>
     </section>
