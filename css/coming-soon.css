@@ -128,6 +128,78 @@
     transform: translateY(-2px);
 }
 
+/* Ecosystem Badge */
+.cs-ecosystem-badge {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--green);
+    border: 1px solid var(--green-border);
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+    text-decoration: none;
+    transition: all var(--transition);
+}
+
+.cs-ecosystem-badge:hover {
+    background: var(--green-soft);
+}
+
+/* Logo in hero */
+.cs-logo {
+    margin-bottom: 24px;
+    animation: cs-float 3s ease-in-out infinite;
+}
+
+.cs-logo img {
+    width: 64px;
+    height: 64px;
+    filter: drop-shadow(0 0 20px rgba(0, 230, 118, 0.3));
+}
+
+/* Free vs Pro teaser */
+.cs-free-pro {
+    max-width: 600px;
+    margin: 0 auto 36px;
+    padding: 16px 24px;
+    border: 1px dashed var(--green-border);
+    border-radius: var(--radius);
+    background: var(--green-soft);
+}
+
+.cs-free-pro p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+/* Pro CTA Button */
+.cs-pro-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border: none;
+    border-radius: 100px;
+    background: var(--green);
+    color: #000;
+    font-family: var(--font-main);
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+    margin-top: 12px;
+    transition: all var(--transition);
+}
+
+.cs-pro-btn:hover {
+    background: #00ff88;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 230, 118, 0.3);
+}
+
 /* Responsive */
 @media (max-width: 600px) {
     .cs-features {

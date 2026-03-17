@@ -834,7 +834,7 @@ function closeFullscreen() {
         if (ctaDisclaimer) ctaDisclaimer.textContent = t.ctaDisclaimer;
         const brokerDetails = document.querySelectorAll('.broker-detail');
         if (brokerDetails[0]) brokerDetails[0].textContent = t.brokerTRDetail;
-        if (brokerDetails[1]) brokerDetails[1].textContent = t.brokerEtoroDetail;
+        if (brokerDetails[1]) brokerDetails[1].textContent = t.brokerIBKRDetail;
         if (brokerDetails[2]) brokerDetails[2].textContent = t.brokerDegiroDetail;
         if (brokerDetails[3]) brokerDetails[3].textContent = t.brokerFidelityDetail;
 

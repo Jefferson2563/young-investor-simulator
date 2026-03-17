@@ -3,8 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio Tracker | Young Investor Simulator</title>
-    <meta name="description" content="Track your investments across multiple brokers. Connect IBKR, Trade Republic, Degiro, and more. Unified net worth dashboard with performance analytics.">
+    <title>Net Worth Tracker — See All Your Investments in One Place | Young Investor</title>
+    <meta name="description" content="Free net worth dashboard. Connect your brokers, track stocks, ETFs, crypto. See your total wealth grow in real-time. Part of the Young Investor ecosystem.">
+    <meta name="keywords" content="net worth tracker, portfolio tracker, investment dashboard, track investments, broker connection, IBKR, Trade Republic, Degiro">
+    <link rel="canonical" href="https://jefferson2563.github.io/young-investor-simulator/portfolio/">
+    <meta property="og:title" content="Net Worth Tracker — See All Your Investments in One Place | Young Investor">
+    <meta property="og:description" content="Free net worth dashboard. Connect your brokers, track stocks, ETFs, crypto. See your total wealth grow in real-time.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jefferson2563.github.io/young-investor-simulator/portfolio/">
+    <meta property="og:site_name" content="Young Investor Simulator">
     <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -34,17 +41,17 @@
                         <span id="langFlag">EN</span>
                     </button>
                     <div class="lang-menu" id="langMenu">
-                        <button class="lang-option active" data-lang="en">🇺🇸 English</button>
-                        <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
-                        <button class="lang-option" data-lang="es">🇪🇸 Español</button>
-                        <button class="lang-option" data-lang="pt">🇧🇷 Português</button>
-                        <button class="lang-option" data-lang="de">🇩🇪 Deutsch</button>
-                        <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
-                        <button class="lang-option" data-lang="zh">🇨🇳 中文</button>
+                        <button class="lang-option active" data-lang="en">EN English</button>
+                        <button class="lang-option" data-lang="fr">FR Fran&ccedil;ais</button>
+                        <button class="lang-option" data-lang="es">ES Espa&ntilde;ol</button>
+                        <button class="lang-option" data-lang="pt">PT Portugu&ecirc;s</button>
+                        <button class="lang-option" data-lang="de">DE Deutsch</button>
+                        <button class="lang-option" data-lang="ar">AR &#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</button>
+                        <button class="lang-option" data-lang="zh">ZH &#20013;&#25991;</button>
                     </div>
                 </div>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                    <span id="themeIcon">☀️</span>
+                    <span id="themeIcon">&#9728;&#65039;</span>
                 </button>
             </div>
         </div>
@@ -53,37 +60,61 @@
     <!-- COMING SOON CONTENT -->
     <main class="coming-soon-page">
         <div class="container">
-            <div class="cs-icon">📊</div>
-            <h1 class="cs-title" id="cs-title">Portfolio Tracker</h1>
-            <p class="cs-subtitle" id="cs-subtitle">Connect your brokers. See everything in one place.</p>
+
+            <!-- Ecosystem Badge -->
+            <a href="../index.html" class="cs-ecosystem-badge" id="cs-ecosystem">Part of the Young Investor ecosystem</a>
+
+            <!-- Logo -->
+            <div class="cs-logo">
+                <img src="../assets/logo.svg" alt="Young Investor" width="64" height="64">
+            </div>
+
+            <h1 class="cs-title" id="cs-title">Know exactly how rich you are.</h1>
+            <p class="cs-subtitle" id="cs-subtitle">Connect all your accounts. See your net worth update in real-time. Stocks, ETFs, crypto, savings — everything in one dashboard.</p>
 
             <div class="cs-features">
                 <div class="cs-feature">
-                    <span class="cs-feat-icon">🔗</span>
-                    <h3 id="feat1-title">Multi-Broker Connect</h3>
-                    <p id="feat1-desc">Link IBKR, Trade Republic, Degiro, Boursorama, Revolut, eToro — all in one dashboard.</p>
+                    <span class="cs-feat-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    </span>
+                    <h3 id="feat1-title">All Accounts, One View</h3>
+                    <p id="feat1-desc">Connect IBKR, Trade Republic, DEGIRO, Revolut, Boursorama. CSV import too.</p>
                 </div>
                 <div class="cs-feature">
-                    <span class="cs-feat-icon">💰</span>
-                    <h3 id="feat2-title">Net Worth Dashboard</h3>
-                    <p id="feat2-desc">See your total portfolio value, performance, and gains across all accounts instantly.</p>
+                    <span class="cs-feat-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    </span>
+                    <h3 id="feat2-title">Real-Time Net Worth</h3>
+                    <p id="feat2-desc">Watch your wealth grow. Updated daily. Broken down by asset class.</p>
                 </div>
                 <div class="cs-feature">
-                    <span class="cs-feat-icon">📈</span>
-                    <h3 id="feat3-title">Performance Analytics</h3>
-                    <p id="feat3-desc">Asset allocation charts, diversification scoring, and historical performance tracking.</p>
+                    <span class="cs-feat-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>
+                    </span>
+                    <h3 id="feat3-title">Performance vs Benchmarks</h3>
+                    <p id="feat3-desc">Are you beating the S&amp;P 500? See how your portfolio compares.</p>
                 </div>
                 <div class="cs-feature">
-                    <span class="cs-feat-icon">📁</span>
-                    <h3 id="feat4-title">CSV Import</h3>
-                    <p id="feat4-desc">Upload your broker export files. Instant portfolio analysis, no API needed.</p>
+                    <span class="cs-feat-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+                    </span>
+                    <h3 id="feat4-title">Diversification Score</h3>
+                    <p id="feat4-desc">Too heavy on tech? We'll tell you. Get smart allocation insights.</p>
                 </div>
+            </div>
+
+            <!-- Free vs Pro -->
+            <div class="cs-free-pro">
+                <p id="cs-free-pro">Free: Connect 2 accounts. Pro: Unlimited accounts + auto-sync.</p>
             </div>
 
             <div class="cs-cta">
                 <div class="cs-badge" id="cs-badge">Coming Soon</div>
                 <p class="cs-notify-text" id="cs-notify">We're building this right now. Go back to the simulator while you wait.</p>
-                <a href="../#simulator" class="cs-btn" id="cs-btn">Back to Simulator</a>
+                <div class="cs-btn-group">
+                    <a href="../#simulator" class="cs-btn" id="cs-btn">Back to Simulator</a>
+                    <a href="../index.html#pro" class="cs-pro-btn" id="cs-pro-btn">Unlock Pro Features</a>
+                </div>
             </div>
         </div>
     </main>
@@ -101,136 +132,157 @@
         // Theme toggle
         const saved = localStorage.getItem('yis-theme') || 'dark';
         document.documentElement.setAttribute('data-theme', saved);
-        document.getElementById('themeIcon').textContent = saved === 'dark' ? '☀️' : '🌙';
+        document.getElementById('themeIcon').textContent = saved === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
 
         document.getElementById('themeToggle').addEventListener('click', () => {
             const current = document.documentElement.getAttribute('data-theme');
             const next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', next);
             localStorage.setItem('yis-theme', next);
-            document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+            document.getElementById('themeIcon').textContent = next === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
         });
 
         // Language system
         const translations = {
             en: {
-                title: 'Portfolio Tracker',
-                subtitle: 'Connect your brokers. See everything in one place.',
-                feat1Title: 'Multi-Broker Connect',
-                feat1Desc: 'Link IBKR, Trade Republic, Degiro, Boursorama, Revolut, eToro — all in one dashboard.',
-                feat2Title: 'Net Worth Dashboard',
-                feat2Desc: 'See your total portfolio value, performance, and gains across all accounts instantly.',
-                feat3Title: 'Performance Analytics',
-                feat3Desc: 'Asset allocation charts, diversification scoring, and historical performance tracking.',
-                feat4Title: 'CSV Import',
-                feat4Desc: 'Upload your broker export files. Instant portfolio analysis, no API needed.',
+                title: 'Know exactly how rich you are.',
+                subtitle: 'Connect all your accounts. See your net worth update in real-time. Stocks, ETFs, crypto, savings \u2014 everything in one dashboard.',
+                feat1Title: 'All Accounts, One View',
+                feat1Desc: 'Connect IBKR, Trade Republic, DEGIRO, Revolut, Boursorama. CSV import too.',
+                feat2Title: 'Real-Time Net Worth',
+                feat2Desc: 'Watch your wealth grow. Updated daily. Broken down by asset class.',
+                feat3Title: 'Performance vs Benchmarks',
+                feat3Desc: 'Are you beating the S&P 500? See how your portfolio compares.',
+                feat4Title: 'Diversification Score',
+                feat4Desc: 'Too heavy on tech? We\u2019ll tell you. Get smart allocation insights.',
+                freePro: 'Free: Connect 2 accounts. Pro: Unlimited accounts + auto-sync.',
                 badge: 'Coming Soon',
-                notify: "We're building this right now. Go back to the simulator while you wait.",
+                notify: 'We\u2019re building this right now. Go back to the simulator while you wait.',
                 btn: 'Back to Simulator',
+                proBtn: 'Unlock Pro Features',
+                ecosystem: 'Part of the Young Investor ecosystem',
                 navSim: 'Simulator', navPort: 'Portfolio', navDiv: 'Dividends', navGoals: 'Goals', navTax: 'Tax',
-                footer: '© 2026 Young Investor Simulator. Built for the next generation.'
+                footer: '\u00A9 2026 Young Investor Simulator. Built for the next generation.'
             },
             fr: {
-                title: 'Suivi de Portefeuille',
-                subtitle: 'Connectez vos courtiers. Tout voir en un seul endroit.',
-                feat1Title: 'Connexion Multi-Courtiers',
-                feat1Desc: 'Reliez IBKR, Trade Republic, Degiro, Boursorama, Revolut, eToro — tout dans un tableau de bord.',
-                feat2Title: 'Tableau de Bord Patrimoine',
-                feat2Desc: 'Voyez la valeur totale de votre portefeuille, la performance et les gains sur tous vos comptes.',
-                feat3Title: 'Analyses de Performance',
-                feat3Desc: "Graphiques d'allocation d'actifs, score de diversification et suivi historique des performances.",
-                feat4Title: 'Import CSV',
-                feat4Desc: 'Importez vos fichiers d\'export courtier. Analyse instantanée, sans API.',
-                badge: 'Bientôt disponible',
-                notify: 'Nous construisons cette fonctionnalité. Retournez au simulateur en attendant.',
+                title: 'Sachez exactement combien vous valez.',
+                subtitle: 'Connectez tous vos comptes. Voyez votre patrimoine se mettre \u00E0 jour en temps r\u00E9el. Actions, ETF, crypto, \u00E9pargne \u2014 tout dans un tableau de bord.',
+                feat1Title: 'Tous les comptes, une seule vue',
+                feat1Desc: 'Connectez IBKR, Trade Republic, DEGIRO, Revolut, Boursorama. Import CSV aussi.',
+                feat2Title: 'Patrimoine en temps r\u00E9el',
+                feat2Desc: 'Regardez votre patrimoine grandir. Mis \u00E0 jour quotidiennement. D\u00E9compos\u00E9 par classe d\u2019actifs.',
+                feat3Title: 'Performance vs indices',
+                feat3Desc: 'Battez-vous le S&P 500 ? Comparez votre portefeuille aux indices.',
+                feat4Title: 'Score de diversification',
+                feat4Desc: 'Trop concentr\u00E9 sur la tech ? On vous le dit. Conseils d\u2019allocation intelligents.',
+                freePro: 'Gratuit : 2 comptes. Pro : Comptes illimit\u00E9s + synchronisation auto.',
+                badge: 'Bient\u00F4t disponible',
+                notify: 'Nous construisons cette fonctionnalit\u00E9. Retournez au simulateur en attendant.',
                 btn: 'Retour au simulateur',
-                navSim: 'Simulateur', navPort: 'Portfolio', navDiv: 'Dividendes', navGoals: 'Objectifs', navTax: 'Impôts',
-                footer: '© 2026 Young Investor Simulator. Conçu pour la prochaine génération.'
+                proBtn: 'D\u00E9bloquer les fonctions Pro',
+                ecosystem: 'Fait partie de l\u2019\u00E9cosyst\u00E8me Young Investor',
+                navSim: 'Simulateur', navPort: 'Portfolio', navDiv: 'Dividendes', navGoals: 'Objectifs', navTax: 'Imp\u00F4ts',
+                footer: '\u00A9 2026 Young Investor Simulator. Con\u00E7u pour la prochaine g\u00E9n\u00E9ration.'
             },
             es: {
-                title: 'Seguimiento de Portafolio',
-                subtitle: 'Conecta tus brókers. Míralo todo en un solo lugar.',
-                feat1Title: 'Conexión Multi-Bróker',
-                feat1Desc: 'Vincula IBKR, Trade Republic, Degiro, Boursorama, Revolut, eToro — todo en un panel.',
-                feat2Title: 'Panel de Patrimonio Neto',
-                feat2Desc: 'Ve el valor total de tu portafolio, rendimiento y ganancias en todas tus cuentas al instante.',
-                feat3Title: 'Análisis de Rendimiento',
-                feat3Desc: 'Gráficos de asignación de activos, puntuación de diversificación y seguimiento histórico.',
-                feat4Title: 'Importar CSV',
-                feat4Desc: 'Sube los archivos de exportación de tu bróker. Análisis instantáneo, sin API.',
-                badge: 'Próximamente',
+                title: 'Sabe exactamente cu\u00E1nto vales.',
+                subtitle: 'Conecta todas tus cuentas. Mira tu patrimonio actualizarse en tiempo real. Acciones, ETFs, crypto, ahorros \u2014 todo en un panel.',
+                feat1Title: 'Todas las cuentas, una vista',
+                feat1Desc: 'Conecta IBKR, Trade Republic, DEGIRO, Revolut, Boursorama. Importaci\u00F3n CSV tambi\u00E9n.',
+                feat2Title: 'Patrimonio en tiempo real',
+                feat2Desc: 'Observa c\u00F3mo crece tu riqueza. Actualizado diariamente. Desglosado por clase de activo.',
+                feat3Title: 'Rendimiento vs \u00EDndices',
+                feat3Desc: '\u00BFEst\u00E1s superando al S&P 500? Compara tu portafolio.',
+                feat4Title: 'Puntuaci\u00F3n de diversificaci\u00F3n',
+                feat4Desc: '\u00BFDemasiado concentrado en tech? Te lo decimos. Consejos de asignaci\u00F3n inteligentes.',
+                freePro: 'Gratis: 2 cuentas. Pro: Cuentas ilimitadas + sincronizaci\u00F3n auto.',
+                badge: 'Pr\u00F3ximamente',
                 notify: 'Estamos construyendo esto ahora. Vuelve al simulador mientras esperas.',
                 btn: 'Volver al simulador',
+                proBtn: 'Desbloquear funciones Pro',
+                ecosystem: 'Parte del ecosistema Young Investor',
                 navSim: 'Simulador', navPort: 'Portafolio', navDiv: 'Dividendos', navGoals: 'Metas', navTax: 'Impuestos',
-                footer: '© 2026 Young Investor Simulator. Hecho para la próxima generación.'
+                footer: '\u00A9 2026 Young Investor Simulator. Hecho para la pr\u00F3xima generaci\u00F3n.'
             },
             pt: {
-                title: 'Rastreador de Portfólio',
-                subtitle: 'Conecte suas corretoras. Veja tudo em um só lugar.',
-                feat1Title: 'Conexão Multi-Corretora',
-                feat1Desc: 'Vincule IBKR, Trade Republic, Degiro, Boursorama, Revolut, eToro — tudo em um painel.',
-                feat2Title: 'Painel de Patrimônio',
-                feat2Desc: 'Veja o valor total do seu portfólio, desempenho e ganhos em todas as contas instantaneamente.',
-                feat3Title: 'Análise de Desempenho',
-                feat3Desc: 'Gráficos de alocação de ativos, pontuação de diversificação e acompanhamento histórico.',
-                feat4Title: 'Importar CSV',
-                feat4Desc: 'Envie os arquivos de exportação da corretora. Análise instantânea, sem API.',
+                title: 'Saiba exatamente quanto voc\u00EA vale.',
+                subtitle: 'Conecte todas as suas contas. Veja seu patrim\u00F4nio se atualizar em tempo real. A\u00E7\u00F5es, ETFs, crypto, poupan\u00E7a \u2014 tudo em um painel.',
+                feat1Title: 'Todas as contas, uma vis\u00E3o',
+                feat1Desc: 'Conecte IBKR, Trade Republic, DEGIRO, Revolut, Boursorama. Import CSV tamb\u00E9m.',
+                feat2Title: 'Patrim\u00F4nio em tempo real',
+                feat2Desc: 'Veja sua riqueza crescer. Atualizado diariamente. Dividido por classe de ativo.',
+                feat3Title: 'Desempenho vs \u00EDndices',
+                feat3Desc: 'Voc\u00EA est\u00E1 superando o S&P 500? Compare seu portf\u00F3lio.',
+                feat4Title: 'Pontua\u00E7\u00E3o de diversifica\u00E7\u00E3o',
+                feat4Desc: 'Muito concentrado em tech? N\u00F3s avisamos. Insights inteligentes de aloca\u00E7\u00E3o.',
+                freePro: 'Gr\u00E1tis: 2 contas. Pro: Contas ilimitadas + sincroniza\u00E7\u00E3o auto.',
                 badge: 'Em breve',
                 notify: 'Estamos construindo isso agora. Volte ao simulador enquanto espera.',
                 btn: 'Voltar ao simulador',
-                navSim: 'Simulador', navPort: 'Portfólio', navDiv: 'Dividendos', navGoals: 'Metas', navTax: 'Impostos',
-                footer: '© 2026 Young Investor Simulator. Feito para a próxima geração.'
+                proBtn: 'Desbloquear recursos Pro',
+                ecosystem: 'Parte do ecossistema Young Investor',
+                navSim: 'Simulador', navPort: 'Portf\u00F3lio', navDiv: 'Dividendos', navGoals: 'Metas', navTax: 'Impostos',
+                footer: '\u00A9 2026 Young Investor Simulator. Feito para a pr\u00F3xima gera\u00E7\u00E3o.'
             },
             de: {
-                title: 'Portfolio-Tracker',
-                subtitle: 'Verbinde deine Broker. Sieh alles auf einen Blick.',
-                feat1Title: 'Multi-Broker-Verbindung',
-                feat1Desc: 'Verknüpfe IBKR, Trade Republic, Degiro, Boursorama, Revolut, eToro — alles in einem Dashboard.',
-                feat2Title: 'Vermögens-Dashboard',
-                feat2Desc: 'Sieh den Gesamtwert deines Portfolios, die Performance und Gewinne über alle Konten.',
-                feat3Title: 'Performance-Analyse',
-                feat3Desc: 'Asset-Allokation-Diagramme, Diversifikationsbewertung und historische Performance.',
-                feat4Title: 'CSV-Import',
-                feat4Desc: 'Lade deine Broker-Exportdateien hoch. Sofortige Portfolioanalyse, ohne API.',
+                title: 'Wisse genau, wie reich du bist.',
+                subtitle: 'Verbinde alle Konten. Sieh dein Verm\u00F6gen in Echtzeit. Aktien, ETFs, Krypto, Ersparnisse \u2014 alles in einem Dashboard.',
+                feat1Title: 'Alle Konten, eine Ansicht',
+                feat1Desc: 'Verbinde IBKR, Trade Republic, DEGIRO, Revolut, Boursorama. CSV-Import auch.',
+                feat2Title: 'Echtzeit-Verm\u00F6gen',
+                feat2Desc: 'Beobachte dein Verm\u00F6gen wachsen. T\u00E4glich aktualisiert. Nach Anlageklasse aufgeschl\u00FCsselt.',
+                feat3Title: 'Performance vs Benchmarks',
+                feat3Desc: 'Schl\u00E4gst du den S&P 500? Vergleiche dein Portfolio.',
+                feat4Title: 'Diversifikations-Score',
+                feat4Desc: 'Zu viel Tech? Wir sagen es dir. Intelligente Allokations-Einblicke.',
+                freePro: 'Kostenlos: 2 Konten. Pro: Unbegrenzte Konten + Auto-Sync.',
                 badge: 'Kommt bald',
-                notify: 'Wir bauen das gerade. Geh zurück zum Simulator.',
-                btn: 'Zurück zum Simulator',
+                notify: 'Wir bauen das gerade. Geh zur\u00FCck zum Simulator.',
+                btn: 'Zur\u00FCck zum Simulator',
+                proBtn: 'Pro-Funktionen freischalten',
+                ecosystem: 'Teil des Young Investor \u00D6kosystems',
                 navSim: 'Simulator', navPort: 'Portfolio', navDiv: 'Dividenden', navGoals: 'Ziele', navTax: 'Steuern',
-                footer: '© 2026 Young Investor Simulator. Für die nächste Generation gebaut.'
+                footer: '\u00A9 2026 Young Investor Simulator. F\u00FCr die n\u00E4chste Generation gebaut.'
             },
             ar: {
-                title: 'متتبع المحفظة',
-                subtitle: 'اربط وسطاءك. شاهد كل شيء في مكان واحد.',
-                feat1Title: 'ربط وسطاء متعددين',
-                feat1Desc: 'اربط IBKR و Trade Republic و Degiro و Boursorama و Revolut و eToro — الكل في لوحة واحدة.',
-                feat2Title: 'لوحة صافي الثروة',
-                feat2Desc: 'شاهد القيمة الإجمالية لمحفظتك والأداء والأرباح عبر جميع الحسابات فوراً.',
-                feat3Title: 'تحليلات الأداء',
-                feat3Desc: 'مخططات توزيع الأصول وتقييم التنويع وتتبع الأداء التاريخي.',
-                feat4Title: 'استيراد CSV',
-                feat4Desc: 'ارفع ملفات تصدير الوسيط. تحليل فوري للمحفظة بدون API.',
-                badge: 'قريبًا',
-                notify: 'نحن نبني هذا الآن. عد إلى المحاكي.',
-                btn: 'العودة إلى المحاكي',
-                navSim: 'المحاكي', navPort: 'المحفظة', navDiv: 'الأرباح', navGoals: 'الأهداف', navTax: 'الضرائب',
-                footer: '© 2026 Young Investor Simulator. صُمم للجيل القادم.'
+                title: '\u0627\u0639\u0631\u0641 \u0628\u0627\u0644\u0636\u0628\u0637 \u0643\u0645 \u062A\u0633\u0627\u0648\u064A.',
+                subtitle: '\u0627\u0631\u0628\u0637 \u062C\u0645\u064A\u0639 \u062D\u0633\u0627\u0628\u0627\u062A\u0643. \u0634\u0627\u0647\u062F \u0635\u0627\u0641\u064A \u062B\u0631\u0648\u062A\u0643 \u064A\u062A\u062D\u062F\u062B \u0641\u0648\u0631\u064B\u0627. \u0627\u0644\u0623\u0633\u0647\u0645\u060C \u0635\u0646\u0627\u062F\u064A\u0642 ETF\u060C \u0627\u0644\u0639\u0645\u0644\u0627\u062A \u0627\u0644\u0631\u0642\u0645\u064A\u0629\u060C \u0627\u0644\u0645\u062F\u062E\u0631\u0627\u062A \u2014 \u0643\u0644 \u0634\u064A\u0621 \u0641\u064A \u0644\u0648\u062D\u0629 \u0648\u0627\u062D\u062F\u0629.',
+                feat1Title: '\u062C\u0645\u064A\u0639 \u0627\u0644\u062D\u0633\u0627\u0628\u0627\u062A\u060C \u0639\u0631\u0636 \u0648\u0627\u062D\u062F',
+                feat1Desc: '\u0627\u0631\u0628\u0637 IBKR\u060C Trade Republic\u060C DEGIRO\u060C Revolut\u060C Boursorama. \u0627\u0633\u062A\u064A\u0631\u0627\u062F CSV \u0623\u064A\u0636\u064B\u0627.',
+                feat2Title: '\u0635\u0627\u0641\u064A \u0627\u0644\u062B\u0631\u0648\u0629 \u0641\u0648\u0631\u064A\u064B\u0627',
+                feat2Desc: '\u0634\u0627\u0647\u062F \u062B\u0631\u0648\u062A\u0643 \u062A\u0646\u0645\u0648. \u064A\u062A\u0645 \u0627\u0644\u062A\u062D\u062F\u064A\u062B \u064A\u0648\u0645\u064A\u064B\u0627. \u0645\u0642\u0633\u0645 \u062D\u0633\u0628 \u0641\u0626\u0629 \u0627\u0644\u0623\u0635\u0648\u0644.',
+                feat3Title: '\u0627\u0644\u0623\u062F\u0627\u0621 \u0645\u0642\u0627\u0628\u0644 \u0627\u0644\u0645\u0624\u0634\u0631\u0627\u062A',
+                feat3Desc: '\u0647\u0644 \u062A\u062A\u0641\u0648\u0642 \u0639\u0644\u0649 S&P 500\u061F \u0642\u0627\u0631\u0646 \u0645\u062D\u0641\u0638\u062A\u0643.',
+                feat4Title: '\u062F\u0631\u062C\u0629 \u0627\u0644\u062A\u0646\u0648\u064A\u0639',
+                feat4Desc: '\u062A\u0631\u0643\u064A\u0632 \u0632\u0627\u0626\u062F \u0639\u0644\u0649 \u0627\u0644\u062A\u0643\u0646\u0648\u0644\u0648\u062C\u064A\u0627\u061F \u0633\u0646\u062E\u0628\u0631\u0643. \u0646\u0635\u0627\u0626\u062D \u062A\u0648\u0632\u064A\u0639 \u0630\u0643\u064A\u0629.',
+                freePro: '\u0645\u062C\u0627\u0646\u064A: \u062D\u0633\u0627\u0628\u0627\u0646. \u0628\u0631\u0648: \u062D\u0633\u0627\u0628\u0627\u062A \u063A\u064A\u0631 \u0645\u062D\u062F\u0648\u062F\u0629 + \u0645\u0632\u0627\u0645\u0646\u0629 \u062A\u0644\u0642\u0627\u0626\u064A\u0629.',
+                badge: '\u0642\u0631\u064A\u0628\u064B\u0627',
+                notify: '\u0646\u062D\u0646 \u0646\u0628\u0646\u064A \u0647\u0630\u0627 \u0627\u0644\u0622\u0646. \u0639\u062F \u0625\u0644\u0649 \u0627\u0644\u0645\u062D\u0627\u0643\u064A.',
+                btn: '\u0627\u0644\u0639\u0648\u062F\u0629 \u0625\u0644\u0649 \u0627\u0644\u0645\u062D\u0627\u0643\u064A',
+                proBtn: '\u0641\u062A\u062D \u0645\u064A\u0632\u0627\u062A \u0628\u0631\u0648',
+                ecosystem: '\u062C\u0632\u0621 \u0645\u0646 \u0645\u0646\u0638\u0648\u0645\u0629 Young Investor',
+                navSim: '\u0627\u0644\u0645\u062D\u0627\u0643\u064A', navPort: '\u0627\u0644\u0645\u062D\u0641\u0638\u0629', navDiv: '\u0627\u0644\u0623\u0631\u0628\u0627\u062D', navGoals: '\u0627\u0644\u0623\u0647\u062F\u0627\u0641', navTax: '\u0627\u0644\u0636\u0631\u0627\u0626\u0628',
+                footer: '\u00A9 2026 Young Investor Simulator. \u0635\u064F\u0645\u0645 \u0644\u0644\u062C\u064A\u0644 \u0627\u0644\u0642\u0627\u062F\u0645.'
             },
             zh: {
-                title: '投资组合追踪器',
-                subtitle: '连接你的券商，一站式查看所有投资。',
-                feat1Title: '多券商连接',
-                feat1Desc: '关联 IBKR、Trade Republic、Degiro、Boursorama、Revolut、eToro — 集中管理。',
-                feat2Title: '净资产仪表盘',
-                feat2Desc: '即时查看投资组合总价值、收益表现和所有账户的盈亏。',
-                feat3Title: '绩效分析',
-                feat3Desc: '资产配置图表、分散化评分和历史绩效追踪。',
-                feat4Title: 'CSV 导入',
-                feat4Desc: '上传券商导出文件，无需 API 即可即时分析投资组合。',
-                badge: '即将推出',
-                notify: '我们正在建设中。请先回到模拟器。',
-                btn: '返回模拟器',
-                navSim: '模拟器', navPort: '投资组合', navDiv: '股息', navGoals: '目标', navTax: '税务',
-                footer: '© 2026 Young Investor Simulator. 为下一代而建。'
+                title: '\u7CBE\u786E\u77E5\u9053\u4F60\u7684\u8D22\u5BCC\u3002',
+                subtitle: '\u8FDE\u63A5\u6240\u6709\u8D26\u6237\u3002\u5B9E\u65F6\u67E5\u770B\u51C0\u8D44\u4EA7\u66F4\u65B0\u3002\u80A1\u7968\u3001ETF\u3001\u52A0\u5BC6\u8D27\u5E01\u3001\u50A8\u84C4 \u2014 \u4E00\u4E2A\u4EEA\u8868\u76D8\u641E\u5B9A\u4E00\u5207\u3002',
+                feat1Title: '\u6240\u6709\u8D26\u6237\uFF0C\u4E00\u4E2A\u89C6\u56FE',
+                feat1Desc: '\u8FDE\u63A5 IBKR\u3001Trade Republic\u3001DEGIRO\u3001Revolut\u3001Boursorama\u3002\u4E5F\u652F\u6301 CSV \u5BFC\u5165\u3002',
+                feat2Title: '\u5B9E\u65F6\u51C0\u8D44\u4EA7',
+                feat2Desc: '\u770B\u7740\u4F60\u7684\u8D22\u5BCC\u589E\u957F\u3002\u6BCF\u65E5\u66F4\u65B0\u3002\u6309\u8D44\u4EA7\u7C7B\u522B\u5206\u89E3\u3002',
+                feat3Title: '\u4E0E\u57FA\u51C6\u6BD4\u8F83',
+                feat3Desc: '\u4F60\u8DD1\u8D62\u4E86 S&P 500 \u5417\uFF1F\u6BD4\u8F83\u4F60\u7684\u6295\u8D44\u7EC4\u5408\u3002',
+                feat4Title: '\u5206\u6563\u5316\u8BC4\u5206',
+                feat4Desc: '\u79D1\u6280\u80A1\u592A\u591A\uFF1F\u6211\u4EEC\u4F1A\u544A\u8BC9\u4F60\u3002\u667A\u80FD\u914D\u7F6E\u5EFA\u8BAE\u3002',
+                freePro: '\u514D\u8D39\uFF1A\u8FDE\u63A5 2 \u4E2A\u8D26\u6237\u3002Pro\uFF1A\u65E0\u9650\u8D26\u6237 + \u81EA\u52A8\u540C\u6B65\u3002',
+                badge: '\u5373\u5C06\u63A8\u51FA',
+                notify: '\u6211\u4EEC\u6B63\u5728\u5EFA\u8BBE\u4E2D\u3002\u8BF7\u5148\u56DE\u5230\u6A21\u62DF\u5668\u3002',
+                btn: '\u8FD4\u56DE\u6A21\u62DF\u5668',
+                proBtn: '\u89E3\u9501 Pro \u529F\u80FD',
+                ecosystem: 'Young Investor \u751F\u6001\u7CFB\u7EDF\u7684\u4E00\u90E8\u5206',
+                navSim: '\u6A21\u62DF\u5668', navPort: '\u6295\u8D44\u7EC4\u5408', navDiv: '\u80A1\u606F', navGoals: '\u76EE\u6807', navTax: '\u7A0E\u52A1',
+                footer: '\u00A9 2026 Young Investor Simulator. \u4E3A\u4E0B\u4E00\u4EE3\u800C\u5EFA\u3002'
             }
         };
 
@@ -250,9 +302,12 @@
             document.getElementById('feat3-desc').textContent = t.feat3Desc;
             document.getElementById('feat4-title').textContent = t.feat4Title;
             document.getElementById('feat4-desc').textContent = t.feat4Desc;
+            document.getElementById('cs-free-pro').textContent = t.freePro;
             document.getElementById('cs-badge').textContent = t.badge;
             document.getElementById('cs-notify').textContent = t.notify;
             document.getElementById('cs-btn').textContent = t.btn;
+            document.getElementById('cs-pro-btn').textContent = t.proBtn;
+            document.getElementById('cs-ecosystem').textContent = t.ecosystem;
             document.getElementById('nav-simulator').textContent = t.navSim;
             document.getElementById('nav-portfolio').textContent = t.navPort;
             document.getElementById('nav-dividends').textContent = t.navDiv;
@@ -261,7 +316,6 @@
             document.getElementById('footer-text').innerHTML = t.footer;
             document.getElementById('langFlag').textContent = langLabels[lang];
 
-            // RTL support for Arabic
             if (lang === 'ar') {
                 document.documentElement.setAttribute('dir', 'rtl');
                 document.documentElement.setAttribute('lang', 'ar');
@@ -270,7 +324,6 @@
                 document.documentElement.setAttribute('lang', lang);
             }
 
-            // Update active state in dropdown
             document.querySelectorAll('.lang-option').forEach(opt => {
                 opt.classList.toggle('active', opt.dataset.lang === lang);
             });
