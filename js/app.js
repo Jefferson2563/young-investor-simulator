@@ -289,8 +289,8 @@ function handleUpgradePro() {
     }
 
     // Stripe Checkout links (monthly + annual)
-    const STRIPE_MONTHLY = 'https://buy.stripe.com/test_00wcN4dA23hc1vSa2o00000';
-    const STRIPE_ANNUAL = 'https://buy.stripe.com/test_00wcN4dA23hc1vSa2o00000'; // Replace with annual link
+    const STRIPE_MONTHLY = 'https://buy.stripe.com/3cIdR8exQ8yI2s75hEfAc00';
+    const STRIPE_ANNUAL = 'https://buy.stripe.com/7sYfZg2P8dT2giX25sfAc01';
 
     const isAnnual = document.getElementById('pricingAnnual').classList.contains('active');
     const link = isAnnual ? STRIPE_ANNUAL : STRIPE_MONTHLY;
@@ -299,6 +299,23 @@ function handleUpgradePro() {
     const email = currentUser.email ? `?prefilled_email=${encodeURIComponent(currentUser.email)}` : '';
     window.open(link + email, '_blank');
 }
+
+// Handle upgrade success redirect from Stripe
+(function() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('upgrade') === 'success') {
+        // Show success toast after page loads
+        window.addEventListener('DOMContentLoaded', function() {
+            setTimeout(function() {
+                if (window._yisShowToast) {
+                    window._yisShowToast('🎉 Welcome to Pro! Your 14-day trial has started.');
+                }
+            }, 1000);
+        });
+        // Clean URL
+        window.history.replaceState({}, '', window.location.pathname);
+    }
+})();
 
 // Pricing toggle handler
 document.addEventListener('DOMContentLoaded', function() {
@@ -309,14 +326,16 @@ document.addEventListener('DOMContentLoaded', function() {
             monthlyBtn.classList.add('active');
             annualBtn.classList.remove('active');
             document.getElementById('proPrice').textContent = '$4.99';
-            document.getElementById('proPeriod').textContent = '/month';
+            const _t = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
+            document.getElementById('proPeriod').textContent = _t.planMonth || '/month';
             document.getElementById('annualNote').style.display = 'none';
         });
         annualBtn.addEventListener('click', function() {
             annualBtn.classList.add('active');
             monthlyBtn.classList.remove('active');
             document.getElementById('proPrice').textContent = '$49.99';
-            document.getElementById('proPeriod').textContent = '/year';
+            const _t = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
+            document.getElementById('proPeriod').textContent = _t.planYear || '/year';
             document.getElementById('annualNote').style.display = 'block';
         });
     }
@@ -1069,6 +1088,28 @@ function closeFullscreen() {
         if (planBtnPro) planBtnPro.textContent = t.planBtnPro;
         const proNote = document.querySelector('.pro-note');
         if (proNote) proNote.textContent = t.proNote;
+
+        // Pricing toggle
+        const pricingMonthly = document.getElementById('pricingMonthly');
+        const pricingAnnual = document.getElementById('pricingAnnual');
+        if (pricingMonthly && t.planMonthly) {
+            pricingMonthly.childNodes[0].textContent = t.planMonthly;
+        }
+        if (pricingAnnual && t.planAnnual) {
+            const saveTag = pricingAnnual.querySelector('.save-tag');
+            pricingAnnual.childNodes[0].textContent = t.planAnnual + ' ';
+            if (saveTag && t.planSaveTag) saveTag.textContent = t.planSaveTag;
+        }
+        const annualNote = document.getElementById('annualNote');
+        if (annualNote && t.planAnnualNote) {
+            const span = annualNote.querySelector('span');
+            if (span) span.textContent = t.planAnnualNote;
+        }
+        // Update period text based on current toggle state
+        if (planPeriods[1]) {
+            const isAnnual = pricingAnnual && pricingAnnual.classList.contains('active');
+            planPeriods[1].textContent = isAnnual ? (t.planYear || '/year') : (t.planMonth || '/month');
+        }
 
         // Pro highlight cards
         const hlCards = document.querySelectorAll('.pro-hl-card');
