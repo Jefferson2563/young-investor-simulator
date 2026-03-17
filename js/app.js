@@ -95,157 +95,129 @@ function shareResults() {
     const fmt = window._yisFormatMoney;
     const _ts = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
 
-    // Create canvas card
-    const W = 1080, H = 1080;
+    // Create canvas card — 1080x1350 (Instagram portrait ratio)
+    const W = 1080, H = 1350;
     const canvas = document.createElement('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
 
-    // Background gradient (dark)
-    const bg = ctx.createLinearGradient(0, 0, W, H);
-    bg.addColorStop(0, '#0a0f0d');
-    bg.addColorStop(0.5, '#0d1a14');
-    bg.addColorStop(1, '#0a0f0d');
-    ctx.fillStyle = bg;
+    // Pure black background — edge to edge, no borders
+    ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, W, H);
 
-    // Decorative glow circle
-    const glow = ctx.createRadialGradient(540, 400, 50, 540, 400, 400);
-    glow.addColorStop(0, 'rgba(0, 230, 118, 0.12)');
-    glow.addColorStop(1, 'rgba(0, 230, 118, 0)');
+    // Subtle radial glow behind the big number
+    const glow = ctx.createRadialGradient(W/2, 420, 20, W/2, 420, 350);
+    glow.addColorStop(0, 'rgba(0, 230, 118, 0.08)');
+    glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = glow;
-    ctx.fillRect(0, 0, W, H);
+    ctx.fillRect(0, 100, W, 600);
 
-    // Border
-    ctx.strokeStyle = 'rgba(0, 230, 118, 0.2)';
-    ctx.lineWidth = 2;
-    ctx.roundRect(24, 24, W - 48, H - 48, 24);
-    ctx.stroke();
-
-    // Inner border accent
-    ctx.strokeStyle = 'rgba(0, 230, 118, 0.08)';
-    ctx.lineWidth = 1;
-    ctx.roundRect(40, 40, W - 80, H - 80, 20);
-    ctx.stroke();
-
-    // Top badge
-    ctx.fillStyle = 'rgba(0, 230, 118, 0.15)';
-    const badgeText = 'YOUNG INVESTOR SIMULATOR';
-    ctx.font = '700 16px "Inter", "SF Pro Display", system-ui, sans-serif';
-    const badgeW = ctx.measureText(badgeText).width + 40;
-    ctx.roundRect((W - badgeW) / 2, 80, badgeW, 36, 18);
-    ctx.fill();
-    ctx.fillStyle = '#00e676';
+    // Top — small branding
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = '600 15px "Inter", system-ui, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText(badgeText, W / 2, 104);
+    ctx.letterSpacing = '3px';
+    ctx.fillText('YOUNG INVESTOR', W / 2, 80);
 
     // Headline
     ctx.fillStyle = '#ffffff';
-    ctx.font = '800 42px "Space Grotesk", "Inter", system-ui, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(_ts.shareISimulated || 'My Investment Simulation', W / 2, 180);
+    ctx.font = '700 38px "Inter", system-ui, sans-serif';
+    ctx.fillText(_ts.shareISimulated || 'I simulated my investment future', W / 2, 160);
 
-    // Final value (big number)
-    ctx.fillStyle = '#00e676';
-    ctx.font = '800 96px "Space Grotesk", "Inter", system-ui, sans-serif';
-    ctx.fillText(fmt(r.finalBalance), W / 2, 320);
-
-    // Subtitle
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.font = '500 22px "Inter", system-ui, sans-serif';
-    ctx.fillText(_ts.shareFinalValue || 'Final Portfolio Value', W / 2, 365);
-
-    // Divider line
-    ctx.strokeStyle = 'rgba(0, 230, 118, 0.2)';
+    // Thin separator line
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(160, 410);
-    ctx.lineTo(W - 160, 410);
+    ctx.moveTo(200, 200);
+    ctx.lineTo(W - 200, 200);
     ctx.stroke();
 
-    // Stats grid (3 columns)
+    // THE BIG NUMBER — green, massive
+    ctx.fillStyle = '#00e676';
+    ctx.font = '900 120px "Inter", system-ui, sans-serif';
+    ctx.fillText(fmt(r.finalBalance), W / 2, 380);
+
+    // Label under big number
+    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+    ctx.font = '400 20px "Inter", system-ui, sans-serif';
+    ctx.fillText(_ts.shareFinalValue || 'Final Portfolio Value', W / 2, 425);
+
+    // Three stats — clean, minimal
     const stats = [
-        { label: _ts.shareIPutIn || 'Invested', value: fmt(r.totalContributed), color: '#ffffff' },
-        { label: _ts.shareMarketGave || 'Interest Earned', value: fmt(r.totalInterest), color: '#00e676' },
-        { label: _ts.shareMoneyMultiplied || 'Multiplier', value: r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '—', color: '#00e676' }
+        { label: _ts.shareIPutIn || 'I put in', value: fmt(r.totalContributed) },
+        { label: _ts.shareMarketGave || 'Market gave me', value: fmt(r.totalInterest) },
+        { label: _ts.shareMoneyMultiplied || 'Multiplied', value: r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '\u2014' }
     ];
 
-    const statY = 470;
-    const colW = (W - 200) / 3;
+    const statY = 540;
+    const colW = W / 3;
     stats.forEach((s, i) => {
-        const cx = 100 + colW * i + colW / 2;
-
-        // Stat card background
-        ctx.fillStyle = 'rgba(255,255,255,0.04)';
-        ctx.beginPath();
-        ctx.roundRect(100 + colW * i + 10, statY - 30, colW - 20, 120, 16);
-        ctx.fill();
-
-        // Value
-        ctx.fillStyle = s.color;
-        ctx.font = '800 36px "Space Grotesk", "Inter", system-ui, sans-serif';
+        const cx = colW * i + colW / 2;
+        // Value — green for interest & multiplier, white for invested
+        ctx.fillStyle = i === 0 ? '#ffffff' : '#00e676';
+        ctx.font = '800 40px "Inter", system-ui, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(s.value, cx, statY + 20);
-
+        ctx.fillText(s.value, cx, statY);
         // Label
-        ctx.fillStyle = 'rgba(255,255,255,0.45)';
-        ctx.font = '500 16px "Inter", system-ui, sans-serif';
-        ctx.fillText(s.label, cx, statY + 55);
+        ctx.fillStyle = 'rgba(255,255,255,0.35)';
+        ctx.font = '400 15px "Inter", system-ui, sans-serif';
+        ctx.fillText(s.label, cx, statY + 30);
     });
 
-    // Parameters bar
-    const paramsY = 650;
-    ctx.fillStyle = 'rgba(0, 230, 118, 0.06)';
+    // Separator
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
     ctx.beginPath();
-    ctx.roundRect(100, paramsY, W - 200, 80, 16);
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(0, 230, 118, 0.15)';
-    ctx.lineWidth = 1;
-    ctx.roundRect(100, paramsY, W - 200, 80, 16);
+    ctx.moveTo(100, 620);
+    ctx.lineTo(W - 100, 620);
     ctx.stroke();
 
+    // Parameters row — the simulation settings
     const sliders = window._yisGetData();
-    const paramTexts = [
-        fmt(sliders.startingAmount || 0) + ' start',
-        fmt(sliders.monthlyContribution || 0) + '/mo',
-        (sliders.annualReturn || 0) + '% return',
-        (sliders.years || 0) + ' years'
+    const paramItems = [
+        { val: fmt(sliders.startingAmount || 0), lbl: 'start' },
+        { val: fmt(sliders.monthlyContribution || 0), lbl: '/month' },
+        { val: (sliders.annualReturn || 0) + '%', lbl: 'return' },
+        { val: (sliders.years || 0) + '', lbl: 'years' }
     ];
-    const paramColW = (W - 240) / 4;
-    ctx.font = '600 18px "Inter", system-ui, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,0.6)';
-    ctx.textAlign = 'center';
-    paramTexts.forEach((t, i) => {
-        ctx.fillText(t, 140 + paramColW * i + paramColW / 2, paramsY + 47);
+    const paramY = 700;
+    const pColW = W / 4;
+    paramItems.forEach((p, i) => {
+        const cx = pColW * i + pColW / 2;
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '700 28px "Inter", system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(p.val, cx, paramY);
+        ctx.fillStyle = 'rgba(255,255,255,0.3)';
+        ctx.font = '400 14px "Inter", system-ui, sans-serif';
+        ctx.fillText(p.lbl, cx, paramY + 25);
     });
 
-    // Motivational quote area
+    // Motivational quote
     const quotes = [
-        '"Compound interest is the eighth wonder of the world." — Einstein',
+        '"Compound interest is the eighth wonder of the world."',
         '"The best time to invest was yesterday. The second best is now."',
-        '"Don\'t save what\'s left after spending. Spend what\'s left after saving."',
-        '"Time in the market beats timing the market."'
+        '"Time in the market beats timing the market."',
+        '"Don\'t save what\'s left after spending. Spend what\'s left after saving."'
     ];
-    const quote = quotes[Math.floor(Math.random() * quotes.length)];
-    ctx.fillStyle = 'rgba(255,255,255,0.3)';
-    ctx.font = 'italic 18px "Inter", system-ui, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText(quote, W / 2, 810);
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.font = 'italic 17px "Inter", system-ui, sans-serif';
+    ctx.fillText(quotes[Math.floor(Math.random() * quotes.length)], W / 2, 830);
 
-    // Bottom CTA
-    ctx.fillStyle = 'rgba(0, 230, 118, 0.12)';
-    ctx.beginPath();
-    ctx.roundRect(240, 870, W - 480, 56, 28);
-    ctx.fill();
+    // Bottom CTA — solid green pill
+    const ctaY = 920;
     ctx.fillStyle = '#00e676';
+    ctx.beginPath();
+    ctx.roundRect(280, ctaY, W - 560, 60, 30);
+    ctx.fill();
+    ctx.fillStyle = '#000000';
     ctx.font = '700 20px "Inter", system-ui, sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('Try it free → younginvestor.app', W / 2, 905);
+    ctx.fillText('Try it free \u2192 younginvestor.app', W / 2, ctaY + 37);
 
-    // Watermark
-    ctx.fillStyle = 'rgba(255,255,255,0.15)';
-    ctx.font = '500 13px "Inter", system-ui, sans-serif';
-    ctx.fillText('Young Investor Simulator · Free Tool', W / 2, 980);
+    // Bitcoin mention — subtle ₿ icon reference
+    // (kept minimal, just the branding watermark)
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.font = '400 13px "Inter", system-ui, sans-serif';
+    ctx.fillText('younginvestor.app \u00b7 Free Investment Simulator', W / 2, H - 40);
 
     // Convert to blob and share
     canvas.toBlob(function(blob) {
