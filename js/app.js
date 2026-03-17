@@ -84,8 +84,23 @@ async function handleGoogleSignIn() {
 }
 
 function handleSignOut() {
+    closeProfileDropdown();
     auth.signOut();
 }
+
+function toggleProfileDropdown() {
+    var dd = document.getElementById('profileDropdown');
+    if (dd) dd.classList.toggle('open');
+}
+function closeProfileDropdown() {
+    var dd = document.getElementById('profileDropdown');
+    if (dd) dd.classList.remove('open');
+}
+// Close dropdown on outside click
+document.addEventListener('click', function(e) {
+    var menu = document.getElementById('userMenu');
+    if (menu && !menu.contains(e.target)) closeProfileDropdown();
+});
 
 // --- Share results (visual card) ---
 function shareResults() {
@@ -112,66 +127,63 @@ function shareResults() {
     ctx.fillStyle = glow;
     ctx.fillRect(0, 100, W, 600);
 
-    // Top — small branding
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.font = '600 15px "Inter", system-ui, sans-serif';
+    // Top branding
+    ctx.fillStyle = 'rgba(255,255,255,0.5)';
+    ctx.font = '700 22px "Inter", system-ui, sans-serif';
     ctx.textAlign = 'center';
-    ctx.letterSpacing = '3px';
-    ctx.fillText('YOUNG INVESTOR', W / 2, 80);
+    ctx.fillText('YOUNG INVESTOR', W / 2, 90);
 
     // Headline
     ctx.fillStyle = '#ffffff';
-    ctx.font = '700 38px "Inter", system-ui, sans-serif';
-    ctx.fillText(_ts.shareISimulated || 'I simulated my investment future', W / 2, 160);
+    ctx.font = '700 44px "Inter", system-ui, sans-serif';
+    ctx.fillText(_ts.shareISimulated || 'I simulated my investment future!', W / 2, 175);
 
-    // Thin separator line
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    // Thin separator
+    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
     ctx.lineWidth = 1;
     ctx.beginPath();
-    ctx.moveTo(200, 200);
-    ctx.lineTo(W - 200, 200);
+    ctx.moveTo(200, 220);
+    ctx.lineTo(W - 200, 220);
     ctx.stroke();
 
     // THE BIG NUMBER — green, massive
     ctx.fillStyle = '#00e676';
-    ctx.font = '900 120px "Inter", system-ui, sans-serif';
-    ctx.fillText(fmt(r.finalBalance), W / 2, 380);
+    ctx.font = '900 130px "Inter", system-ui, sans-serif';
+    ctx.fillText(fmt(r.finalBalance), W / 2, 400);
 
     // Label under big number
-    ctx.fillStyle = 'rgba(255,255,255,0.4)';
-    ctx.font = '400 20px "Inter", system-ui, sans-serif';
-    ctx.fillText(_ts.shareFinalValue || 'Final Portfolio Value', W / 2, 425);
+    ctx.fillStyle = 'rgba(255,255,255,0.55)';
+    ctx.font = '500 26px "Inter", system-ui, sans-serif';
+    ctx.fillText(_ts.shareFinalValue || 'Final Portfolio Value', W / 2, 450);
 
-    // Three stats — clean, minimal
+    // Three stats — bigger text
     const stats = [
         { label: _ts.shareIPutIn || 'I put in', value: fmt(r.totalContributed) },
         { label: _ts.shareMarketGave || 'Market gave me', value: fmt(r.totalInterest) },
         { label: _ts.shareMoneyMultiplied || 'Multiplied', value: r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '\u2014' }
     ];
 
-    const statY = 540;
+    const statY = 570;
     const colW = W / 3;
     stats.forEach((s, i) => {
         const cx = colW * i + colW / 2;
-        // Value — green for interest & multiplier, white for invested
         ctx.fillStyle = i === 0 ? '#ffffff' : '#00e676';
-        ctx.font = '800 40px "Inter", system-ui, sans-serif';
+        ctx.font = '800 48px "Inter", system-ui, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(s.value, cx, statY);
-        // Label
-        ctx.fillStyle = 'rgba(255,255,255,0.35)';
-        ctx.font = '400 15px "Inter", system-ui, sans-serif';
-        ctx.fillText(s.label, cx, statY + 30);
+        ctx.fillStyle = 'rgba(255,255,255,0.5)';
+        ctx.font = '500 20px "Inter", system-ui, sans-serif';
+        ctx.fillText(s.label, cx, statY + 38);
     });
 
     // Separator
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
     ctx.beginPath();
-    ctx.moveTo(100, 620);
-    ctx.lineTo(W - 100, 620);
+    ctx.moveTo(100, 660);
+    ctx.lineTo(W - 100, 660);
     ctx.stroke();
 
-    // Parameters row — the simulation settings
+    // Parameters row
     const sliders = window._yisGetData();
     const paramItems = [
         { val: fmt(sliders.startingAmount || 0), lbl: 'start' },
@@ -179,67 +191,59 @@ function shareResults() {
         { val: (sliders.annualReturn || 0) + '%', lbl: 'return' },
         { val: (sliders.years || 0) + '', lbl: 'years' }
     ];
-    const paramY = 700;
+    const paramY = 740;
     const pColW = W / 4;
     paramItems.forEach((p, i) => {
         const cx = pColW * i + pColW / 2;
         ctx.fillStyle = '#ffffff';
-        ctx.font = '700 28px "Inter", system-ui, sans-serif';
+        ctx.font = '700 36px "Inter", system-ui, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(p.val, cx, paramY);
-        ctx.fillStyle = 'rgba(255,255,255,0.3)';
-        ctx.font = '400 14px "Inter", system-ui, sans-serif';
-        ctx.fillText(p.lbl, cx, paramY + 25);
+        ctx.fillStyle = 'rgba(255,255,255,0.45)';
+        ctx.font = '500 18px "Inter", system-ui, sans-serif';
+        ctx.fillText(p.lbl, cx, paramY + 30);
     });
 
-    // Motivational quote
+    // Motivational quote — bigger
     const quotes = [
         '"Compound interest is the eighth wonder of the world."',
         '"The best time to invest was yesterday. The second best is now."',
-        '"Time in the market beats timing the market."',
-        '"Don\'t save what\'s left after spending. Spend what\'s left after saving."'
+        '"Time in the market beats timing the market."'
     ];
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.font = 'italic 17px "Inter", system-ui, sans-serif';
-    ctx.fillText(quotes[Math.floor(Math.random() * quotes.length)], W / 2, 830);
+    ctx.fillStyle = 'rgba(255,255,255,0.35)';
+    ctx.font = 'italic 22px "Inter", system-ui, sans-serif';
+    ctx.fillText(quotes[Math.floor(Math.random() * quotes.length)], W / 2, 870);
 
-    // Bottom CTA — solid green pill
-    const ctaY = 920;
+    // Bottom CTA — solid green pill, bigger
+    const ctaY = 940;
     ctx.fillStyle = '#00e676';
     ctx.beginPath();
-    ctx.roundRect(280, ctaY, W - 560, 60, 30);
+    ctx.roundRect(240, ctaY, W - 480, 70, 35);
     ctx.fill();
     ctx.fillStyle = '#000000';
-    ctx.font = '700 20px "Inter", system-ui, sans-serif';
-    ctx.fillText('Try it free \u2192 younginvestor.app', W / 2, ctaY + 37);
+    ctx.font = '700 26px "Inter", system-ui, sans-serif';
+    ctx.fillText('Try it free \u2192 younginvestor.app', W / 2, ctaY + 44);
 
-    // Bitcoin mention — subtle ₿ icon reference
-    // (kept minimal, just the branding watermark)
-    ctx.fillStyle = 'rgba(255,255,255,0.12)';
-    ctx.font = '400 13px "Inter", system-ui, sans-serif';
-    ctx.fillText('younginvestor.app \u00b7 Free Investment Simulator', W / 2, H - 40);
+    // Watermark — bigger
+    ctx.fillStyle = 'rgba(255,255,255,0.2)';
+    ctx.font = '500 18px "Inter", system-ui, sans-serif';
+    ctx.fillText('younginvestor.app \u00b7 Free Investment Simulator', W / 2, H - 50);
 
     // Convert to blob and share
     canvas.toBlob(function(blob) {
         if (!blob) return;
         const file = new File([blob], 'my-investment-simulation.png', { type: 'image/png' });
 
-        const textFallback = `${_ts.shareISimulated || 'I just simulated my investment future!'}\n` +
-            `💰 ${fmt(r.finalBalance)} from ${fmt(r.totalContributed)} invested\n` +
-            `📈 ${r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '0x'} return\n\n` +
-            `Try it: ${window.location.href}\n#YoungInvestorSimulator`;
-
+        // Share image only — no separate text, so WhatsApp keeps image + caption together
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
             navigator.share({
-                title: _ts.shareTitle || 'My Investment Simulation',
-                text: textFallback,
                 files: [file]
             }).catch(() => {});
         } else if (navigator.share) {
             navigator.share({
-                title: _ts.shareTitle || 'My Investment Simulation',
-                text: textFallback,
-                url: window.location.href
+                title: _ts.shareTitle || 'Young Investor Simulator',
+                text: `${_ts.shareISimulated || 'I just simulated my investment future!'} \u2192 younginvestor.app`,
+                url: 'https://younginvestor.app/#simulator'
             }).catch(() => {});
         } else {
             // Fallback: download the image
@@ -261,8 +265,8 @@ function handleUpgradePro() {
     }
 
     // Stripe Checkout links (monthly + annual)
-    const STRIPE_MONTHLY = 'https://buy.stripe.com/3cIdR8exQ8yI2s75hEfAc00';
-    const STRIPE_ANNUAL = 'https://buy.stripe.com/7sYfZg2P8dT2giX25sfAc01';
+    const STRIPE_MONTHLY = 'https://buy.stripe.com/14A14m61kdT27Mr5hEfAc03';
+    const STRIPE_ANNUAL = 'https://buy.stripe.com/9B6eVc9dw8yI5Ej11ofAc02';
 
     const isAnnual = document.getElementById('pricingAnnual').classList.contains('active');
     const link = isAnnual ? STRIPE_ANNUAL : STRIPE_MONTHLY;
@@ -1283,6 +1287,11 @@ function closeFullscreen() {
                     .substring(0, 2)
                     .toUpperCase();
                 userAvatar.textContent = initials;
+                // Populate profile dropdown
+                var pName = document.getElementById('profileName');
+                var pEmail = document.getElementById('profileEmail');
+                if (pName) pName.textContent = user.displayName || 'Investor';
+                if (pEmail) pEmail.textContent = user.email || '';
                 loadFromCloud();
             } else {
                 authBtn.style.display = '';
