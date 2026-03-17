@@ -155,6 +155,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
     <script src="../js/firebase-config.js"></script>
+    <script src="../js/premium.js"></script>
 
     <script>
         // --- Auth ---
@@ -171,8 +172,8 @@
         document.addEventListener('click', function(e) { var m = document.getElementById('userMenu'); if (m && !m.contains(e.target)) { var dd = document.getElementById('profileDD'); if (dd) dd.classList.remove('open'); } });
         auth.onAuthStateChanged(function(u) {
             currentUser = u;
-            if (u) { document.getElementById('authBtn').style.display = 'none'; document.getElementById('userMenu').style.display = 'flex'; var i = (u.displayName || u.email || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase(); document.getElementById('userAvatar').textContent = i; document.getElementById('profileName').textContent = u.displayName || 'Investor'; document.getElementById('profileEmail').textContent = u.email || ''; }
-            else { document.getElementById('authBtn').style.display = ''; document.getElementById('userMenu').style.display = 'none'; }
+            if (u) { document.getElementById('authBtn').style.display = 'none'; document.getElementById('userMenu').style.display = 'flex'; var i = (u.displayName || u.email || '?').split(' ').map(function(w) { return w[0]; }).join('').substring(0, 2).toUpperCase(); document.getElementById('userAvatar').textContent = i; document.getElementById('profileName').textContent = u.displayName || 'Investor'; document.getElementById('profileEmail').textContent = u.email || ''; if (window.YIS_PREMIUM) window.YIS_PREMIUM.checkStatus(u); }
+            else { document.getElementById('authBtn').style.display = ''; document.getElementById('userMenu').style.display = 'none'; if (window.YIS_PREMIUM) window.YIS_PREMIUM.checkStatus(null); }
         });
 
         // Theme toggle

@@ -1298,9 +1298,13 @@ function closeFullscreen() {
                 if (pName) pName.textContent = user.displayName || 'Investor';
                 if (pEmail) pEmail.textContent = user.email || '';
                 loadFromCloud();
+                // Check premium status
+                if (window.YIS_PREMIUM) window.YIS_PREMIUM.checkStatus(user);
             } else {
                 authBtn.style.display = '';
                 userMenu.style.display = 'none';
+                // Reset premium state
+                if (window.YIS_PREMIUM) window.YIS_PREMIUM.checkStatus(null);
             }
         });
     }
