@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Young Investor | Dividend Calculator — Track Your Passive Income</title>
-    <meta name="description" content="Free dividend calculator. See how much passive income your investments generate. DRIP calculator, income projections, dividend growth simulator.">
-    <meta name="keywords" content="dividend calculator, dividend tracker, passive income calculator, DRIP calculator, dividend yield calculator, dividend growth">
+    <meta name="description" content="Free DRIP dividend reinvestment calculator. See year-by-year how dividends compound your wealth. Realistic projections with monthly contributions.">
+    <meta name="keywords" content="dividend calculator, DRIP calculator, dividend reinvestment, passive income calculator, dividend yield calculator, dividend growth, compound dividends">
     <link rel="canonical" href="https://younginvestor.app/dividends/">
     <meta property="og:title" content="Young Investor | Dividend Calculator — Track Your Passive Income">
-    <meta property="og:description" content="Free dividend calculator. See how much passive income your investments generate. DRIP calculator included.">
+    <meta property="og:description" content="Free DRIP calculator. See year-by-year how dividends compound your wealth with realistic monthly projections.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://younginvestor.app/dividends/">
     <meta property="og:site_name" content="Young Investor">
@@ -19,112 +19,96 @@
     <link rel="stylesheet" href="../css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
-        /* ===== Dividend Calculator Styles ===== */
-        .div-page { padding: 100px 0 60px; min-height: 100vh; }
-        .div-hero { text-align: center; margin-bottom: 48px; }
-        .div-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green); border: 1px solid var(--green-border); padding: 6px 16px; border-radius: 100px; margin-bottom: 16px; text-decoration: none; }
-        .div-title { font-family: var(--font-display); font-size: clamp(28px, 5vw, 48px); font-weight: 800; color: var(--text); margin: 0 0 12px; line-height: 1.15; }
-        .div-subtitle { font-size: 16px; color: var(--text-secondary); max-width: 520px; margin: 0 auto; line-height: 1.5; }
+        *,*::before,*::after{box-sizing:border-box;}
 
-        /* Layout */
-        .div-layout { display: grid; grid-template-columns: 340px 1fr; gap: 32px; align-items: start; }
+        .dc-page{padding:90px 0 60px;min-height:100vh;}
+        .dc-hero{text-align:center;margin-bottom:40px;}
+        .dc-badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--green);border:1px solid var(--green-border);padding:6px 16px;border-radius:100px;margin-bottom:14px;text-decoration:none;}
+        .dc-badge:hover{background:var(--green-soft);}
+        .dc-title{font-family:var(--font-display);font-size:clamp(26px,4.5vw,42px);font-weight:800;color:var(--text);margin:0 0 10px;line-height:1.15;}
+        .dc-sub{font-size:15px;color:var(--text-secondary);max-width:500px;margin:0 auto;line-height:1.5;}
 
-        /* Left panel — controls */
-        .div-panel { position: sticky; top: 90px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px 24px; }
-        .div-panel-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); margin: 0 0 24px; }
+        /* ===== INPUT FORM ===== */
+        .dc-form-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 32px;margin-bottom:32px;max-width:900px;margin-left:auto;margin-right:auto;}
+        .dc-form-title{font-family:var(--font-display);font-size:17px;font-weight:700;color:var(--text);margin:0 0 20px;display:flex;align-items:center;gap:8px;}
+        .dc-form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;}
+        .dc-field{display:flex;flex-direction:column;gap:5px;}
+        .dc-field label{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
+        .dc-field input,.dc-field select{width:100%;padding:10px 14px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font-main);font-size:15px;font-weight:600;outline:none;transition:border-color 0.2s;}
+        .dc-field input:focus,.dc-field select:focus{border-color:var(--green);}
+        .dc-field select{cursor:pointer;-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23999' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px;}
+        .dc-field .dc-input-prefix{position:relative;}
+        .dc-field .dc-input-prefix::before{content:'$';position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:15px;font-weight:600;}
+        .dc-field .dc-input-prefix input{padding-left:28px;}
+        .dc-field .dc-input-suffix{position:relative;}
+        .dc-field .dc-input-suffix::after{content:'%';position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:14px;font-weight:600;}
+        .dc-field .dc-input-suffix input{padding-right:32px;}
 
-        .div-control { margin-bottom: 22px; }
-        .div-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
-        .div-label-text { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
-        .div-label-value { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text); }
+        /* Toggle row */
+        .dc-toggle-row{display:flex;align-items:center;gap:12px;padding:12px 0 0;grid-column:1/-1;}
+        .dc-toggle-row label{font-size:13px;font-weight:600;color:var(--text);text-transform:none;letter-spacing:0;cursor:pointer;}
+        .dc-switch{position:relative;width:44px;height:24px;flex-shrink:0;}
+        .dc-switch input{opacity:0;width:0;height:0;}
+        .dc-switch-track{position:absolute;inset:0;background:var(--border-light);border-radius:24px;cursor:pointer;transition:background 0.2s;}
+        .dc-switch-track::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:transform 0.2s;}
+        .dc-switch input:checked+.dc-switch-track{background:var(--green);}
+        .dc-switch input:checked+.dc-switch-track::after{transform:translateX(20px);}
 
-        .div-slider { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: var(--slider-track); outline: none; cursor: pointer; }
-        .div-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--slider-fill); cursor: pointer; border: 3px solid var(--bg-card); box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: transform 0.15s; }
-        .div-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
-        .div-slider::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--slider-fill); cursor: pointer; border: 3px solid var(--bg-card); }
+        /* Calculate button */
+        .dc-calc-btn{grid-column:1/-1;padding:14px 0;background:var(--green);color:#000;border:none;border-radius:100px;font-family:var(--font-main);font-size:15px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-top:4px;}
+        .dc-calc-btn:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,230,118,0.3);}
 
-        /* DRIP Toggle */
-        .div-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-top: 1px solid var(--border); margin-top: 6px; }
-        .div-toggle-label { font-size: 14px; font-weight: 600; color: var(--text); }
-        .div-toggle-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
-        .div-switch { position: relative; width: 48px; height: 26px; flex-shrink: 0; }
-        .div-switch input { opacity: 0; width: 0; height: 0; }
-        .div-switch-track { position: absolute; inset: 0; background: var(--border-light); border-radius: 26px; cursor: pointer; transition: background 0.2s; }
-        .div-switch-track::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
-        .div-switch input:checked + .div-switch-track { background: var(--green); }
-        .div-switch input:checked + .div-switch-track::after { transform: translateX(22px); }
+        /* ===== SUMMARY CARDS ===== */
+        .dc-summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;max-width:900px;margin:0 auto 32px;}
+        .dc-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center;}
+        .dc-card-val{font-family:var(--font-display);font-size:26px;font-weight:800;color:var(--green);margin-bottom:4px;}
+        .dc-card-label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;}
+        .dc-card.highlight{border-color:var(--green-border);background:var(--green-soft);}
+        .dc-card.highlight .dc-card-val{font-size:30px;}
 
-        /* Payout frequency selector */
-        .div-freq { display: flex; gap: 4px; margin-top: 8px; }
-        .div-freq-btn { flex: 1; padding: 8px 0; border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--text-muted); font-family: var(--font-main); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
-        .div-freq-btn.active { background: var(--green); color: #000; border-color: var(--green); }
+        /* ===== CHART ===== */
+        .dc-chart-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;max-width:900px;margin:0 auto 32px;}
+        .dc-chart-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+        .dc-chart-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text);}
+        .dc-legend{display:flex;gap:14px;flex-wrap:wrap;}
+        .dc-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--text-secondary);}
+        .dc-legend-dot{width:10px;height:10px;border-radius:3px;}
+        .dc-chart-canvas{width:100%;height:320px;}
 
-        /* Right side — results */
-        .div-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 24px; }
-        .div-stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; }
-        .div-stat-value { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: var(--green); margin-bottom: 4px; }
-        .div-stat-label { font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-        .div-stat.accent { border-color: var(--green-border); background: var(--green-soft); }
-        .div-stat.accent .div-stat-value { font-size: 34px; }
+        /* ===== YEAR-BY-YEAR TABLE ===== */
+        .dc-table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;max-width:900px;margin:0 auto 32px;overflow-x:auto;}
+        .dc-table-title{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text);margin-bottom:14px;}
+        .dc-table{width:100%;border-collapse:collapse;font-size:13px;min-width:700px;}
+        .dc-table thead{position:sticky;top:0;z-index:2;}
+        .dc-table th{padding:10px 12px;text-align:right;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);border-bottom:2px solid var(--border);background:var(--bg-card);white-space:nowrap;}
+        .dc-table th:first-child{text-align:center;width:60px;}
+        .dc-table td{padding:10px 12px;text-align:right;color:var(--text-secondary);border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums;white-space:nowrap;}
+        .dc-table td:first-child{text-align:center;font-weight:700;color:var(--text);}
+        .dc-table tr:hover td{background:var(--green-soft);color:var(--text);}
+        .dc-table .green{color:var(--green);font-weight:600;}
+        .dc-table .total-row td{border-top:2px solid var(--green-border);font-weight:700;color:var(--green);background:var(--green-soft);}
 
-        /* Chart */
-        .div-chart-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
-        .div-chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .div-chart-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); }
-        .div-chart-legend { display: flex; gap: 16px; }
-        .div-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
-        .div-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+        /* ===== PRO CTA ===== */
+        .dc-pro{background:var(--green-soft);border:1px solid var(--green-border);border-radius:var(--radius-lg);padding:32px;text-align:center;max-width:900px;margin:0 auto 32px;}
+        .dc-pro h3{font-family:var(--font-display);font-size:20px;font-weight:700;color:var(--text);margin:0 0 8px;}
+        .dc-pro p{font-size:14px;color:var(--text-secondary);margin:0 0 16px;max-width:400px;margin-left:auto;margin-right:auto;}
+        .dc-pro-btn{display:inline-block;padding:14px 32px;background:var(--green);color:#000;font-family:var(--font-main);font-size:15px;font-weight:700;border-radius:100px;text-decoration:none;transition:all 0.2s;border:none;cursor:pointer;}
+        .dc-pro-btn:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,230,118,0.3);}
 
-        /* Payout schedule */
-        .div-schedule { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
-        .div-schedule-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
-        .div-months { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .div-month { padding: 14px 8px; border-radius: var(--radius); background: var(--bg-secondary); text-align: center; border: 1px solid transparent; transition: all 0.15s; }
-        .div-month.payout { background: var(--green-soft); border-color: var(--green-border); }
-        .div-month-name { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
-        .div-month.payout .div-month-name { color: var(--green); }
-        .div-month-amount { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); }
-        .div-month.payout .div-month-amount { color: var(--green); }
+        /* ===== FOOTER ===== */
+        .dc-footer{text-align:center;padding:32px 0;font-size:12px;color:var(--text-muted);}
 
-        /* Popular dividend stocks */
-        .div-stocks { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
-        .div-stocks-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
-        .div-stock-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
-        .div-stock { padding: 14px; border-radius: var(--radius); background: var(--bg-secondary); border: 1px solid var(--border); text-align: center; cursor: pointer; transition: all 0.15s; }
-        .div-stock:hover { border-color: var(--green-border); background: var(--green-soft); transform: translateY(-2px); }
-        .div-stock-ticker { font-family: var(--font-display); font-size: 15px; font-weight: 800; color: var(--text); }
-        .div-stock-name { font-size: 11px; color: var(--text-muted); margin: 2px 0; }
-        .div-stock-yield { font-size: 13px; font-weight: 700; color: var(--green); }
-
-        /* Pro CTA */
-        .div-pro-cta { background: var(--green-soft); border: 1px solid var(--green-border); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 24px; }
-        .div-pro-cta h3 { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text); margin: 0 0 8px; }
-        .div-pro-cta p { font-size: 14px; color: var(--text-secondary); margin: 0 0 16px; }
-        .div-pro-btn { display: inline-block; padding: 14px 32px; background: var(--green); color: #000; font-family: var(--font-main); font-size: 15px; font-weight: 700; border-radius: 100px; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; }
-        .div-pro-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,230,118,0.3); }
-
-        /* DRIP comparison (Pro locked) */
-        .div-drip-section { position: relative; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
-        .div-drip-section.locked { overflow: hidden; }
-        .div-lock-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); border-radius: var(--radius-lg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 10; }
-        .div-lock-icon { font-size: 32px; }
-        .div-lock-text { font-size: 14px; color: #fff; font-weight: 600; }
-
-        /* Footer */
-        .div-footer { text-align: center; padding: 40px 0; }
-        .div-footer-text { font-size: 13px; color: var(--text-muted); }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .div-layout { grid-template-columns: 1fr; }
-            .div-panel { position: static; }
-            .div-stats { grid-template-columns: repeat(2, 1fr); }
-            .div-months { grid-template-columns: repeat(3, 1fr); }
+        /* ===== RESPONSIVE ===== */
+        @media(max-width:768px){
+            .dc-form-wrap{padding:20px 18px;}
+            .dc-form-grid{grid-template-columns:1fr 1fr;}
+            .dc-summary{grid-template-columns:repeat(2,1fr);}
+            .dc-chart-canvas{height:240px;}
         }
-        @media (max-width: 480px) {
-            .div-stats { grid-template-columns: 1fr; }
-            .div-months { grid-template-columns: repeat(2, 1fr); }
-            .div-stock-grid { grid-template-columns: repeat(2, 1fr); }
+        @media(max-width:480px){
+            .dc-form-grid{grid-template-columns:1fr;}
+            .dc-summary{grid-template-columns:1fr;}
+            .dc-chart-head{flex-direction:column;align-items:flex-start;}
         }
     </style>
 </head>
@@ -140,15 +124,13 @@
             <div class="nav-links">
                 <a href="../#simulator">Simulator</a>
                 <a href="../portfolio/" class="nav-soon" title="Coming Soon">Net Worth</a>
-                <a href="../dividends/" class="nav-active">Dividends</a>
+                <a href="../dividends/" class="nav-active nav-soon">Dividends</a>
                 <a href="../goals/" class="nav-soon" title="Coming Soon">Goals</a>
                 <a href="../tax/" class="nav-soon" title="Coming Soon">Tax</a>
             </div>
             <div class="nav-right">
                 <div class="lang-dropdown" id="langDropdown">
-                    <button class="lang-btn" id="langBtn" aria-label="Change language">
-                        <span id="langFlag">EN</span>
-                    </button>
+                    <button class="lang-btn" id="langBtn" aria-label="Change language"><span id="langFlag">EN</span></button>
                     <div class="lang-menu" id="langMenu">
                         <button class="lang-option active" data-lang="en">🇺🇸 English</button>
                         <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
@@ -159,9 +141,7 @@
                         <button class="lang-option" data-lang="zh">🇨🇳 中文</button>
                     </div>
                 </div>
-                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                    <span id="themeIcon">☀️</span>
-                </button>
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><span id="themeIcon">☀️</span></button>
                 <button class="auth-btn" id="authBtn" onclick="openAuthModal()">Sign In</button>
                 <div class="user-menu" id="userMenu" style="display:none;">
                     <div class="user-avatar" id="userAvatar" onclick="toggleProfileDD()"></div>
@@ -186,39 +166,24 @@
         <div class="modal">
             <button class="modal-close" onclick="closeAuthModal()">&times;</button>
             <div class="modal-header">
-                <img src="../assets/logo.svg" alt="" class="modal-logo" style="width:48px;height:48px;margin-bottom:12px;">
+                <img src="../assets/logo.svg" alt="" style="width:48px;height:48px;margin-bottom:12px;">
                 <h2 class="modal-title">Sign In</h2>
-                <p class="modal-desc" style="font-size:14px;color:var(--text-secondary);margin:8px 0 20px;">Save your calculations and unlock Pro features.</p>
+                <p style="font-size:14px;color:var(--text-secondary);margin:8px 0 20px;">Save calculations & unlock Pro features.</p>
             </div>
             <div class="auth-tabs">
                 <button class="auth-tab active" onclick="switchTab('signin')">Sign In</button>
                 <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
             </div>
             <form id="signinForm" onsubmit="handleSignIn(event)">
-                <div class="form-group">
-                    <label for="signinEmail">Email</label>
-                    <input type="email" id="signinEmail" placeholder="you@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="signinPassword">Password</label>
-                    <input type="password" id="signinPassword" placeholder="Your password" required>
-                </div>
+                <div class="form-group"><label>Email</label><input type="email" id="signinEmail" placeholder="you@example.com" required></div>
+                <div class="form-group"><label>Password</label><input type="password" id="signinPassword" placeholder="Your password" required></div>
                 <div class="auth-error" id="signinError"></div>
                 <button type="submit" class="auth-submit">Sign In</button>
             </form>
             <form id="signupForm" style="display:none" onsubmit="handleSignUp(event)">
-                <div class="form-group">
-                    <label for="signupName">Name</label>
-                    <input type="text" id="signupName" placeholder="Your name" required>
-                </div>
-                <div class="form-group">
-                    <label for="signupEmail">Email</label>
-                    <input type="email" id="signupEmail" placeholder="you@example.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="signupPassword">Password</label>
-                    <input type="password" id="signupPassword" placeholder="Min 6 characters" required minlength="6">
-                </div>
+                <div class="form-group"><label>Name</label><input type="text" id="signupName" placeholder="Your name" required></div>
+                <div class="form-group"><label>Email</label><input type="email" id="signupEmail" placeholder="you@example.com" required></div>
+                <div class="form-group"><label>Password</label><input type="password" id="signupPassword" placeholder="Min 6 characters" required minlength="6"></div>
                 <div class="auth-error" id="signupError"></div>
                 <button type="submit" class="auth-submit">Create Account</button>
             </form>
@@ -230,180 +195,147 @@
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="div-page">
+    <!-- MAIN -->
+    <main class="dc-page">
         <div class="container">
 
             <!-- Hero -->
-            <div class="div-hero">
-                <a href="../" class="div-badge">YOUNG INVESTOR ECOSYSTEM</a>
-                <h1 class="div-title" id="divTitle">How much passive income will you earn?</h1>
-                <p class="div-subtitle" id="divSubtitle">Enter your investment, set the dividend yield, and see your income grow year after year.</p>
+            <div class="dc-hero">
+                <a href="../" class="dc-badge">YOUNG INVESTOR ECOSYSTEM</a>
+                <h1 class="dc-title">Dividend Reinvestment Calculator</h1>
+                <p class="dc-sub">See year-by-year how reinvesting dividends compounds your wealth. Realistic projections with monthly contributions.</p>
             </div>
 
-            <!-- Calculator layout -->
-            <div class="div-layout">
-
-                <!-- LEFT PANEL — Controls -->
-                <div class="div-panel">
-                    <h2 class="div-panel-title" id="panelTitle">Your Investment</h2>
-
-                    <!-- Investment Amount -->
-                    <div class="div-control">
-                        <div class="div-label">
-                            <span class="div-label-text" id="labelInvest">Investment</span>
-                            <span class="div-label-value" id="valInvest">$10,000</span>
-                        </div>
-                        <input type="range" class="div-slider" id="sliderInvest" min="0" max="1000" value="200">
+            <!-- INPUT FORM -->
+            <div class="dc-form-wrap">
+                <div class="dc-form-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                    Your Investment
+                </div>
+                <div class="dc-form-grid">
+                    <div class="dc-field">
+                        <label>Initial Investment</label>
+                        <div class="dc-input-prefix"><input type="number" id="inInitial" value="10000" min="0" step="100"></div>
                     </div>
-
-                    <!-- Monthly Contribution -->
-                    <div class="div-control">
-                        <div class="div-label">
-                            <span class="div-label-text" id="labelMonthly">Monthly Add</span>
-                            <span class="div-label-value" id="valMonthly">$100</span>
-                        </div>
-                        <input type="range" class="div-slider" id="sliderMonthly" min="0" max="1000" value="100">
+                    <div class="dc-field">
+                        <label>Monthly Contribution</label>
+                        <div class="dc-input-prefix"><input type="number" id="inMonthly" value="200" min="0" step="25"></div>
                     </div>
-
-                    <!-- Dividend Yield -->
-                    <div class="div-control">
-                        <div class="div-label">
-                            <span class="div-label-text" id="labelYield">Dividend Yield</span>
-                            <span class="div-label-value" id="valYield">3.5%</span>
-                        </div>
-                        <input type="range" class="div-slider" id="sliderYield" min="0" max="120" value="35">
+                    <div class="dc-field">
+                        <label>Share Price</label>
+                        <div class="dc-input-prefix"><input type="number" id="inPrice" value="50" min="0.01" step="0.01"></div>
                     </div>
-
-                    <!-- Dividend Growth Rate -->
-                    <div class="div-control">
-                        <div class="div-label">
-                            <span class="div-label-text" id="labelGrowth">Dividend Growth</span>
-                            <span class="div-label-value" id="valGrowth">5%</span>
-                        </div>
-                        <input type="range" class="div-slider" id="sliderGrowth" min="0" max="200" value="50">
+                    <div class="dc-field">
+                        <label>Annual Dividend Yield</label>
+                        <div class="dc-input-suffix"><input type="number" id="inYield" value="3.5" min="0" max="30" step="0.1"></div>
                     </div>
-
-                    <!-- Years -->
-                    <div class="div-control">
-                        <div class="div-label">
-                            <span class="div-label-text" id="labelYears">Time Horizon</span>
-                            <span class="div-label-value" id="valYears">10 years</span>
-                        </div>
-                        <input type="range" class="div-slider" id="sliderYears" min="1" max="40" value="10">
+                    <div class="dc-field">
+                        <label>Dividend Growth Rate / yr</label>
+                        <div class="dc-input-suffix"><input type="number" id="inGrowth" value="5" min="0" max="30" step="0.5"></div>
                     </div>
-
-                    <!-- Payout Frequency -->
-                    <div class="div-control">
-                        <div class="div-label">
-                            <span class="div-label-text" id="labelFreq">Payout Frequency</span>
-                        </div>
-                        <div class="div-freq">
-                            <button class="div-freq-btn" data-freq="12" id="freqMonthly">Monthly</button>
-                            <button class="div-freq-btn active" data-freq="4" id="freqQuarterly">Quarterly</button>
-                            <button class="div-freq-btn" data-freq="2" id="freqSemi">Semi</button>
-                            <button class="div-freq-btn" data-freq="1" id="freqAnnual">Annual</button>
+                    <div class="dc-field">
+                        <label>Share Price Growth / yr</label>
+                        <div class="dc-input-suffix"><input type="number" id="inPriceGrowth" value="7" min="-10" max="30" step="0.5"></div>
+                    </div>
+                    <div class="dc-field">
+                        <label>Payout Frequency</label>
+                        <select id="inFreq">
+                            <option value="12">Monthly</option>
+                            <option value="4" selected>Quarterly</option>
+                            <option value="2">Semi-Annual</option>
+                            <option value="1">Annual</option>
+                        </select>
+                    </div>
+                    <div class="dc-field">
+                        <label>Investment Length</label>
+                        <div class="dc-input-suffix" style="--suffix:'yrs';">
+                            <input type="number" id="inYears" value="10" min="1" max="50" step="1">
                         </div>
                     </div>
-
-                    <!-- DRIP Toggle -->
-                    <div class="div-toggle-row">
-                        <div>
-                            <div class="div-toggle-label" id="labelDrip">DRIP (Reinvest)</div>
-                            <div class="div-toggle-sub" id="labelDripSub">Auto-reinvest dividends</div>
-                        </div>
-                        <label class="div-switch">
-                            <input type="checkbox" id="dripToggle" checked>
-                            <span class="div-switch-track"></span>
+                    <div class="dc-toggle-row">
+                        <label class="dc-switch">
+                            <input type="checkbox" id="inDrip" checked>
+                            <span class="dc-switch-track"></span>
                         </label>
+                        <label for="inDrip" style="cursor:pointer;">Reinvest Dividends (DRIP)</label>
                     </div>
-                </div>
-
-                <!-- RIGHT SIDE — Results -->
-                <div class="div-results">
-
-                    <!-- Stats Cards -->
-                    <div class="div-stats">
-                        <div class="div-stat accent">
-                            <div class="div-stat-value" id="statAnnualIncome">$350</div>
-                            <div class="div-stat-label" id="statAnnualLabel">Annual Income (Year 1)</div>
-                        </div>
-                        <div class="div-stat accent">
-                            <div class="div-stat-value" id="statMonthlyIncome">$29</div>
-                            <div class="div-stat-label" id="statMonthlyLabel">Monthly Income (Year 1)</div>
-                        </div>
-                        <div class="div-stat">
-                            <div class="div-stat-value" id="statTotalDiv">$5,420</div>
-                            <div class="div-stat-label" id="statTotalLabel">Total Dividends Earned</div>
-                        </div>
-                        <div class="div-stat">
-                            <div class="div-stat-value" id="statYieldOnCost">4.8%</div>
-                            <div class="div-stat-label" id="statYieldLabel">Yield on Cost (Final)</div>
-                        </div>
-                        <div class="div-stat">
-                            <div class="div-stat-value" id="statFinalValue">$25,400</div>
-                            <div class="div-stat-label" id="statFinalLabel">Portfolio Value (Final)</div>
-                        </div>
-                        <div class="div-stat">
-                            <div class="div-stat-value" id="statFinalAnnual">$890</div>
-                            <div class="div-stat-label" id="statFinalAnnualLabel">Annual Income (Final Year)</div>
-                        </div>
-                    </div>
-
-                    <!-- Chart -->
-                    <div class="div-chart-wrap">
-                        <div class="div-chart-header">
-                            <span class="div-chart-title" id="chartTitle">Dividend Income Over Time</span>
-                            <div class="div-chart-legend">
-                                <span class="div-legend-item"><span class="div-legend-dot" style="background:#00e676"></span> Annual Dividends</span>
-                                <span class="div-legend-item"><span class="div-legend-dot" style="background:rgba(255,255,255,0.3)"></span> Portfolio Value</span>
-                            </div>
-                        </div>
-                        <canvas id="divChart" height="280"></canvas>
-                    </div>
-
-                    <!-- Payout Calendar -->
-                    <div class="div-schedule">
-                        <div class="div-schedule-title" id="scheduleTitle">📅 Payout Schedule (Year 1)</div>
-                        <div class="div-months" id="payoutGrid"></div>
-                    </div>
-
-                    <!-- Popular Dividend Stocks -->
-                    <div class="div-stocks">
-                        <div class="div-stocks-title" id="stocksTitle">Popular Dividend Stocks — Click to Simulate</div>
-                        <div class="div-stock-grid" id="stockGrid"></div>
-                    </div>
-
-                    <!-- DRIP Comparison (Pro feature locked) -->
-                    <div class="div-drip-section locked" id="dripSection">
-                        <div class="div-lock-overlay" id="dripLock">
-                            <div class="div-lock-icon">🔒</div>
-                            <div class="div-lock-text">DRIP Comparison — Pro Feature</div>
-                            <a href="../index.html#pro" class="div-pro-btn" style="font-size:13px;padding:10px 24px;">Unlock with Pro</a>
-                        </div>
-                        <div class="div-chart-header">
-                            <span class="div-chart-title">DRIP vs No DRIP — 10 Year Comparison</span>
-                        </div>
-                        <canvas id="dripChart" height="220"></canvas>
-                    </div>
-
-                    <!-- Pro CTA -->
-                    <div class="div-pro-cta">
-                        <h3 id="proCTATitle">Want auto-tracking from your broker?</h3>
-                        <p id="proCTADesc">Pro unlocks real portfolio tracking, automatic dividend logging, and PDF exports.</p>
-                        <a href="../index.html#pro" class="div-pro-btn" id="proCTABtn">Start 14-day Free Trial</a>
-                    </div>
+                    <button class="dc-calc-btn" id="calcBtn" onclick="runCalc()">Calculate Dividends</button>
                 </div>
             </div>
+
+            <!-- SUMMARY CARDS -->
+            <div class="dc-summary" id="summaryCards">
+                <div class="dc-card highlight">
+                    <div class="dc-card-val" id="cFinal">$0</div>
+                    <div class="dc-card-label">Final Portfolio</div>
+                </div>
+                <div class="dc-card highlight">
+                    <div class="dc-card-val" id="cTotalDiv">$0</div>
+                    <div class="dc-card-label">Total Dividends</div>
+                </div>
+                <div class="dc-card">
+                    <div class="dc-card-val" id="cAnnualY1">$0</div>
+                    <div class="dc-card-label">Annual Income (Yr 1)</div>
+                </div>
+                <div class="dc-card">
+                    <div class="dc-card-val" id="cAnnualFinal">$0</div>
+                    <div class="dc-card-label">Annual Income (Final)</div>
+                </div>
+                <div class="dc-card">
+                    <div class="dc-card-val" id="cYOC">0%</div>
+                    <div class="dc-card-label">Yield on Cost</div>
+                </div>
+                <div class="dc-card">
+                    <div class="dc-card-val" id="cShares">0</div>
+                    <div class="dc-card-label">Total Shares</div>
+                </div>
+            </div>
+
+            <!-- CHART -->
+            <div class="dc-chart-wrap">
+                <div class="dc-chart-head">
+                    <span class="dc-chart-title">Portfolio Growth — The Dividend Snowball</span>
+                    <div class="dc-legend">
+                        <span class="dc-legend-item"><span class="dc-legend-dot" style="background:#00e676;"></span> Dividends</span>
+                        <span class="dc-legend-item"><span class="dc-legend-dot" style="background:#1e88e5;"></span> Invested</span>
+                        <span class="dc-legend-item"><span class="dc-legend-dot" style="background:rgba(255,255,255,0.15);"></span> No DRIP</span>
+                    </div>
+                </div>
+                <div class="dc-chart-canvas"><canvas id="dcChart"></canvas></div>
+            </div>
+
+            <!-- YEAR-BY-YEAR TABLE -->
+            <div class="dc-table-wrap">
+                <div class="dc-table-title">Year-by-Year Breakdown</div>
+                <table class="dc-table">
+                    <thead>
+                        <tr>
+                            <th>Year</th>
+                            <th>Shares</th>
+                            <th>Share Price</th>
+                            <th>Div / Share</th>
+                            <th>Yield</th>
+                            <th>Yield on Cost</th>
+                            <th>Annual Div.</th>
+                            <th>Total Div.</th>
+                            <th>End Balance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+
+            <!-- PRO CTA -->
+            <div class="dc-pro">
+                <h3>Go Pro — Auto-Track Real Dividends</h3>
+                <p>Connect your broker, auto-log every payout, get tax reports and PDF exports.</p>
+                <a href="../index.html#pro" class="dc-pro-btn">Start 14-Day Free Trial</a>
+            </div>
+
         </div>
     </main>
 
-    <!-- FOOTER -->
-    <footer class="div-footer">
-        <div class="container">
-            <span class="div-footer-text">&copy; 2026 Young Investor. Built for the next generation of investors.</span>
-        </div>
-    </footer>
+    <footer class="dc-footer"><div class="container">&copy; 2026 Young Investor. Built for the next generation of investors.</div></footer>
 
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -412,366 +344,234 @@
     <script src="../js/firebase-config.js"></script>
 
     <script>
-    (function() {
-        'use strict';
+    (function(){
+    'use strict';
 
-        // ===== AUTH =====
-        let currentUser = null;
+    /* ===== AUTH ===== */
+    var currentUser=null;
+    function openAuthModal(){document.getElementById('authModal').classList.add('open');}
+    function closeAuthModal(){document.getElementById('authModal').classList.remove('open');}
+    window.openAuthModal=openAuthModal;window.closeAuthModal=closeAuthModal;
+    window.switchTab=function(t){document.getElementById('signinForm').style.display=t==='signin'?'':'none';document.getElementById('signupForm').style.display=t==='signup'?'':'none';document.querySelectorAll('.auth-tab').forEach(function(b,i){b.classList.toggle('active',(i===0&&t==='signin')||(i===1&&t==='signup'));});};
+    window.handleSignIn=async function(e){e.preventDefault();try{await auth.signInWithEmailAndPassword(document.getElementById('signinEmail').value,document.getElementById('signinPassword').value);closeAuthModal();}catch(err){document.getElementById('signinError').textContent=err.message;}};
+    window.handleSignUp=async function(e){e.preventDefault();try{var c=await auth.createUserWithEmailAndPassword(document.getElementById('signupEmail').value,document.getElementById('signupPassword').value);await c.user.updateProfile({displayName:document.getElementById('signupName').value});closeAuthModal();}catch(err){document.getElementById('signupError').textContent=err.message;}};
+    window.handleGoogleSignIn=async function(){try{await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());closeAuthModal();}catch(err){document.getElementById('signinError').textContent=err.message;}};
+    window.handleSignOut=function(){document.getElementById('profileDD').classList.remove('open');auth.signOut();};
+    window.toggleProfileDD=function(){document.getElementById('profileDD').classList.toggle('open');};
+    document.addEventListener('click',function(e){var m=document.getElementById('userMenu');if(m&&!m.contains(e.target))document.getElementById('profileDD').classList.remove('open');});
+    auth.onAuthStateChanged(function(user){
+        currentUser=user;
+        if(user){document.getElementById('authBtn').style.display='none';document.getElementById('userMenu').style.display='flex';var ini=(user.displayName||user.email||'?').split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();document.getElementById('userAvatar').textContent=ini;document.getElementById('profileName').textContent=user.displayName||'Investor';document.getElementById('profileEmail').textContent=user.email||'';}
+        else{document.getElementById('authBtn').style.display='';document.getElementById('userMenu').style.display='none';}
+    });
 
-        function openAuthModal() { document.getElementById('authModal').classList.add('open'); }
-        function closeAuthModal() { document.getElementById('authModal').classList.remove('open'); }
-        window.openAuthModal = openAuthModal;
-        window.closeAuthModal = closeAuthModal;
+    /* ===== THEME ===== */
+    var st=localStorage.getItem('yis-theme')||'dark';
+    document.documentElement.setAttribute('data-theme',st);
+    document.getElementById('themeIcon').textContent=st==='dark'?'\u2600\uFE0F':'\uD83C\uDF19';
+    document.getElementById('themeToggle').addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');var n=c==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('yis-theme',n);document.getElementById('themeIcon').textContent=n==='dark'?'\u2600\uFE0F':'\uD83C\uDF19';if(chartInstance)renderChart(lastData);});
 
-        window.switchTab = function(tab) {
-            document.getElementById('signinForm').style.display = tab === 'signin' ? '' : 'none';
-            document.getElementById('signupForm').style.display = tab === 'signup' ? '' : 'none';
-            document.querySelectorAll('.auth-tab').forEach((t, i) => t.classList.toggle('active', (i === 0 && tab === 'signin') || (i === 1 && tab === 'signup')));
-        };
+    /* ===== LANG (basic) ===== */
+    document.getElementById('langBtn').addEventListener('click',function(e){e.stopPropagation();document.getElementById('langDropdown').classList.toggle('open');});
+    document.querySelectorAll('.lang-option').forEach(function(o){o.addEventListener('click',function(){document.getElementById('langDropdown').classList.remove('open');localStorage.setItem('yis-lang',o.dataset.lang);document.querySelectorAll('.lang-option').forEach(function(x){x.classList.toggle('active',x.dataset.lang===o.dataset.lang);});document.getElementById('langFlag').textContent=o.dataset.lang.toUpperCase();});});
+    document.addEventListener('click',function(){document.getElementById('langDropdown').classList.remove('open');});
+    var sl=localStorage.getItem('yis-lang')||'en';document.getElementById('langFlag').textContent=sl.toUpperCase();
 
-        window.handleSignIn = async function(e) {
-            e.preventDefault();
-            try {
-                await auth.signInWithEmailAndPassword(document.getElementById('signinEmail').value, document.getElementById('signinPassword').value);
-                closeAuthModal();
-            } catch (err) { document.getElementById('signinError').textContent = err.message; }
-        };
+    /* ===== HELPERS ===== */
+    function fmt(n){
+        if(n>=1e6)return '$'+(n/1e6).toFixed(1)+'M';
+        return '$'+Math.round(n).toLocaleString('en-US');
+    }
+    function fmtD(n){return '$'+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+    function val(id){return parseFloat(document.getElementById(id).value)||0;}
 
-        window.handleSignUp = async function(e) {
-            e.preventDefault();
-            try {
-                const cred = await auth.createUserWithEmailAndPassword(document.getElementById('signupEmail').value, document.getElementById('signupPassword').value);
-                await cred.user.updateProfile({ displayName: document.getElementById('signupName').value });
-                closeAuthModal();
-            } catch (err) { document.getElementById('signupError').textContent = err.message; }
-        };
+    /* ===== CORE CALCULATION ===== */
+    var lastData=null;
 
-        window.handleGoogleSignIn = async function() {
-            try {
-                await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-                closeAuthModal();
-            } catch (err) { document.getElementById('signinError').textContent = err.message; }
-        };
+    function calculate(){
+        var initial=val('inInitial');
+        var monthly=val('inMonthly');
+        var sharePrice=val('inPrice');
+        var divYield=val('inYield')/100;
+        var divGrowth=val('inGrowth')/100;
+        var priceGrowth=val('inPriceGrowth')/100;
+        var freq=parseInt(document.getElementById('inFreq').value);
+        var years=Math.min(val('inYears'),50);
+        var drip=document.getElementById('inDrip').checked;
 
-        window.handleSignOut = function() {
-            document.getElementById('profileDD').classList.remove('open');
-            auth.signOut();
-        };
+        var shares=sharePrice>0?initial/sharePrice:0;
+        var totalInvested=initial;
+        var totalDividends=0;
+        var currentPrice=sharePrice;
+        var currentDivPerShare=sharePrice*divYield/freq;
+        var rows=[];
+        var totalCost=initial;
 
-        window.toggleProfileDD = function() {
-            document.getElementById('profileDD').classList.toggle('open');
-        };
+        for(var y=1;y<=years;y++){
+            var annualDiv=0;
 
-        document.addEventListener('click', function(e) {
-            var m = document.getElementById('userMenu');
-            if (m && !m.contains(e.target)) document.getElementById('profileDD').classList.remove('open');
-        });
-
-        auth.onAuthStateChanged(function(user) {
-            currentUser = user;
-            var authBtn = document.getElementById('authBtn');
-            var userMenu = document.getElementById('userMenu');
-            if (user) {
-                authBtn.style.display = 'none';
-                userMenu.style.display = 'flex';
-                var initials = (user.displayName || user.email || '?').split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
-                document.getElementById('userAvatar').textContent = initials;
-                document.getElementById('profileName').textContent = user.displayName || 'Investor';
-                document.getElementById('profileEmail').textContent = user.email || '';
-            } else {
-                authBtn.style.display = '';
-                userMenu.style.display = 'none';
-            }
-        });
-
-        // ===== THEME =====
-        var savedTheme = localStorage.getItem('yis-theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', savedTheme);
-        document.getElementById('themeIcon').textContent = savedTheme === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
-
-        document.getElementById('themeToggle').addEventListener('click', function() {
-            var current = document.documentElement.getAttribute('data-theme');
-            var next = current === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', next);
-            localStorage.setItem('yis-theme', next);
-            document.getElementById('themeIcon').textContent = next === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
-            renderChart();
-        });
-
-        // ===== LANGUAGE (dropdown) =====
-        document.getElementById('langBtn').addEventListener('click', function(e) {
-            e.stopPropagation();
-            document.getElementById('langDropdown').classList.toggle('open');
-        });
-        document.querySelectorAll('.lang-option').forEach(function(opt) {
-            opt.addEventListener('click', function() {
-                document.getElementById('langDropdown').classList.remove('open');
-                localStorage.setItem('yis-lang', opt.dataset.lang);
-                document.querySelectorAll('.lang-option').forEach(function(o) { o.classList.toggle('active', o.dataset.lang === opt.dataset.lang); });
-                document.getElementById('langFlag').textContent = opt.dataset.lang.toUpperCase();
-                // Basic i18n could be extended here
-            });
-        });
-        document.addEventListener('click', function() { document.getElementById('langDropdown').classList.remove('open'); });
-        var savedLang = localStorage.getItem('yis-lang') || 'en';
-        document.getElementById('langFlag').textContent = savedLang.toUpperCase();
-
-        // ===== SLIDER MAPPING =====
-        var investMap = [[0,0],[50,1000],[100,2500],[150,5000],[200,10000],[300,25000],[400,50000],[500,100000],[600,250000],[700,500000],[800,1000000],[900,2500000],[1000,5000000]];
-        var monthlyMap = [[0,0],[50,25],[100,50],[150,100],[200,200],[300,500],[400,1000],[500,2000],[600,3000],[700,5000],[800,7500],[900,10000],[1000,25000]];
-
-        function mapSlider(map, pos) {
-            if (pos <= map[0][0]) return map[0][1];
-            if (pos >= map[map.length-1][0]) return map[map.length-1][1];
-            for (var i = 1; i < map.length; i++) {
-                if (pos <= map[i][0]) {
-                    var t = (pos - map[i-1][0]) / (map[i][0] - map[i-1][0]);
-                    return Math.round(map[i-1][1] + t * (map[i][1] - map[i-1][1]));
+            for(var p=0;p<freq;p++){
+                var divThisPayout=shares*currentDivPerShare;
+                annualDiv+=divThisPayout;
+                if(drip&&currentPrice>0){
+                    shares+=divThisPayout/currentPrice;
                 }
             }
-            return map[map.length-1][1];
-        }
 
-        function fmt(n) {
-            if (n >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
-            if (n >= 1e3) return '$' + n.toLocaleString('en-US', {maximumFractionDigits:0});
-            return '$' + n.toLocaleString('en-US', {maximumFractionDigits:0});
-        }
+            // Monthly contributions throughout the year
+            for(var m=0;m<12;m++){
+                if(monthly>0&&currentPrice>0){
+                    shares+=monthly/currentPrice;
+                    totalInvested+=monthly;
+                    totalCost+=monthly;
+                }
+            }
 
-        // ===== STATE =====
-        var state = { invest: 10000, monthly: 100, yield: 3.5, growth: 5, years: 10, freq: 4, drip: true };
+            totalDividends+=annualDiv;
 
-        // ===== POPULAR DIVIDEND STOCKS =====
-        var stocks = [
-            { ticker: 'KO', name: 'Coca-Cola', yield: 3.1 },
-            { ticker: 'JNJ', name: 'Johnson & Johnson', yield: 3.0 },
-            { ticker: 'PG', name: 'Procter & Gamble', yield: 2.4 },
-            { ticker: 'O', name: 'Realty Income', yield: 5.5 },
-            { ticker: 'VZ', name: 'Verizon', yield: 6.4 },
-            { ticker: 'SCHD', name: 'Schwab Div ETF', yield: 3.5 },
-            { ticker: 'T', name: 'AT&T', yield: 5.2 },
-            { ticker: 'ABBV', name: 'AbbVie', yield: 3.6 },
-            { ticker: 'XOM', name: 'ExxonMobil', yield: 3.3 },
-            { ticker: 'MCD', name: "McDonald's", yield: 2.3 },
-            { ticker: 'PEP', name: 'PepsiCo', yield: 2.7 },
-            { ticker: 'AAPL', name: 'Apple', yield: 0.5 }
-        ];
+            // Grow price & dividend for next year
+            currentPrice*=(1+priceGrowth);
+            currentDivPerShare*=(1+divGrowth);
 
-        function renderStocks() {
-            var grid = document.getElementById('stockGrid');
-            grid.innerHTML = '';
-            stocks.forEach(function(s) {
-                var div = document.createElement('div');
-                div.className = 'div-stock';
-                div.innerHTML = '<div class="div-stock-ticker">' + s.ticker + '</div><div class="div-stock-name">' + s.name + '</div><div class="div-stock-yield">' + s.yield.toFixed(1) + '% yield</div>';
-                div.addEventListener('click', function() {
-                    document.getElementById('sliderYield').value = Math.round(s.yield * 10);
-                    update();
-                });
-                grid.appendChild(div);
+            var endBalance=shares*currentPrice;
+            var yieldOnCost=totalCost>0?(annualDiv/totalCost*100):0;
+
+            rows.push({
+                year:y,
+                shares:shares,
+                price:currentPrice,
+                divPerShare:currentDivPerShare*freq, // annual div per share
+                yield:divYield*100*Math.pow(1+divGrowth,y-1),
+                yieldOnCost:yieldOnCost,
+                annualDiv:annualDiv,
+                totalDiv:totalDividends,
+                balance:endBalance,
+                invested:totalInvested
             });
         }
 
-        // ===== CALCULATE =====
-        function calculate() {
-            var invest = state.invest;
-            var monthly = state.monthly;
-            var divYield = state.yield / 100;
-            var growth = state.growth / 100;
-            var years = state.years;
-            var drip = state.drip;
-
-            var yearlyData = [];
-            var portfolio = invest;
-            var totalDividends = 0;
-            var currentYield = divYield;
-
-            for (var y = 1; y <= years; y++) {
-                // Add monthly contributions for this year
-                portfolio += monthly * 12;
-
-                // Calculate annual dividend based on current yield
-                var annualDiv = portfolio * currentYield;
-                totalDividends += annualDiv;
-
-                if (drip) {
-                    portfolio += annualDiv; // reinvest
-                }
-
-                yearlyData.push({
-                    year: y,
-                    portfolio: portfolio,
-                    annualDividend: annualDiv,
-                    monthlyDividend: annualDiv / 12,
-                    yieldOnCost: (invest + monthly * 12 * y) > 0 ? (annualDiv / (invest + monthly * 12 * y) * 100) : 0,
-                    totalDividends: totalDividends,
-                    currentYield: currentYield * 100
-                });
-
-                // Grow the yield for next year
-                currentYield *= (1 + growth);
-            }
-
-            return yearlyData;
+        // Also compute No-DRIP scenario for chart comparison
+        var nShares=sharePrice>0?initial/sharePrice:0;
+        var nInvested=initial;
+        var nPrice=sharePrice;
+        var nDPS=sharePrice*divYield/freq;
+        var nodrip=[];
+        for(var y2=1;y2<=years;y2++){
+            for(var p2=0;p2<freq;p2++){/* dividends NOT reinvested */}
+            for(var m2=0;m2<12;m2++){if(monthly>0&&nPrice>0){nShares+=monthly/nPrice;nInvested+=monthly;}}
+            nPrice*=(1+priceGrowth);nDPS*=(1+divGrowth);
+            nodrip.push(nShares*nPrice);
         }
 
-        // ===== RENDER STATS =====
-        function renderStats(data) {
-            if (!data.length) return;
-            var first = data[0];
-            var last = data[data.length - 1];
+        return {rows:rows,nodrip:nodrip};
+    }
 
-            document.getElementById('statAnnualIncome').textContent = fmt(first.annualDividend);
-            document.getElementById('statMonthlyIncome').textContent = fmt(first.monthlyDividend);
-            document.getElementById('statTotalDiv').textContent = fmt(last.totalDividends);
-            document.getElementById('statYieldOnCost').textContent = last.yieldOnCost.toFixed(1) + '%';
-            document.getElementById('statFinalValue').textContent = fmt(last.portfolio);
-            document.getElementById('statFinalAnnual').textContent = fmt(last.annualDividend);
-        }
+    /* ===== RENDER SUMMARY ===== */
+    function renderSummary(data){
+        var rows=data.rows;
+        if(!rows.length)return;
+        var first=rows[0],last=rows[rows.length-1];
+        document.getElementById('cFinal').textContent=fmt(last.balance);
+        document.getElementById('cTotalDiv').textContent=fmt(last.totalDiv);
+        document.getElementById('cAnnualY1').textContent=fmt(first.annualDiv);
+        document.getElementById('cAnnualFinal').textContent=fmt(last.annualDiv);
+        document.getElementById('cYOC').textContent=last.yieldOnCost.toFixed(1)+'%';
+        document.getElementById('cShares').textContent=Math.round(last.shares).toLocaleString();
+    }
 
-        // ===== RENDER CHART =====
-        var chart = null;
-        function renderChart() {
-            var data = calculate();
-            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-            var gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
-            var textColor = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)';
+    /* ===== RENDER TABLE ===== */
+    function renderTable(data){
+        var tbody=document.getElementById('tableBody');
+        tbody.innerHTML='';
+        var rows=data.rows;
+        rows.forEach(function(r){
+            var tr=document.createElement('tr');
+            tr.innerHTML='<td>'+r.year+'</td>'+
+                '<td>'+Math.round(r.shares).toLocaleString()+'</td>'+
+                '<td>'+fmtD(r.price)+'</td>'+
+                '<td>'+fmtD(r.divPerShare)+'</td>'+
+                '<td>'+r.yield.toFixed(1)+'%</td>'+
+                '<td>'+r.yieldOnCost.toFixed(1)+'%</td>'+
+                '<td class="green">'+fmt(r.annualDiv)+'</td>'+
+                '<td class="green">'+fmt(r.totalDiv)+'</td>'+
+                '<td>'+fmt(r.balance)+'</td>';
+            tbody.appendChild(tr);
+        });
+        // Total row
+        var last=rows[rows.length-1];
+        var totalTr=document.createElement('tr');
+        totalTr.className='total-row';
+        totalTr.innerHTML='<td>Total</td><td>'+Math.round(last.shares).toLocaleString()+'</td><td></td><td></td><td></td><td>'+last.yieldOnCost.toFixed(1)+'%</td><td class="green">'+fmt(last.annualDiv)+'/yr</td><td class="green">'+fmt(last.totalDiv)+'</td><td>'+fmt(last.balance)+'</td>';
+        tbody.appendChild(totalTr);
+    }
 
-            var labels = data.map(function(d) { return 'Year ' + d.year; });
-            var divData = data.map(function(d) { return Math.round(d.annualDividend); });
-            var portData = data.map(function(d) { return Math.round(d.portfolio); });
+    /* ===== RENDER CHART ===== */
+    var chartInstance=null;
+    function renderChart(data){
+        var rows=data.rows;
+        var isDark=document.documentElement.getAttribute('data-theme')==='dark';
+        var gc=isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.06)';
+        var tc=isDark?'rgba(255,255,255,0.45)':'rgba(0,0,0,0.45)';
 
-            if (chart) chart.destroy();
-            var ctx = document.getElementById('divChart').getContext('2d');
-            chart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Annual Dividends',
-                            data: divData,
-                            backgroundColor: '#00e676',
-                            borderRadius: 4,
-                            order: 2,
-                            yAxisID: 'y'
-                        },
-                        {
-                            label: 'Portfolio Value',
-                            data: portData,
-                            type: 'line',
-                            borderColor: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)',
-                            backgroundColor: 'transparent',
-                            borderWidth: 2,
-                            pointRadius: 0,
-                            tension: 0.3,
-                            order: 1,
-                            yAxisID: 'y1'
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    interaction: { mode: 'index', intersect: false },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: isDark ? '#1a1a1a' : '#ffffff',
-                            titleColor: isDark ? '#fff' : '#000',
-                            bodyColor: isDark ? '#ccc' : '#333',
-                            borderColor: isDark ? '#333' : '#ddd',
-                            borderWidth: 1,
-                            padding: 12,
-                            callbacks: {
-                                label: function(ctx) { return ctx.dataset.label + ': ' + fmt(ctx.raw); }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: { grid: { display: false }, ticks: { color: textColor, font: { size: 11 } } },
-                        y: {
-                            position: 'left',
-                            grid: { color: gridColor },
-                            ticks: { color: '#00e676', font: { size: 11 }, callback: function(v) { return fmt(v); } }
-                        },
-                        y1: {
-                            position: 'right',
-                            grid: { display: false },
-                            ticks: { color: textColor, font: { size: 11 }, callback: function(v) { return fmt(v); } }
-                        }
+        var labels=rows.map(function(r){return 'Yr '+r.year;});
+        var divCum=rows.map(function(r){return Math.round(r.totalDiv);});
+        var invested=rows.map(function(r){return Math.round(r.invested);});
+        var balance=rows.map(function(r){return Math.round(r.balance);});
+        var nodrip=data.nodrip.map(function(v){return Math.round(v);});
+
+        if(chartInstance)chartInstance.destroy();
+        var ctx=document.getElementById('dcChart').getContext('2d');
+        chartInstance=new Chart(ctx,{
+            type:'bar',
+            data:{
+                labels:labels,
+                datasets:[
+                    {label:'Total Dividends',data:divCum,backgroundColor:'#00e676',borderRadius:3,stack:'a',order:3},
+                    {label:'Invested',data:invested,backgroundColor:'#1e88e5',borderRadius:3,stack:'a',order:2},
+                    {label:'No DRIP',data:nodrip,type:'line',borderColor:isDark?'rgba(255,255,255,0.15)':'rgba(0,0,0,0.15)',backgroundColor:'transparent',borderWidth:2,borderDash:[6,4],pointRadius:0,tension:0.3,order:1}
+                ]
+            },
+            options:{
+                responsive:true,
+                maintainAspectRatio:false,
+                interaction:{mode:'index',intersect:false},
+                plugins:{
+                    legend:{display:false},
+                    tooltip:{
+                        backgroundColor:isDark?'#1a1a1a':'#fff',
+                        titleColor:isDark?'#fff':'#000',
+                        bodyColor:isDark?'#ccc':'#333',
+                        borderColor:isDark?'#333':'#ddd',
+                        borderWidth:1,padding:12,
+                        callbacks:{label:function(c){return c.dataset.label+': '+fmt(c.raw);}}
                     }
+                },
+                scales:{
+                    x:{stacked:true,grid:{display:false},ticks:{color:tc,font:{size:11}}},
+                    y:{stacked:true,grid:{color:gc},ticks:{color:tc,font:{size:11},callback:function(v){return fmt(v);}}}
                 }
-            });
-        }
-
-        // ===== RENDER PAYOUT CALENDAR =====
-        var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-        function renderCalendar() {
-            var grid = document.getElementById('payoutGrid');
-            grid.innerHTML = '';
-            var freq = state.freq;
-            var annualDiv = state.invest * (state.yield / 100);
-            var perPayout = annualDiv / freq;
-
-            // Determine payout months
-            var payoutMonths = [];
-            if (freq === 12) payoutMonths = [0,1,2,3,4,5,6,7,8,9,10,11];
-            else if (freq === 4) payoutMonths = [2,5,8,11]; // Mar, Jun, Sep, Dec
-            else if (freq === 2) payoutMonths = [5,11]; // Jun, Dec
-            else payoutMonths = [11]; // Dec
-
-            for (var i = 0; i < 12; i++) {
-                var isPayout = payoutMonths.indexOf(i) >= 0;
-                var div = document.createElement('div');
-                div.className = 'div-month' + (isPayout ? ' payout' : '');
-                div.innerHTML = '<div class="div-month-name">' + monthNames[i] + '</div><div class="div-month-amount">' + (isPayout ? fmt(perPayout) : '—') + '</div>';
-                grid.appendChild(div);
             }
-        }
-
-        // ===== UPDATE ALL =====
-        function update() {
-            state.invest = mapSlider(investMap, parseInt(document.getElementById('sliderInvest').value));
-            state.monthly = mapSlider(monthlyMap, parseInt(document.getElementById('sliderMonthly').value));
-            state.yield = parseInt(document.getElementById('sliderYield').value) / 10;
-            state.growth = parseInt(document.getElementById('sliderGrowth').value) / 10;
-            state.years = parseInt(document.getElementById('sliderYears').value);
-            state.drip = document.getElementById('dripToggle').checked;
-
-            // Update display values
-            document.getElementById('valInvest').textContent = fmt(state.invest);
-            document.getElementById('valMonthly').textContent = fmt(state.monthly) + '/mo';
-            document.getElementById('valYield').textContent = state.yield.toFixed(1) + '%';
-            document.getElementById('valGrowth').textContent = state.growth.toFixed(1) + '%/yr';
-            document.getElementById('valYears').textContent = state.years + ' year' + (state.years > 1 ? 's' : '');
-
-            var data = calculate();
-            renderStats(data);
-            renderChart();
-            renderCalendar();
-        }
-
-        // ===== EVENT LISTENERS =====
-        ['sliderInvest','sliderMonthly','sliderYield','sliderGrowth','sliderYears'].forEach(function(id) {
-            document.getElementById(id).addEventListener('input', update);
         });
+    }
 
-        document.getElementById('dripToggle').addEventListener('change', update);
+    /* ===== RUN ===== */
+    window.runCalc=function(){
+        lastData=calculate();
+        renderSummary(lastData);
+        renderChart(lastData);
+        renderTable(lastData);
 
-        // Frequency buttons
-        document.querySelectorAll('.div-freq-btn').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.div-freq-btn').forEach(function(b) { b.classList.remove('active'); });
-                btn.classList.add('active');
-                state.freq = parseInt(btn.dataset.freq);
-                update();
-            });
-        });
+        // Scroll to results
+        document.getElementById('summaryCards').scrollIntoView({behavior:'smooth',block:'start'});
+    };
 
-        // ===== INIT =====
-        renderStocks();
-        update();
+    // Auto-calculate on load
+    runCalc();
+
+    // Also auto-calculate on Enter key
+    document.querySelectorAll('.dc-field input').forEach(function(inp){
+        inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();runCalc();}});
+    });
 
     })();
     </script>
