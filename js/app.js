@@ -110,124 +110,129 @@ function shareResults() {
     const fmt = window._yisFormatMoney;
     const _ts = (window.YIS_TRANSLATIONS || {})[localStorage.getItem('yis-lang') || 'en'] || {};
 
-    // Create canvas card — 1080x1350 (Instagram portrait ratio)
-    const W = 1080, H = 1350;
+    // Create canvas card — 1080x1080 (Instagram square, best for WhatsApp)
+    const W = 1080, H = 1080;
     const canvas = document.createElement('canvas');
     canvas.width = W; canvas.height = H;
     const ctx = canvas.getContext('2d');
 
-    // Pure black background — edge to edge, no borders
+    // Pure black background
     ctx.fillStyle = '#000000';
     ctx.fillRect(0, 0, W, H);
 
     // Subtle radial glow behind the big number
-    const glow = ctx.createRadialGradient(W/2, 420, 20, W/2, 420, 350);
-    glow.addColorStop(0, 'rgba(0, 230, 118, 0.08)');
+    const glow = ctx.createRadialGradient(W/2, 340, 20, W/2, 340, 400);
+    glow.addColorStop(0, 'rgba(0, 230, 118, 0.10)');
     glow.addColorStop(1, 'rgba(0, 0, 0, 0)');
     ctx.fillStyle = glow;
-    ctx.fillRect(0, 100, W, 600);
+    ctx.fillRect(0, 50, W, 600);
 
-    // Top branding
-    ctx.fillStyle = 'rgba(255,255,255,0.5)';
-    ctx.font = '700 22px "Inter", system-ui, sans-serif';
+    // Top branding — large & clear
+    ctx.fillStyle = 'rgba(255,255,255,0.6)';
+    ctx.font = '800 32px "Inter", system-ui, sans-serif';
     ctx.textAlign = 'center';
-    ctx.fillText('YOUNG INVESTOR', W / 2, 90);
+    ctx.letterSpacing = '4px';
+    ctx.fillText('YOUNG INVESTOR', W / 2, 80);
 
-    // Headline
+    // Headline — big, readable
     ctx.fillStyle = '#ffffff';
-    ctx.font = '700 44px "Inter", system-ui, sans-serif';
-    ctx.fillText(_ts.shareISimulated || 'I simulated my investment future!', W / 2, 175);
+    ctx.font = '700 52px "Inter", system-ui, sans-serif';
+    ctx.fillText(_ts.shareISimulated || 'My investment simulation', W / 2, 160);
 
-    // Thin separator
-    ctx.strokeStyle = 'rgba(255,255,255,0.1)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(200, 220);
-    ctx.lineTo(W - 200, 220);
-    ctx.stroke();
-
-    // THE BIG NUMBER — green, massive
+    // THE BIG NUMBER — green, massive, impossible to miss
     ctx.fillStyle = '#00e676';
-    ctx.font = '900 130px "Inter", system-ui, sans-serif';
-    ctx.fillText(fmt(r.finalBalance), W / 2, 400);
+    ctx.font = '900 140px "Inter", system-ui, sans-serif';
+    ctx.fillText(fmt(r.finalBalance), W / 2, 340);
 
-    // Label under big number
-    ctx.fillStyle = 'rgba(255,255,255,0.55)';
-    ctx.font = '500 26px "Inter", system-ui, sans-serif';
-    ctx.fillText(_ts.shareFinalValue || 'Final Portfolio Value', W / 2, 450);
+    // Label under big number — clearly readable
+    ctx.fillStyle = 'rgba(255,255,255,0.7)';
+    ctx.font = '600 32px "Inter", system-ui, sans-serif';
+    ctx.fillText(_ts.shareFinalValue || 'Final Portfolio Value', W / 2, 395);
 
-    // Three stats — bigger text
+    // Three stats in boxes
     const stats = [
         { label: _ts.shareIPutIn || 'I put in', value: fmt(r.totalContributed) },
         { label: _ts.shareMarketGave || 'Market gave me', value: fmt(r.totalInterest) },
         { label: _ts.shareMoneyMultiplied || 'Multiplied', value: r.totalContributed > 0 ? (r.finalBalance / r.totalContributed).toFixed(1) + 'x' : '\u2014' }
     ];
 
-    const statY = 570;
-    const colW = W / 3;
+    const statY = 480;
+    const boxW = 300, boxH = 100, boxGap = 30;
+    const startX = (W - (boxW * 3 + boxGap * 2)) / 2;
     stats.forEach((s, i) => {
-        const cx = colW * i + colW / 2;
+        const bx = startX + i * (boxW + boxGap);
+        // Box background
+        ctx.fillStyle = 'rgba(255,255,255,0.05)';
+        ctx.beginPath();
+        ctx.roundRect(bx, statY, boxW, boxH, 14);
+        ctx.fill();
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+        // Value
         ctx.fillStyle = i === 0 ? '#ffffff' : '#00e676';
-        ctx.font = '800 48px "Inter", system-ui, sans-serif';
+        ctx.font = '800 42px "Inter", system-ui, sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText(s.value, cx, statY);
-        ctx.fillStyle = 'rgba(255,255,255,0.5)';
-        ctx.font = '500 20px "Inter", system-ui, sans-serif';
-        ctx.fillText(s.label, cx, statY + 38);
+        ctx.fillText(s.value, bx + boxW / 2, statY + 48);
+        // Label
+        ctx.fillStyle = 'rgba(255,255,255,0.6)';
+        ctx.font = '600 22px "Inter", system-ui, sans-serif';
+        ctx.fillText(s.label, bx + boxW / 2, statY + 80);
     });
 
-    // Separator
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-    ctx.beginPath();
-    ctx.moveTo(100, 660);
-    ctx.lineTo(W - 100, 660);
-    ctx.stroke();
-
-    // Parameters row
+    // Parameters row — your inputs
     const sliders = window._yisGetData();
     const paramItems = [
-        { val: fmt(sliders.startingAmount || 0), lbl: 'start' },
+        { val: fmt(sliders.startingAmount || 0), lbl: 'Start' },
         { val: fmt(sliders.monthlyContribution || 0), lbl: '/month' },
-        { val: (sliders.annualReturn || 0) + '%', lbl: 'return' },
-        { val: (sliders.years || 0) + '', lbl: 'years' }
+        { val: (sliders.annualReturn || 0) + '%', lbl: 'Return' },
+        { val: (sliders.years || 0) + ' yrs', lbl: 'Duration' }
     ];
-    const paramY = 740;
+    const paramY = 660;
     const pColW = W / 4;
     paramItems.forEach((p, i) => {
         const cx = pColW * i + pColW / 2;
         ctx.fillStyle = '#ffffff';
-        ctx.font = '700 36px "Inter", system-ui, sans-serif';
+        ctx.font = '700 38px "Inter", system-ui, sans-serif';
         ctx.textAlign = 'center';
         ctx.fillText(p.val, cx, paramY);
-        ctx.fillStyle = 'rgba(255,255,255,0.45)';
-        ctx.font = '500 18px "Inter", system-ui, sans-serif';
-        ctx.fillText(p.lbl, cx, paramY + 30);
+        ctx.fillStyle = 'rgba(255,255,255,0.55)';
+        ctx.font = '600 22px "Inter", system-ui, sans-serif';
+        ctx.fillText(p.lbl, cx, paramY + 34);
     });
 
-    // Motivational quote — bigger
+    // Thin line
+    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(120, 750);
+    ctx.lineTo(W - 120, 750);
+    ctx.stroke();
+
+    // Motivational quote — readable
     const quotes = [
         '"Compound interest is the eighth wonder of the world."',
-        '"The best time to invest was yesterday. The second best is now."',
+        '"The best time to invest was yesterday. The next best is now."',
         '"Time in the market beats timing the market."'
     ];
-    ctx.fillStyle = 'rgba(255,255,255,0.35)';
-    ctx.font = 'italic 22px "Inter", system-ui, sans-serif';
-    ctx.fillText(quotes[Math.floor(Math.random() * quotes.length)], W / 2, 870);
+    ctx.fillStyle = 'rgba(255,255,255,0.45)';
+    ctx.font = 'italic 28px "Inter", system-ui, sans-serif';
+    ctx.fillText(quotes[Math.floor(Math.random() * quotes.length)], W / 2, 810);
 
-    // Bottom CTA — solid green pill, bigger
-    const ctaY = 940;
+    // Bottom CTA — solid green pill
+    const ctaY = 880;
     ctx.fillStyle = '#00e676';
     ctx.beginPath();
-    ctx.roundRect(240, ctaY, W - 480, 70, 35);
+    ctx.roundRect(200, ctaY, W - 400, 80, 40);
     ctx.fill();
     ctx.fillStyle = '#000000';
-    ctx.font = '700 26px "Inter", system-ui, sans-serif';
-    ctx.fillText('Try it free \u2192 younginvestor.app', W / 2, ctaY + 44);
+    ctx.font = '700 30px "Inter", system-ui, sans-serif';
+    ctx.fillText('Try it free \u2192 younginvestor.app', W / 2, ctaY + 52);
 
-    // Watermark — bigger
-    ctx.fillStyle = 'rgba(255,255,255,0.2)';
-    ctx.font = '500 18px "Inter", system-ui, sans-serif';
-    ctx.fillText('younginvestor.app \u00b7 Free Investment Simulator', W / 2, H - 50);
+    // Watermark
+    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.font = '600 22px "Inter", system-ui, sans-serif';
+    ctx.fillText('younginvestor.app', W / 2, H - 40);
 
     // Convert to blob and share
     canvas.toBlob(function(blob) {
