@@ -71,10 +71,7 @@
                         <button class="lang-option" data-lang="zh">🇨🇳 中文</button>
                     </div>
                 </div>
-                <button class="save-btn" id="saveBtn" title="Save your simulation">
-                    <span class="save-icon">💾</span>
-                    <span class="save-text">Save</span>
-                </button>
+                <!-- Save button moved to profile dropdown -->
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
                     <span id="themeIcon">☀️</span>
                 </button>
@@ -93,6 +90,10 @@
                             <span class="badge-icon">&#9734;</span> Free Plan
                         </div>
                         <a href="#pro" class="profile-link" onclick="closeProfileDropdown()">Upgrade to Pro</a>
+                        <div class="profile-divider"></div>
+                        <button class="profile-action" id="saveBtn" onclick="closeProfileDropdown()">
+                            <span>💾</span> Save Simulation
+                        </button>
                         <div class="profile-divider"></div>
                         <button class="profile-signout" onclick="handleSignOut()">Sign Out</button>
                     </div>

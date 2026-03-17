@@ -4,20 +4,129 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Young Investor | Dividend Calculator — Track Your Passive Income</title>
-    <meta name="description" content="Free dividend calculator and tracker. See upcoming payouts, project passive income, track dividend growth. DRIP calculator included.">
-    <meta name="keywords" content="dividend calculator, dividend tracker, passive income calculator, DRIP calculator, dividend calendar, dividend growth">
+    <meta name="description" content="Free dividend calculator. See how much passive income your investments generate. DRIP calculator, income projections, dividend growth simulator.">
+    <meta name="keywords" content="dividend calculator, dividend tracker, passive income calculator, DRIP calculator, dividend yield calculator, dividend growth">
     <link rel="canonical" href="https://younginvestor.app/dividends/">
     <meta property="og:title" content="Young Investor | Dividend Calculator — Track Your Passive Income">
-    <meta property="og:description" content="Free dividend calculator and tracker. See upcoming payouts, project passive income, track dividend growth. DRIP calculator included.">
+    <meta property="og:description" content="Free dividend calculator. See how much passive income your investments generate. DRIP calculator included.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://younginvestor.app/dividends/">
-    <meta property="og:site_name" content="Young Investor Simulator">
+    <meta property="og:site_name" content="Young Investor">
     <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/coming-soon.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        /* ===== Dividend Calculator Styles ===== */
+        .div-page { padding: 100px 0 60px; min-height: 100vh; }
+        .div-hero { text-align: center; margin-bottom: 48px; }
+        .div-badge { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--green); border: 1px solid var(--green-border); padding: 6px 16px; border-radius: 100px; margin-bottom: 16px; text-decoration: none; }
+        .div-title { font-family: var(--font-display); font-size: clamp(28px, 5vw, 48px); font-weight: 800; color: var(--text); margin: 0 0 12px; line-height: 1.15; }
+        .div-subtitle { font-size: 16px; color: var(--text-secondary); max-width: 520px; margin: 0 auto; line-height: 1.5; }
+
+        /* Layout */
+        .div-layout { display: grid; grid-template-columns: 340px 1fr; gap: 32px; align-items: start; }
+
+        /* Left panel — controls */
+        .div-panel { position: sticky; top: 90px; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 28px 24px; }
+        .div-panel-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--text); margin: 0 0 24px; }
+
+        .div-control { margin-bottom: 22px; }
+        .div-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+        .div-label-text { font-size: 13px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+        .div-label-value { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text); }
+
+        .div-slider { -webkit-appearance: none; width: 100%; height: 6px; border-radius: 3px; background: var(--slider-track); outline: none; cursor: pointer; }
+        .div-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 22px; height: 22px; border-radius: 50%; background: var(--slider-fill); cursor: pointer; border: 3px solid var(--bg-card); box-shadow: 0 2px 8px rgba(0,0,0,0.3); transition: transform 0.15s; }
+        .div-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+        .div-slider::-moz-range-thumb { width: 22px; height: 22px; border-radius: 50%; background: var(--slider-fill); cursor: pointer; border: 3px solid var(--bg-card); }
+
+        /* DRIP Toggle */
+        .div-toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-top: 1px solid var(--border); margin-top: 6px; }
+        .div-toggle-label { font-size: 14px; font-weight: 600; color: var(--text); }
+        .div-toggle-sub { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+        .div-switch { position: relative; width: 48px; height: 26px; flex-shrink: 0; }
+        .div-switch input { opacity: 0; width: 0; height: 0; }
+        .div-switch-track { position: absolute; inset: 0; background: var(--border-light); border-radius: 26px; cursor: pointer; transition: background 0.2s; }
+        .div-switch-track::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; background: #fff; border-radius: 50%; transition: transform 0.2s; }
+        .div-switch input:checked + .div-switch-track { background: var(--green); }
+        .div-switch input:checked + .div-switch-track::after { transform: translateX(22px); }
+
+        /* Payout frequency selector */
+        .div-freq { display: flex; gap: 4px; margin-top: 8px; }
+        .div-freq-btn { flex: 1; padding: 8px 0; border: 1px solid var(--border); border-radius: 8px; background: transparent; color: var(--text-muted); font-family: var(--font-main); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+        .div-freq-btn.active { background: var(--green); color: #000; border-color: var(--green); }
+
+        /* Right side — results */
+        .div-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin-bottom: 24px; }
+        .div-stat { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; }
+        .div-stat-value { font-family: var(--font-display); font-size: 28px; font-weight: 800; color: var(--green); margin-bottom: 4px; }
+        .div-stat-label { font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .div-stat.accent { border-color: var(--green-border); background: var(--green-soft); }
+        .div-stat.accent .div-stat-value { font-size: 34px; }
+
+        /* Chart */
+        .div-chart-wrap { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
+        .div-chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .div-chart-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); }
+        .div-chart-legend { display: flex; gap: 16px; }
+        .div-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-secondary); }
+        .div-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+        /* Payout schedule */
+        .div-schedule { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
+        .div-schedule-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+        .div-months { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .div-month { padding: 14px 8px; border-radius: var(--radius); background: var(--bg-secondary); text-align: center; border: 1px solid transparent; transition: all 0.15s; }
+        .div-month.payout { background: var(--green-soft); border-color: var(--green-border); }
+        .div-month-name { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+        .div-month.payout .div-month-name { color: var(--green); }
+        .div-month-amount { font-family: var(--font-display); font-size: 15px; font-weight: 700; color: var(--text); }
+        .div-month.payout .div-month-amount { color: var(--green); }
+
+        /* Popular dividend stocks */
+        .div-stocks { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
+        .div-stocks-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 16px; }
+        .div-stock-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
+        .div-stock { padding: 14px; border-radius: var(--radius); background: var(--bg-secondary); border: 1px solid var(--border); text-align: center; cursor: pointer; transition: all 0.15s; }
+        .div-stock:hover { border-color: var(--green-border); background: var(--green-soft); transform: translateY(-2px); }
+        .div-stock-ticker { font-family: var(--font-display); font-size: 15px; font-weight: 800; color: var(--text); }
+        .div-stock-name { font-size: 11px; color: var(--text-muted); margin: 2px 0; }
+        .div-stock-yield { font-size: 13px; font-weight: 700; color: var(--green); }
+
+        /* Pro CTA */
+        .div-pro-cta { background: var(--green-soft); border: 1px solid var(--green-border); border-radius: var(--radius-lg); padding: 32px; text-align: center; margin-bottom: 24px; }
+        .div-pro-cta h3 { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text); margin: 0 0 8px; }
+        .div-pro-cta p { font-size: 14px; color: var(--text-secondary); margin: 0 0 16px; }
+        .div-pro-btn { display: inline-block; padding: 14px 32px; background: var(--green); color: #000; font-family: var(--font-main); font-size: 15px; font-weight: 700; border-radius: 100px; text-decoration: none; transition: all 0.2s; border: none; cursor: pointer; }
+        .div-pro-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(0,230,118,0.3); }
+
+        /* DRIP comparison (Pro locked) */
+        .div-drip-section { position: relative; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; margin-bottom: 24px; }
+        .div-drip-section.locked { overflow: hidden; }
+        .div-lock-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.7); backdrop-filter: blur(6px); border-radius: var(--radius-lg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; z-index: 10; }
+        .div-lock-icon { font-size: 32px; }
+        .div-lock-text { font-size: 14px; color: #fff; font-weight: 600; }
+
+        /* Footer */
+        .div-footer { text-align: center; padding: 40px 0; }
+        .div-footer-text { font-size: 13px; color: var(--text-muted); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .div-layout { grid-template-columns: 1fr; }
+            .div-panel { position: static; }
+            .div-stats { grid-template-columns: repeat(2, 1fr); }
+            .div-months { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .div-stats { grid-template-columns: 1fr; }
+            .div-months { grid-template-columns: repeat(2, 1fr); }
+            .div-stock-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
 </head>
 <body>
 
@@ -29,11 +138,11 @@
                 <span class="logo-text">Young Investor <span class="logo-accent">| Dividend Calculator</span></span>
             </a>
             <div class="nav-links">
-                <a href="../#simulator" id="nav-simulator">Simulator</a>
-                <a href="../portfolio/" class="nav-soon" title="Coming Soon" id="nav-portfolio">Net Worth</a>
-                <a href="../dividends/" class="nav-active" id="nav-dividends">Dividends</a>
-                <a href="../goals/" class="nav-soon" title="Coming Soon" id="nav-goals">Goals</a>
-                <a href="../tax/" class="nav-soon" title="Coming Soon" id="nav-tax">Tax</a>
+                <a href="../#simulator">Simulator</a>
+                <a href="../portfolio/" class="nav-soon" title="Coming Soon">Net Worth</a>
+                <a href="../dividends/" class="nav-active">Dividends</a>
+                <a href="../goals/" class="nav-soon" title="Coming Soon">Goals</a>
+                <a href="../tax/" class="nav-soon" title="Coming Soon">Tax</a>
             </div>
             <div class="nav-right">
                 <div class="lang-dropdown" id="langDropdown">
@@ -41,316 +150,630 @@
                         <span id="langFlag">EN</span>
                     </button>
                     <div class="lang-menu" id="langMenu">
-                        <button class="lang-option active" data-lang="en">EN English</button>
-                        <button class="lang-option" data-lang="fr">FR Fran&ccedil;ais</button>
-                        <button class="lang-option" data-lang="es">ES Espa&ntilde;ol</button>
-                        <button class="lang-option" data-lang="pt">PT Portugu&ecirc;s</button>
-                        <button class="lang-option" data-lang="de">DE Deutsch</button>
-                        <button class="lang-option" data-lang="ar">AR &#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;</button>
-                        <button class="lang-option" data-lang="zh">ZH &#20013;&#25991;</button>
+                        <button class="lang-option active" data-lang="en">🇺🇸 English</button>
+                        <button class="lang-option" data-lang="fr">🇫🇷 Français</button>
+                        <button class="lang-option" data-lang="es">🇪🇸 Español</button>
+                        <button class="lang-option" data-lang="pt">🇧🇷 Português</button>
+                        <button class="lang-option" data-lang="de">🇩🇪 Deutsch</button>
+                        <button class="lang-option" data-lang="ar">🇸🇦 العربية</button>
+                        <button class="lang-option" data-lang="zh">🇨🇳 中文</button>
                     </div>
                 </div>
                 <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                    <span id="themeIcon">&#9728;&#65039;</span>
+                    <span id="themeIcon">☀️</span>
                 </button>
+                <button class="auth-btn" id="authBtn" onclick="openAuthModal()">Sign In</button>
+                <div class="user-menu" id="userMenu" style="display:none;">
+                    <div class="user-avatar" id="userAvatar" onclick="toggleProfileDD()"></div>
+                    <div class="profile-dropdown" id="profileDD">
+                        <div class="profile-info">
+                            <div class="profile-name" id="profileName"></div>
+                            <div class="profile-email" id="profileEmail"></div>
+                        </div>
+                        <div class="profile-divider"></div>
+                        <div class="profile-badge" id="profileBadge"><span class="badge-icon">☆</span> Free Plan</div>
+                        <a href="../index.html#pro" class="profile-link">Upgrade to Pro</a>
+                        <div class="profile-divider"></div>
+                        <button class="profile-signout" onclick="handleSignOut()">Sign Out</button>
+                    </div>
+                </div>
             </div>
         </div>
     </nav>
 
-    <!-- COMING SOON CONTENT -->
-    <main class="coming-soon-page">
+    <!-- AUTH MODAL -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal">
+            <button class="modal-close" onclick="closeAuthModal()">&times;</button>
+            <div class="modal-header">
+                <img src="../assets/logo.svg" alt="" class="modal-logo" style="width:48px;height:48px;margin-bottom:12px;">
+                <h2 class="modal-title">Sign In</h2>
+                <p class="modal-desc" style="font-size:14px;color:var(--text-secondary);margin:8px 0 20px;">Save your calculations and unlock Pro features.</p>
+            </div>
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchTab('signin')">Sign In</button>
+                <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+            </div>
+            <form id="signinForm" onsubmit="handleSignIn(event)">
+                <div class="form-group">
+                    <label for="signinEmail">Email</label>
+                    <input type="email" id="signinEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="signinPassword">Password</label>
+                    <input type="password" id="signinPassword" placeholder="Your password" required>
+                </div>
+                <div class="auth-error" id="signinError"></div>
+                <button type="submit" class="auth-submit">Sign In</button>
+            </form>
+            <form id="signupForm" style="display:none" onsubmit="handleSignUp(event)">
+                <div class="form-group">
+                    <label for="signupName">Name</label>
+                    <input type="text" id="signupName" placeholder="Your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email</label>
+                    <input type="email" id="signupEmail" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password</label>
+                    <input type="password" id="signupPassword" placeholder="Min 6 characters" required minlength="6">
+                </div>
+                <div class="auth-error" id="signupError"></div>
+                <button type="submit" class="auth-submit">Create Account</button>
+            </form>
+            <div class="auth-divider"><span>or</span></div>
+            <button class="google-btn" onclick="handleGoogleSignIn()">
+                <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 01-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.997 8.997 0 000 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+                Continue with Google
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main class="div-page">
         <div class="container">
 
-            <!-- Ecosystem Badge -->
-            <a href="../index.html" class="cs-ecosystem-badge" id="cs-ecosystem">Part of the Young Investor ecosystem</a>
-
-            <!-- Logo -->
-            <div class="cs-logo">
-                <img src="../assets/logo.svg" alt="Young Investor" width="64" height="64">
+            <!-- Hero -->
+            <div class="div-hero">
+                <a href="../" class="div-badge">YOUNG INVESTOR ECOSYSTEM</a>
+                <h1 class="div-title" id="divTitle">How much passive income will you earn?</h1>
+                <p class="div-subtitle" id="divSubtitle">Enter your investment, set the dividend yield, and see your income grow year after year.</p>
             </div>
 
-            <h1 class="cs-title" id="cs-title">See exactly how much passive income you'll earn.</h1>
-            <p class="cs-subtitle" id="cs-subtitle">Track every dividend. Know when you get paid. Project your future income stream.</p>
+            <!-- Calculator layout -->
+            <div class="div-layout">
 
-            <div class="cs-features">
-                <div class="cs-feature">
-                    <span class="cs-feat-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><rect x="7" y="14" width="3" height="3" rx="0.5"/><rect x="14" y="14" width="3" height="3" rx="0.5"/></svg>
-                    </span>
-                    <h3 id="feat1-title">Dividend Calendar</h3>
-                    <p id="feat1-desc">See every payout date. Export to Google Calendar. Never miss a dividend.</p>
-                </div>
-                <div class="cs-feature">
-                    <span class="cs-feat-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-                    </span>
-                    <h3 id="feat2-title">Income Projections</h3>
-                    <p id="feat2-desc">How much will you earn next year? In 5 years? We'll show you.</p>
-                </div>
-                <div class="cs-feature">
-                    <span class="cs-feat-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/><line x1="8" y1="18" x2="16" y2="18"/></svg>
-                    </span>
-                    <h3 id="feat3-title">DRIP Calculator</h3>
-                    <p id="feat3-desc">Reinvest dividends automatically? See the compound effect.</p>
-                </div>
-                <div class="cs-feature">
-                    <span class="cs-feat-icon">
-                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                    </span>
-                    <h3 id="feat4-title">Smart Notifications</h3>
-                    <p id="feat4-desc">Get alerts before payouts. Monthly income summaries. Stock news.</p>
-                </div>
-            </div>
+                <!-- LEFT PANEL — Controls -->
+                <div class="div-panel">
+                    <h2 class="div-panel-title" id="panelTitle">Your Investment</h2>
 
-            <!-- Free vs Pro -->
-            <div class="cs-free-pro">
-                <p id="cs-free-pro">Free: Basic calculator. Pro: Auto-tracking from connected brokers.</p>
-            </div>
+                    <!-- Investment Amount -->
+                    <div class="div-control">
+                        <div class="div-label">
+                            <span class="div-label-text" id="labelInvest">Investment</span>
+                            <span class="div-label-value" id="valInvest">$10,000</span>
+                        </div>
+                        <input type="range" class="div-slider" id="sliderInvest" min="0" max="1000" value="200">
+                    </div>
 
-            <div class="cs-cta">
-                <div class="cs-badge" id="cs-badge">Coming Soon</div>
-                <p class="cs-notify-text" id="cs-notify">We're building this right now. Go back to the simulator while you wait.</p>
-                <div class="cs-btn-group">
-                    <a href="../#simulator" class="cs-btn" id="cs-btn">Back to Simulator</a>
-                    <a href="../index.html#pro" class="cs-pro-btn" id="cs-pro-btn">Unlock Pro Features</a>
+                    <!-- Monthly Contribution -->
+                    <div class="div-control">
+                        <div class="div-label">
+                            <span class="div-label-text" id="labelMonthly">Monthly Add</span>
+                            <span class="div-label-value" id="valMonthly">$100</span>
+                        </div>
+                        <input type="range" class="div-slider" id="sliderMonthly" min="0" max="1000" value="100">
+                    </div>
+
+                    <!-- Dividend Yield -->
+                    <div class="div-control">
+                        <div class="div-label">
+                            <span class="div-label-text" id="labelYield">Dividend Yield</span>
+                            <span class="div-label-value" id="valYield">3.5%</span>
+                        </div>
+                        <input type="range" class="div-slider" id="sliderYield" min="0" max="120" value="35">
+                    </div>
+
+                    <!-- Dividend Growth Rate -->
+                    <div class="div-control">
+                        <div class="div-label">
+                            <span class="div-label-text" id="labelGrowth">Dividend Growth</span>
+                            <span class="div-label-value" id="valGrowth">5%</span>
+                        </div>
+                        <input type="range" class="div-slider" id="sliderGrowth" min="0" max="200" value="50">
+                    </div>
+
+                    <!-- Years -->
+                    <div class="div-control">
+                        <div class="div-label">
+                            <span class="div-label-text" id="labelYears">Time Horizon</span>
+                            <span class="div-label-value" id="valYears">10 years</span>
+                        </div>
+                        <input type="range" class="div-slider" id="sliderYears" min="1" max="40" value="10">
+                    </div>
+
+                    <!-- Payout Frequency -->
+                    <div class="div-control">
+                        <div class="div-label">
+                            <span class="div-label-text" id="labelFreq">Payout Frequency</span>
+                        </div>
+                        <div class="div-freq">
+                            <button class="div-freq-btn" data-freq="12" id="freqMonthly">Monthly</button>
+                            <button class="div-freq-btn active" data-freq="4" id="freqQuarterly">Quarterly</button>
+                            <button class="div-freq-btn" data-freq="2" id="freqSemi">Semi</button>
+                            <button class="div-freq-btn" data-freq="1" id="freqAnnual">Annual</button>
+                        </div>
+                    </div>
+
+                    <!-- DRIP Toggle -->
+                    <div class="div-toggle-row">
+                        <div>
+                            <div class="div-toggle-label" id="labelDrip">DRIP (Reinvest)</div>
+                            <div class="div-toggle-sub" id="labelDripSub">Auto-reinvest dividends</div>
+                        </div>
+                        <label class="div-switch">
+                            <input type="checkbox" id="dripToggle" checked>
+                            <span class="div-switch-track"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- RIGHT SIDE — Results -->
+                <div class="div-results">
+
+                    <!-- Stats Cards -->
+                    <div class="div-stats">
+                        <div class="div-stat accent">
+                            <div class="div-stat-value" id="statAnnualIncome">$350</div>
+                            <div class="div-stat-label" id="statAnnualLabel">Annual Income (Year 1)</div>
+                        </div>
+                        <div class="div-stat accent">
+                            <div class="div-stat-value" id="statMonthlyIncome">$29</div>
+                            <div class="div-stat-label" id="statMonthlyLabel">Monthly Income (Year 1)</div>
+                        </div>
+                        <div class="div-stat">
+                            <div class="div-stat-value" id="statTotalDiv">$5,420</div>
+                            <div class="div-stat-label" id="statTotalLabel">Total Dividends Earned</div>
+                        </div>
+                        <div class="div-stat">
+                            <div class="div-stat-value" id="statYieldOnCost">4.8%</div>
+                            <div class="div-stat-label" id="statYieldLabel">Yield on Cost (Final)</div>
+                        </div>
+                        <div class="div-stat">
+                            <div class="div-stat-value" id="statFinalValue">$25,400</div>
+                            <div class="div-stat-label" id="statFinalLabel">Portfolio Value (Final)</div>
+                        </div>
+                        <div class="div-stat">
+                            <div class="div-stat-value" id="statFinalAnnual">$890</div>
+                            <div class="div-stat-label" id="statFinalAnnualLabel">Annual Income (Final Year)</div>
+                        </div>
+                    </div>
+
+                    <!-- Chart -->
+                    <div class="div-chart-wrap">
+                        <div class="div-chart-header">
+                            <span class="div-chart-title" id="chartTitle">Dividend Income Over Time</span>
+                            <div class="div-chart-legend">
+                                <span class="div-legend-item"><span class="div-legend-dot" style="background:#00e676"></span> Annual Dividends</span>
+                                <span class="div-legend-item"><span class="div-legend-dot" style="background:rgba(255,255,255,0.3)"></span> Portfolio Value</span>
+                            </div>
+                        </div>
+                        <canvas id="divChart" height="280"></canvas>
+                    </div>
+
+                    <!-- Payout Calendar -->
+                    <div class="div-schedule">
+                        <div class="div-schedule-title" id="scheduleTitle">📅 Payout Schedule (Year 1)</div>
+                        <div class="div-months" id="payoutGrid"></div>
+                    </div>
+
+                    <!-- Popular Dividend Stocks -->
+                    <div class="div-stocks">
+                        <div class="div-stocks-title" id="stocksTitle">Popular Dividend Stocks — Click to Simulate</div>
+                        <div class="div-stock-grid" id="stockGrid"></div>
+                    </div>
+
+                    <!-- DRIP Comparison (Pro feature locked) -->
+                    <div class="div-drip-section locked" id="dripSection">
+                        <div class="div-lock-overlay" id="dripLock">
+                            <div class="div-lock-icon">🔒</div>
+                            <div class="div-lock-text">DRIP Comparison — Pro Feature</div>
+                            <a href="../index.html#pro" class="div-pro-btn" style="font-size:13px;padding:10px 24px;">Unlock with Pro</a>
+                        </div>
+                        <div class="div-chart-header">
+                            <span class="div-chart-title">DRIP vs No DRIP — 10 Year Comparison</span>
+                        </div>
+                        <canvas id="dripChart" height="220"></canvas>
+                    </div>
+
+                    <!-- Pro CTA -->
+                    <div class="div-pro-cta">
+                        <h3 id="proCTATitle">Want auto-tracking from your broker?</h3>
+                        <p id="proCTADesc">Pro unlocks real portfolio tracking, automatic dividend logging, and PDF exports.</p>
+                        <a href="../index.html#pro" class="div-pro-btn" id="proCTABtn">Start 14-day Free Trial</a>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
     <!-- FOOTER -->
-    <footer class="footer">
+    <footer class="div-footer">
         <div class="container">
-            <div class="footer-bottom">
-                <span id="footer-text">&copy; 2026 Young Investor Simulator. Built for the next generation.</span>
-            </div>
+            <span class="div-footer-text">&copy; 2026 Young Investor. Built for the next generation of investors.</span>
         </div>
     </footer>
 
-    <script>
-        // Theme toggle
-        const saved = localStorage.getItem('yis-theme') || 'dark';
-        document.documentElement.setAttribute('data-theme', saved);
-        document.getElementById('themeIcon').textContent = saved === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
 
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'dark' ? 'light' : 'dark';
+    <script>
+    (function() {
+        'use strict';
+
+        // ===== AUTH =====
+        let currentUser = null;
+
+        function openAuthModal() { document.getElementById('authModal').classList.add('open'); }
+        function closeAuthModal() { document.getElementById('authModal').classList.remove('open'); }
+        window.openAuthModal = openAuthModal;
+        window.closeAuthModal = closeAuthModal;
+
+        window.switchTab = function(tab) {
+            document.getElementById('signinForm').style.display = tab === 'signin' ? '' : 'none';
+            document.getElementById('signupForm').style.display = tab === 'signup' ? '' : 'none';
+            document.querySelectorAll('.auth-tab').forEach((t, i) => t.classList.toggle('active', (i === 0 && tab === 'signin') || (i === 1 && tab === 'signup')));
+        };
+
+        window.handleSignIn = async function(e) {
+            e.preventDefault();
+            try {
+                await auth.signInWithEmailAndPassword(document.getElementById('signinEmail').value, document.getElementById('signinPassword').value);
+                closeAuthModal();
+            } catch (err) { document.getElementById('signinError').textContent = err.message; }
+        };
+
+        window.handleSignUp = async function(e) {
+            e.preventDefault();
+            try {
+                const cred = await auth.createUserWithEmailAndPassword(document.getElementById('signupEmail').value, document.getElementById('signupPassword').value);
+                await cred.user.updateProfile({ displayName: document.getElementById('signupName').value });
+                closeAuthModal();
+            } catch (err) { document.getElementById('signupError').textContent = err.message; }
+        };
+
+        window.handleGoogleSignIn = async function() {
+            try {
+                await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+                closeAuthModal();
+            } catch (err) { document.getElementById('signinError').textContent = err.message; }
+        };
+
+        window.handleSignOut = function() {
+            document.getElementById('profileDD').classList.remove('open');
+            auth.signOut();
+        };
+
+        window.toggleProfileDD = function() {
+            document.getElementById('profileDD').classList.toggle('open');
+        };
+
+        document.addEventListener('click', function(e) {
+            var m = document.getElementById('userMenu');
+            if (m && !m.contains(e.target)) document.getElementById('profileDD').classList.remove('open');
+        });
+
+        auth.onAuthStateChanged(function(user) {
+            currentUser = user;
+            var authBtn = document.getElementById('authBtn');
+            var userMenu = document.getElementById('userMenu');
+            if (user) {
+                authBtn.style.display = 'none';
+                userMenu.style.display = 'flex';
+                var initials = (user.displayName || user.email || '?').split(' ').map(function(w){return w[0]}).join('').substring(0,2).toUpperCase();
+                document.getElementById('userAvatar').textContent = initials;
+                document.getElementById('profileName').textContent = user.displayName || 'Investor';
+                document.getElementById('profileEmail').textContent = user.email || '';
+            } else {
+                authBtn.style.display = '';
+                userMenu.style.display = 'none';
+            }
+        });
+
+        // ===== THEME =====
+        var savedTheme = localStorage.getItem('yis-theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeIcon').textContent = savedTheme === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+
+        document.getElementById('themeToggle').addEventListener('click', function() {
+            var current = document.documentElement.getAttribute('data-theme');
+            var next = current === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', next);
             localStorage.setItem('yis-theme', next);
             document.getElementById('themeIcon').textContent = next === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+            renderChart();
         });
 
-        // Language system
-        const translations = {
-            en: {
-                title: "See exactly how much passive income you'll earn.",
-                subtitle: 'Track every dividend. Know when you get paid. Project your future income stream.',
-                feat1Title: 'Dividend Calendar',
-                feat1Desc: 'See every payout date. Export to Google Calendar. Never miss a dividend.',
-                feat2Title: 'Income Projections',
-                feat2Desc: "How much will you earn next year? In 5 years? We'll show you.",
-                feat3Title: 'DRIP Calculator',
-                feat3Desc: 'Reinvest dividends automatically? See the compound effect.',
-                feat4Title: 'Smart Notifications',
-                feat4Desc: 'Get alerts before payouts. Monthly income summaries. Stock news.',
-                freePro: 'Free: Basic calculator. Pro: Auto-tracking from connected brokers.',
-                badge: 'Coming Soon',
-                notify: "We're building this right now. Go back to the simulator while you wait.",
-                btn: 'Back to Simulator',
-                proBtn: 'Unlock Pro Features',
-                ecosystem: 'Part of the Young Investor ecosystem',
-                navSim: 'Simulator', navPort: 'Portfolio', navDiv: 'Dividends', navGoals: 'Goals', navTax: 'Tax',
-                footer: '\u00A9 2026 Young Investor Simulator. Built for the next generation.'
-            },
-            fr: {
-                title: 'D\u00E9couvrez exactement combien de revenus passifs vous gagnerez.',
-                subtitle: 'Suivez chaque dividende. Sachez quand vous \u00EAtes pay\u00E9. Projetez vos revenus futurs.',
-                feat1Title: 'Calendrier des dividendes',
-                feat1Desc: 'Chaque date de versement. Export Google Calendar. Ne manquez aucun dividende.',
-                feat2Title: 'Projections de revenus',
-                feat2Desc: 'Combien gagnerez-vous l\u2019an prochain ? Dans 5 ans ? On vous montre.',
-                feat3Title: 'Calculateur DRIP',
-                feat3Desc: 'R\u00E9investir les dividendes automatiquement ? Voyez l\u2019effet compos\u00E9.',
-                feat4Title: 'Notifications intelligentes',
-                feat4Desc: 'Alertes avant les versements. R\u00E9sum\u00E9s mensuels. Actualit\u00E9s des actions.',
-                freePro: 'Gratuit : Calculateur basique. Pro : Suivi auto depuis vos courtiers connect\u00E9s.',
-                badge: 'Bient\u00F4t disponible',
-                notify: 'Nous construisons cette fonctionnalit\u00E9. Retournez au simulateur en attendant.',
-                btn: 'Retour au simulateur',
-                proBtn: 'D\u00E9bloquer les fonctions Pro',
-                ecosystem: 'Fait partie de l\u2019\u00E9cosyst\u00E8me Young Investor',
-                navSim: 'Simulateur', navPort: 'Portfolio', navDiv: 'Dividendes', navGoals: 'Objectifs', navTax: 'Imp\u00F4ts',
-                footer: '\u00A9 2026 Young Investor Simulator. Con\u00E7u pour la prochaine g\u00E9n\u00E9ration.'
-            },
-            es: {
-                title: 'Descubre exactamente cu\u00E1nto ingreso pasivo ganar\u00E1s.',
-                subtitle: 'Rastrea cada dividendo. Sabe cu\u00E1ndo te pagan. Proyecta tus ingresos futuros.',
-                feat1Title: 'Calendario de dividendos',
-                feat1Desc: 'Cada fecha de pago. Exporta a Google Calendar. No te pierdas ning\u00FAn dividendo.',
-                feat2Title: 'Proyecciones de ingresos',
-                feat2Desc: '\u00BFCu\u00E1nto ganar\u00E1s el pr\u00F3ximo a\u00F1o? \u00BFEn 5 a\u00F1os? Te lo mostramos.',
-                feat3Title: 'Calculadora DRIP',
-                feat3Desc: '\u00BFReinvertir dividendos autom\u00E1ticamente? Mira el efecto compuesto.',
-                feat4Title: 'Notificaciones inteligentes',
-                feat4Desc: 'Alertas antes de los pagos. Res\u00FAmenes mensuales. Noticias de acciones.',
-                freePro: 'Gratis: Calculadora b\u00E1sica. Pro: Seguimiento auto desde brokers conectados.',
-                badge: 'Pr\u00F3ximamente',
-                notify: 'Estamos construyendo esto ahora. Vuelve al simulador mientras esperas.',
-                btn: 'Volver al simulador',
-                proBtn: 'Desbloquear funciones Pro',
-                ecosystem: 'Parte del ecosistema Young Investor',
-                navSim: 'Simulador', navPort: 'Portafolio', navDiv: 'Dividendos', navGoals: 'Metas', navTax: 'Impuestos',
-                footer: '\u00A9 2026 Young Investor Simulator. Hecho para la pr\u00F3xima generaci\u00F3n.'
-            },
-            pt: {
-                title: 'Descubra exatamente quanta renda passiva voc\u00EA vai ganhar.',
-                subtitle: 'Acompanhe cada dividendo. Saiba quando recebe. Projete seus rendimentos futuros.',
-                feat1Title: 'Calend\u00E1rio de dividendos',
-                feat1Desc: 'Cada data de pagamento. Exporte para Google Calendar. Nunca perca um dividendo.',
-                feat2Title: 'Proje\u00E7\u00F5es de renda',
-                feat2Desc: 'Quanto vai ganhar no pr\u00F3ximo ano? Em 5 anos? N\u00F3s mostramos.',
-                feat3Title: 'Calculadora DRIP',
-                feat3Desc: 'Reinvestir dividendos automaticamente? Veja o efeito composto.',
-                feat4Title: 'Notifica\u00E7\u00F5es inteligentes',
-                feat4Desc: 'Alertas antes dos pagamentos. Resumos mensais. Not\u00EDcias de a\u00E7\u00F5es.',
-                freePro: 'Gr\u00E1tis: Calculadora b\u00E1sica. Pro: Rastreamento auto de corretoras conectadas.',
-                badge: 'Em breve',
-                notify: 'Estamos construindo isso agora. Volte ao simulador enquanto espera.',
-                btn: 'Voltar ao simulador',
-                proBtn: 'Desbloquear recursos Pro',
-                ecosystem: 'Parte do ecossistema Young Investor',
-                navSim: 'Simulador', navPort: 'Portf\u00F3lio', navDiv: 'Dividendos', navGoals: 'Metas', navTax: 'Impostos',
-                footer: '\u00A9 2026 Young Investor Simulator. Feito para a pr\u00F3xima gera\u00E7\u00E3o.'
-            },
-            de: {
-                title: 'Sieh genau, wie viel passives Einkommen du verdienen wirst.',
-                subtitle: 'Verfolge jede Dividende. Wisse, wann du bezahlt wirst. Projiziere deinen zuk\u00FCnftigen Einkommensstrom.',
-                feat1Title: 'Dividendenkalender',
-                feat1Desc: 'Jedes Auszahlungsdatum. Export zu Google Calendar. Verpasse keine Dividende.',
-                feat2Title: 'Einkommensprognosen',
-                feat2Desc: 'Wie viel verdienst du n\u00E4chstes Jahr? In 5 Jahren? Wir zeigen es dir.',
-                feat3Title: 'DRIP-Rechner',
-                feat3Desc: 'Dividenden automatisch reinvestieren? Sieh den Zinseszinseffekt.',
-                feat4Title: 'Intelligente Benachrichtigungen',
-                feat4Desc: 'Benachrichtigungen vor Aussch\u00FCttungen. Monatliche Zusammenfassungen. Aktiennews.',
-                freePro: 'Kostenlos: Basis-Rechner. Pro: Auto-Tracking von verbundenen Brokern.',
-                badge: 'Kommt bald',
-                notify: 'Wir bauen das gerade. Geh zur\u00FCck zum Simulator.',
-                btn: 'Zur\u00FCck zum Simulator',
-                proBtn: 'Pro-Funktionen freischalten',
-                ecosystem: 'Teil des Young Investor \u00D6kosystems',
-                navSim: 'Simulator', navPort: 'Portfolio', navDiv: 'Dividenden', navGoals: 'Ziele', navTax: 'Steuern',
-                footer: '\u00A9 2026 Young Investor Simulator. F\u00FCr die n\u00E4chste Generation gebaut.'
-            },
-            ar: {
-                title: '\u0627\u0639\u0631\u0641 \u0628\u0627\u0644\u0636\u0628\u0637 \u0643\u0645 \u0633\u062A\u0643\u0633\u0628 \u0645\u0646 \u0627\u0644\u062F\u062E\u0644 \u0627\u0644\u0633\u0644\u0628\u064A.',
-                subtitle: '\u062A\u062A\u0628\u0639 \u0643\u0644 \u062A\u0648\u0632\u064A\u0639 \u0623\u0631\u0628\u0627\u062D. \u0627\u0639\u0631\u0641 \u0645\u062A\u0649 \u062A\u0642\u0628\u0636. \u062A\u0648\u0642\u0639 \u062A\u062F\u0641\u0642 \u062F\u062E\u0644\u0643 \u0627\u0644\u0645\u0633\u062A\u0642\u0628\u0644\u064A.',
-                feat1Title: '\u062A\u0642\u0648\u064A\u0645 \u0627\u0644\u0623\u0631\u0628\u0627\u062D',
-                feat1Desc: '\u0643\u0644 \u062A\u0627\u0631\u064A\u062E \u062F\u0641\u0639. \u0635\u062F\u0651\u0631 \u0625\u0644\u0649 Google Calendar. \u0644\u0627 \u062A\u0641\u0648\u0651\u062A \u0623\u064A \u062A\u0648\u0632\u064A\u0639.',
-                feat2Title: '\u062A\u0648\u0642\u0639\u0627\u062A \u0627\u0644\u062F\u062E\u0644',
-                feat2Desc: '\u0643\u0645 \u0633\u062A\u0643\u0633\u0628 \u0627\u0644\u0639\u0627\u0645 \u0627\u0644\u0642\u0627\u062F\u0645\u061F \u062E\u0644\u0627\u0644 5 \u0633\u0646\u0648\u0627\u062A\u061F \u0633\u0646\u0631\u064A\u0643.',
-                feat3Title: '\u062D\u0627\u0633\u0628\u0629 DRIP',
-                feat3Desc: '\u0625\u0639\u0627\u062F\u0629 \u0627\u0633\u062A\u062B\u0645\u0627\u0631 \u0627\u0644\u0623\u0631\u0628\u0627\u062D \u062A\u0644\u0642\u0627\u0626\u064A\u064B\u0627\u061F \u0634\u0627\u0647\u062F \u0627\u0644\u062A\u0623\u062B\u064A\u0631 \u0627\u0644\u0645\u0631\u0643\u0628.',
-                feat4Title: '\u0625\u0634\u0639\u0627\u0631\u0627\u062A \u0630\u0643\u064A\u0629',
-                feat4Desc: '\u062A\u0646\u0628\u064A\u0647\u0627\u062A \u0642\u0628\u0644 \u0627\u0644\u0645\u062F\u0641\u0648\u0639\u0627\u062A. \u0645\u0644\u062E\u0635\u0627\u062A \u0634\u0647\u0631\u064A\u0629. \u0623\u062E\u0628\u0627\u0631 \u0627\u0644\u0623\u0633\u0647\u0645.',
-                freePro: '\u0645\u062C\u0627\u0646\u064A: \u062D\u0627\u0633\u0628\u0629 \u0623\u0633\u0627\u0633\u064A\u0629. \u0628\u0631\u0648: \u062A\u062A\u0628\u0639 \u062A\u0644\u0642\u0627\u0626\u064A \u0645\u0646 \u0627\u0644\u0648\u0633\u0637\u0627\u0621 \u0627\u0644\u0645\u062A\u0635\u0644\u064A\u0646.',
-                badge: '\u0642\u0631\u064A\u0628\u064B\u0627',
-                notify: '\u0646\u062D\u0646 \u0646\u0628\u0646\u064A \u0647\u0630\u0627 \u0627\u0644\u0622\u0646. \u0639\u062F \u0625\u0644\u0649 \u0627\u0644\u0645\u062D\u0627\u0643\u064A.',
-                btn: '\u0627\u0644\u0639\u0648\u062F\u0629 \u0625\u0644\u0649 \u0627\u0644\u0645\u062D\u0627\u0643\u064A',
-                proBtn: '\u0641\u062A\u062D \u0645\u064A\u0632\u0627\u062A \u0628\u0631\u0648',
-                ecosystem: '\u062C\u0632\u0621 \u0645\u0646 \u0645\u0646\u0638\u0648\u0645\u0629 Young Investor',
-                navSim: '\u0627\u0644\u0645\u062D\u0627\u0643\u064A', navPort: '\u0627\u0644\u0645\u062D\u0641\u0638\u0629', navDiv: '\u0627\u0644\u0623\u0631\u0628\u0627\u062D', navGoals: '\u0627\u0644\u0623\u0647\u062F\u0627\u0641', navTax: '\u0627\u0644\u0636\u0631\u0627\u0626\u0628',
-                footer: '\u00A9 2026 Young Investor Simulator. \u0635\u064F\u0645\u0645 \u0644\u0644\u062C\u064A\u0644 \u0627\u0644\u0642\u0627\u062F\u0645.'
-            },
-            zh: {
-                title: '\u7CBE\u786E\u77E5\u9053\u4F60\u5C06\u8D5A\u591A\u5C11\u88AB\u52A8\u6536\u5165\u3002',
-                subtitle: '\u8FFD\u8E2A\u6BCF\u7B14\u80A1\u606F\u3002\u77E5\u9053\u4F55\u65F6\u6536\u6B3E\u3002\u9884\u6D4B\u672A\u6765\u6536\u5165\u6D41\u3002',
-                feat1Title: '\u80A1\u606F\u65E5\u5386',
-                feat1Desc: '\u6BCF\u4E2A\u6D3E\u606F\u65E5\u671F\u3002\u5BFC\u51FA\u5230 Google Calendar\u3002\u4E0D\u9519\u8FC7\u4EFB\u4F55\u80A1\u606F\u3002',
-                feat2Title: '\u6536\u5165\u9884\u6D4B',
-                feat2Desc: '\u660E\u5E74\u80FD\u8D5A\u591A\u5C11\uFF1F5\u5E74\u540E\u5462\uFF1F\u6211\u4EEC\u7ED9\u4F60\u770B\u3002',
-                feat3Title: 'DRIP \u8BA1\u7B97\u5668',
-                feat3Desc: '\u81EA\u52A8\u518D\u6295\u8D44\u80A1\u606F\uFF1F\u67E5\u770B\u590D\u5229\u6548\u679C\u3002',
-                feat4Title: '\u667A\u80FD\u901A\u77E5',
-                feat4Desc: '\u6D3E\u606F\u524D\u63D0\u9192\u3002\u6708\u5EA6\u6536\u5165\u6C47\u603B\u3002\u80A1\u7968\u65B0\u95FB\u3002',
-                freePro: '\u514D\u8D39\uFF1A\u57FA\u7840\u8BA1\u7B97\u5668\u3002Pro\uFF1A\u4ECE\u8FDE\u63A5\u7684\u5238\u5546\u81EA\u52A8\u8FFD\u8E2A\u3002',
-                badge: '\u5373\u5C06\u63A8\u51FA',
-                notify: '\u6211\u4EEC\u6B63\u5728\u5EFA\u8BBE\u4E2D\u3002\u8BF7\u5148\u56DE\u5230\u6A21\u62DF\u5668\u3002',
-                btn: '\u8FD4\u56DE\u6A21\u62DF\u5668',
-                proBtn: '\u89E3\u9501 Pro \u529F\u80FD',
-                ecosystem: 'Young Investor \u751F\u6001\u7CFB\u7EDF\u7684\u4E00\u90E8\u5206',
-                navSim: '\u6A21\u62DF\u5668', navPort: '\u6295\u8D44\u7EC4\u5408', navDiv: '\u80A1\u606F', navGoals: '\u76EE\u6807', navTax: '\u7A0E\u52A1',
-                footer: '\u00A9 2026 Young Investor Simulator. \u4E3A\u4E0B\u4E00\u4EE3\u800C\u5EFA\u3002'
-            }
-        };
-
-        const langLabels = { en: 'EN', fr: 'FR', es: 'ES', pt: 'PT', de: 'DE', ar: 'AR', zh: 'ZH' };
-
-        function applyLanguage(lang) {
-            const t = translations[lang];
-            if (!t) return;
-
-            document.getElementById('cs-title').textContent = t.title;
-            document.getElementById('cs-subtitle').textContent = t.subtitle;
-            document.getElementById('feat1-title').textContent = t.feat1Title;
-            document.getElementById('feat1-desc').textContent = t.feat1Desc;
-            document.getElementById('feat2-title').textContent = t.feat2Title;
-            document.getElementById('feat2-desc').textContent = t.feat2Desc;
-            document.getElementById('feat3-title').textContent = t.feat3Title;
-            document.getElementById('feat3-desc').textContent = t.feat3Desc;
-            document.getElementById('feat4-title').textContent = t.feat4Title;
-            document.getElementById('feat4-desc').textContent = t.feat4Desc;
-            document.getElementById('cs-free-pro').textContent = t.freePro;
-            document.getElementById('cs-badge').textContent = t.badge;
-            document.getElementById('cs-notify').textContent = t.notify;
-            document.getElementById('cs-btn').textContent = t.btn;
-            document.getElementById('cs-pro-btn').textContent = t.proBtn;
-            document.getElementById('cs-ecosystem').textContent = t.ecosystem;
-            document.getElementById('nav-simulator').textContent = t.navSim;
-            document.getElementById('nav-portfolio').textContent = t.navPort;
-            document.getElementById('nav-dividends').textContent = t.navDiv;
-            document.getElementById('nav-goals').textContent = t.navGoals;
-            document.getElementById('nav-tax').textContent = t.navTax;
-            document.getElementById('footer-text').innerHTML = t.footer;
-            document.getElementById('langFlag').textContent = langLabels[lang];
-
-            if (lang === 'ar') {
-                document.documentElement.setAttribute('dir', 'rtl');
-                document.documentElement.setAttribute('lang', 'ar');
-            } else {
-                document.documentElement.setAttribute('dir', 'ltr');
-                document.documentElement.setAttribute('lang', lang);
-            }
-
-            document.querySelectorAll('.lang-option').forEach(opt => {
-                opt.classList.toggle('active', opt.dataset.lang === lang);
-            });
-
-            localStorage.setItem('yis-lang', lang);
-        }
-
-        // Language dropdown toggle
-        document.getElementById('langBtn').addEventListener('click', (e) => {
+        // ===== LANGUAGE (dropdown) =====
+        document.getElementById('langBtn').addEventListener('click', function(e) {
             e.stopPropagation();
             document.getElementById('langDropdown').classList.toggle('open');
         });
-
-        document.querySelectorAll('.lang-option').forEach(opt => {
-            opt.addEventListener('click', () => {
-                applyLanguage(opt.dataset.lang);
+        document.querySelectorAll('.lang-option').forEach(function(opt) {
+            opt.addEventListener('click', function() {
                 document.getElementById('langDropdown').classList.remove('open');
+                localStorage.setItem('yis-lang', opt.dataset.lang);
+                document.querySelectorAll('.lang-option').forEach(function(o) { o.classList.toggle('active', o.dataset.lang === opt.dataset.lang); });
+                document.getElementById('langFlag').textContent = opt.dataset.lang.toUpperCase();
+                // Basic i18n could be extended here
+            });
+        });
+        document.addEventListener('click', function() { document.getElementById('langDropdown').classList.remove('open'); });
+        var savedLang = localStorage.getItem('yis-lang') || 'en';
+        document.getElementById('langFlag').textContent = savedLang.toUpperCase();
+
+        // ===== SLIDER MAPPING =====
+        var investMap = [[0,0],[50,1000],[100,2500],[150,5000],[200,10000],[300,25000],[400,50000],[500,100000],[600,250000],[700,500000],[800,1000000],[900,2500000],[1000,5000000]];
+        var monthlyMap = [[0,0],[50,25],[100,50],[150,100],[200,200],[300,500],[400,1000],[500,2000],[600,3000],[700,5000],[800,7500],[900,10000],[1000,25000]];
+
+        function mapSlider(map, pos) {
+            if (pos <= map[0][0]) return map[0][1];
+            if (pos >= map[map.length-1][0]) return map[map.length-1][1];
+            for (var i = 1; i < map.length; i++) {
+                if (pos <= map[i][0]) {
+                    var t = (pos - map[i-1][0]) / (map[i][0] - map[i-1][0]);
+                    return Math.round(map[i-1][1] + t * (map[i][1] - map[i-1][1]));
+                }
+            }
+            return map[map.length-1][1];
+        }
+
+        function fmt(n) {
+            if (n >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
+            if (n >= 1e3) return '$' + n.toLocaleString('en-US', {maximumFractionDigits:0});
+            return '$' + n.toLocaleString('en-US', {maximumFractionDigits:0});
+        }
+
+        // ===== STATE =====
+        var state = { invest: 10000, monthly: 100, yield: 3.5, growth: 5, years: 10, freq: 4, drip: true };
+
+        // ===== POPULAR DIVIDEND STOCKS =====
+        var stocks = [
+            { ticker: 'KO', name: 'Coca-Cola', yield: 3.1 },
+            { ticker: 'JNJ', name: 'Johnson & Johnson', yield: 3.0 },
+            { ticker: 'PG', name: 'Procter & Gamble', yield: 2.4 },
+            { ticker: 'O', name: 'Realty Income', yield: 5.5 },
+            { ticker: 'VZ', name: 'Verizon', yield: 6.4 },
+            { ticker: 'SCHD', name: 'Schwab Div ETF', yield: 3.5 },
+            { ticker: 'T', name: 'AT&T', yield: 5.2 },
+            { ticker: 'ABBV', name: 'AbbVie', yield: 3.6 },
+            { ticker: 'XOM', name: 'ExxonMobil', yield: 3.3 },
+            { ticker: 'MCD', name: "McDonald's", yield: 2.3 },
+            { ticker: 'PEP', name: 'PepsiCo', yield: 2.7 },
+            { ticker: 'AAPL', name: 'Apple', yield: 0.5 }
+        ];
+
+        function renderStocks() {
+            var grid = document.getElementById('stockGrid');
+            grid.innerHTML = '';
+            stocks.forEach(function(s) {
+                var div = document.createElement('div');
+                div.className = 'div-stock';
+                div.innerHTML = '<div class="div-stock-ticker">' + s.ticker + '</div><div class="div-stock-name">' + s.name + '</div><div class="div-stock-yield">' + s.yield.toFixed(1) + '% yield</div>';
+                div.addEventListener('click', function() {
+                    document.getElementById('sliderYield').value = Math.round(s.yield * 10);
+                    update();
+                });
+                grid.appendChild(div);
+            });
+        }
+
+        // ===== CALCULATE =====
+        function calculate() {
+            var invest = state.invest;
+            var monthly = state.monthly;
+            var divYield = state.yield / 100;
+            var growth = state.growth / 100;
+            var years = state.years;
+            var drip = state.drip;
+
+            var yearlyData = [];
+            var portfolio = invest;
+            var totalDividends = 0;
+            var currentYield = divYield;
+
+            for (var y = 1; y <= years; y++) {
+                // Add monthly contributions for this year
+                portfolio += monthly * 12;
+
+                // Calculate annual dividend based on current yield
+                var annualDiv = portfolio * currentYield;
+                totalDividends += annualDiv;
+
+                if (drip) {
+                    portfolio += annualDiv; // reinvest
+                }
+
+                yearlyData.push({
+                    year: y,
+                    portfolio: portfolio,
+                    annualDividend: annualDiv,
+                    monthlyDividend: annualDiv / 12,
+                    yieldOnCost: (invest + monthly * 12 * y) > 0 ? (annualDiv / (invest + monthly * 12 * y) * 100) : 0,
+                    totalDividends: totalDividends,
+                    currentYield: currentYield * 100
+                });
+
+                // Grow the yield for next year
+                currentYield *= (1 + growth);
+            }
+
+            return yearlyData;
+        }
+
+        // ===== RENDER STATS =====
+        function renderStats(data) {
+            if (!data.length) return;
+            var first = data[0];
+            var last = data[data.length - 1];
+
+            document.getElementById('statAnnualIncome').textContent = fmt(first.annualDividend);
+            document.getElementById('statMonthlyIncome').textContent = fmt(first.monthlyDividend);
+            document.getElementById('statTotalDiv').textContent = fmt(last.totalDividends);
+            document.getElementById('statYieldOnCost').textContent = last.yieldOnCost.toFixed(1) + '%';
+            document.getElementById('statFinalValue').textContent = fmt(last.portfolio);
+            document.getElementById('statFinalAnnual').textContent = fmt(last.annualDividend);
+        }
+
+        // ===== RENDER CHART =====
+        var chart = null;
+        function renderChart() {
+            var data = calculate();
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            var gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+            var textColor = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.5)';
+
+            var labels = data.map(function(d) { return 'Year ' + d.year; });
+            var divData = data.map(function(d) { return Math.round(d.annualDividend); });
+            var portData = data.map(function(d) { return Math.round(d.portfolio); });
+
+            if (chart) chart.destroy();
+            var ctx = document.getElementById('divChart').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Annual Dividends',
+                            data: divData,
+                            backgroundColor: '#00e676',
+                            borderRadius: 4,
+                            order: 2,
+                            yAxisID: 'y'
+                        },
+                        {
+                            label: 'Portfolio Value',
+                            data: portData,
+                            type: 'line',
+                            borderColor: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)',
+                            backgroundColor: 'transparent',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            tension: 0.3,
+                            order: 1,
+                            yAxisID: 'y1'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: { mode: 'index', intersect: false },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: isDark ? '#1a1a1a' : '#ffffff',
+                            titleColor: isDark ? '#fff' : '#000',
+                            bodyColor: isDark ? '#ccc' : '#333',
+                            borderColor: isDark ? '#333' : '#ddd',
+                            borderWidth: 1,
+                            padding: 12,
+                            callbacks: {
+                                label: function(ctx) { return ctx.dataset.label + ': ' + fmt(ctx.raw); }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { grid: { display: false }, ticks: { color: textColor, font: { size: 11 } } },
+                        y: {
+                            position: 'left',
+                            grid: { color: gridColor },
+                            ticks: { color: '#00e676', font: { size: 11 }, callback: function(v) { return fmt(v); } }
+                        },
+                        y1: {
+                            position: 'right',
+                            grid: { display: false },
+                            ticks: { color: textColor, font: { size: 11 }, callback: function(v) { return fmt(v); } }
+                        }
+                    }
+                }
+            });
+        }
+
+        // ===== RENDER PAYOUT CALENDAR =====
+        var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        function renderCalendar() {
+            var grid = document.getElementById('payoutGrid');
+            grid.innerHTML = '';
+            var freq = state.freq;
+            var annualDiv = state.invest * (state.yield / 100);
+            var perPayout = annualDiv / freq;
+
+            // Determine payout months
+            var payoutMonths = [];
+            if (freq === 12) payoutMonths = [0,1,2,3,4,5,6,7,8,9,10,11];
+            else if (freq === 4) payoutMonths = [2,5,8,11]; // Mar, Jun, Sep, Dec
+            else if (freq === 2) payoutMonths = [5,11]; // Jun, Dec
+            else payoutMonths = [11]; // Dec
+
+            for (var i = 0; i < 12; i++) {
+                var isPayout = payoutMonths.indexOf(i) >= 0;
+                var div = document.createElement('div');
+                div.className = 'div-month' + (isPayout ? ' payout' : '');
+                div.innerHTML = '<div class="div-month-name">' + monthNames[i] + '</div><div class="div-month-amount">' + (isPayout ? fmt(perPayout) : '—') + '</div>';
+                grid.appendChild(div);
+            }
+        }
+
+        // ===== UPDATE ALL =====
+        function update() {
+            state.invest = mapSlider(investMap, parseInt(document.getElementById('sliderInvest').value));
+            state.monthly = mapSlider(monthlyMap, parseInt(document.getElementById('sliderMonthly').value));
+            state.yield = parseInt(document.getElementById('sliderYield').value) / 10;
+            state.growth = parseInt(document.getElementById('sliderGrowth').value) / 10;
+            state.years = parseInt(document.getElementById('sliderYears').value);
+            state.drip = document.getElementById('dripToggle').checked;
+
+            // Update display values
+            document.getElementById('valInvest').textContent = fmt(state.invest);
+            document.getElementById('valMonthly').textContent = fmt(state.monthly) + '/mo';
+            document.getElementById('valYield').textContent = state.yield.toFixed(1) + '%';
+            document.getElementById('valGrowth').textContent = state.growth.toFixed(1) + '%/yr';
+            document.getElementById('valYears').textContent = state.years + ' year' + (state.years > 1 ? 's' : '');
+
+            var data = calculate();
+            renderStats(data);
+            renderChart();
+            renderCalendar();
+        }
+
+        // ===== EVENT LISTENERS =====
+        ['sliderInvest','sliderMonthly','sliderYield','sliderGrowth','sliderYears'].forEach(function(id) {
+            document.getElementById(id).addEventListener('input', update);
+        });
+
+        document.getElementById('dripToggle').addEventListener('change', update);
+
+        // Frequency buttons
+        document.querySelectorAll('.div-freq-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.div-freq-btn').forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                state.freq = parseInt(btn.dataset.freq);
+                update();
             });
         });
 
-        document.addEventListener('click', () => {
-            document.getElementById('langDropdown').classList.remove('open');
-        });
+        // ===== INIT =====
+        renderStocks();
+        update();
 
-        // Apply saved language on load
-        const savedLang = localStorage.getItem('yis-lang') || 'en';
-        applyLanguage(savedLang);
+    })();
     </script>
 </body>
 </html>
