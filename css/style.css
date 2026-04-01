@@ -1973,6 +1973,7 @@ a.pro-hl-card,
     background: linear-gradient(90deg, var(--gold-soft) 0%, transparent 50%, var(--gold-soft) 100%);
     border-bottom: 1px solid var(--gold-border);
     padding: 10px 0;
+    padding-top: 74px; /* push below fixed navbar */
     position: relative;
     z-index: 90;
 }
