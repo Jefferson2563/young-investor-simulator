@@ -688,21 +688,21 @@ function closeFullscreen() {
 
     // --- Milestones ---
     const allMilestones = [
-        { target: 1000,        icon: '🌱' },
-        { target: 5000,        icon: '🌿' },
-        { target: 10000,       icon: '🪴' },
-        { target: 25000,       icon: '🌳' },
-        { target: 50000,       icon: '🏔️' },
-        { target: 100000,      icon: '💎' },
-        { target: 250000,      icon: '🚀' },
-        { target: 500000,      icon: '🏦' },
-        { target: 1000000,     icon: '👑' },
-        { target: 2500000,     icon: '🌟' },
-        { target: 5000000,     icon: '🏆' },
-        { target: 10000000,    icon: '💰' },
-        { target: 50000000,    icon: '🏰' },
-        { target: 100000000,   icon: '🌍' },
-        { target: 1000000000,  icon: '🪐' },
+        { target: 1000,        icon: '●' },
+        { target: 5000,        icon: '●' },
+        { target: 10000,       icon: '◆' },
+        { target: 25000,       icon: '◆' },
+        { target: 50000,       icon: '▲' },
+        { target: 100000,      icon: '★' },
+        { target: 250000,      icon: '★' },
+        { target: 500000,      icon: '★' },
+        { target: 1000000,     icon: '◉' },
+        { target: 2500000,     icon: '◉' },
+        { target: 5000000,     icon: '◉' },
+        { target: 10000000,    icon: '✦' },
+        { target: 50000000,    icon: '✦' },
+        { target: 100000000,   icon: '✦' },
+        { target: 1000000000,  icon: '✦' },
     ];
 
     function updateMilestones(initial, monthly, rate, years) {

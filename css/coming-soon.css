@@ -200,6 +200,74 @@
     box-shadow: 0 8px 24px rgba(0, 230, 118, 0.3);
 }
 
+/* ===== PER-TOOL COLOR THEMES ===== */
+
+/* Nav active link per tool */
+[data-tool="portfolio"] .nav-links a.nav-active { color: #42A5F5; }
+[data-tool="goals"] .nav-links a.nav-active { color: #26C6DA; }
+[data-tool="tax"] .nav-links a.nav-active { color: #AB8FD2; }
+
+/* Portfolio — Blue (trust, stability) */
+[data-tool="portfolio"] .cs-badge { background: #42A5F5; color: #000; }
+[data-tool="portfolio"] .cs-ecosystem-badge { color: #42A5F5; border-color: rgba(66, 165, 245, 0.35); }
+[data-tool="portfolio"] .cs-ecosystem-badge:hover { background: rgba(66, 165, 245, 0.08); }
+[data-tool="portfolio"] .cs-btn { border-color: rgba(66, 165, 245, 0.35); background: rgba(66, 165, 245, 0.08); color: #42A5F5; }
+[data-tool="portfolio"] .cs-btn:hover { background: #42A5F5; color: #000; }
+[data-tool="portfolio"] .cs-pro-btn { background: #42A5F5; }
+[data-tool="portfolio"] .cs-pro-btn:hover { background: #64B5F6; box-shadow: 0 8px 24px rgba(66, 165, 245, 0.3); }
+[data-tool="portfolio"] .cs-feature:hover { border-color: rgba(66, 165, 245, 0.35); }
+[data-tool="portfolio"] .cs-free-pro { border-color: rgba(66, 165, 245, 0.35); background: rgba(66, 165, 245, 0.06); }
+[data-tool="portfolio"] .cs-logo img { filter: drop-shadow(0 0 20px rgba(66, 165, 245, 0.3)); }
+[data-tool="portfolio"] .logo-accent { color: #42A5F5 !important; }
+
+/* Goals — Teal (aspiration, forward vision) */
+[data-tool="goals"] .cs-badge { background: #26C6DA; color: #000; }
+[data-tool="goals"] .cs-ecosystem-badge { color: #26C6DA; border-color: rgba(38, 198, 218, 0.35); }
+[data-tool="goals"] .cs-ecosystem-badge:hover { background: rgba(38, 198, 218, 0.08); }
+[data-tool="goals"] .cs-btn { border-color: rgba(38, 198, 218, 0.35); background: rgba(38, 198, 218, 0.08); color: #26C6DA; }
+[data-tool="goals"] .cs-btn:hover { background: #26C6DA; color: #000; }
+[data-tool="goals"] .cs-pro-btn { background: #26C6DA; }
+[data-tool="goals"] .cs-pro-btn:hover { background: #4DD0E1; box-shadow: 0 8px 24px rgba(38, 198, 218, 0.3); }
+[data-tool="goals"] .cs-feature:hover { border-color: rgba(38, 198, 218, 0.35); }
+[data-tool="goals"] .cs-free-pro { border-color: rgba(38, 198, 218, 0.35); background: rgba(38, 198, 218, 0.06); }
+[data-tool="goals"] .cs-logo img { filter: drop-shadow(0 0 20px rgba(38, 198, 218, 0.3)); }
+[data-tool="goals"] .logo-accent { color: #26C6DA !important; }
+
+/* Tax — Slate Violet (precision, authority) */
+[data-tool="tax"] .cs-badge { background: #AB8FD2; color: #000; }
+[data-tool="tax"] .cs-ecosystem-badge { color: #AB8FD2; border-color: rgba(171, 143, 210, 0.35); }
+[data-tool="tax"] .cs-ecosystem-badge:hover { background: rgba(171, 143, 210, 0.08); }
+[data-tool="tax"] .cs-btn { border-color: rgba(171, 143, 210, 0.35); background: rgba(171, 143, 210, 0.08); color: #AB8FD2; }
+[data-tool="tax"] .cs-btn:hover { background: #AB8FD2; color: #000; }
+[data-tool="tax"] .cs-pro-btn { background: #AB8FD2; }
+[data-tool="tax"] .cs-pro-btn:hover { background: #C4B0E0; box-shadow: 0 8px 24px rgba(171, 143, 210, 0.3); }
+[data-tool="tax"] .cs-feature:hover { border-color: rgba(171, 143, 210, 0.35); }
+[data-tool="tax"] .cs-free-pro { border-color: rgba(171, 143, 210, 0.35); background: rgba(171, 143, 210, 0.06); }
+[data-tool="tax"] .cs-logo img { filter: drop-shadow(0 0 20px rgba(171, 143, 210, 0.3)); }
+[data-tool="tax"] .logo-accent { color: #AB8FD2 !important; }
+
+/* Light theme adjustments — data-theme is on <html>, data-tool is on <body> */
+[data-theme="light"] [data-tool="portfolio"] .cs-badge { background: #1976D2; color: #fff; }
+[data-theme="light"] [data-tool="portfolio"] .cs-ecosystem-badge { color: #1976D2; border-color: rgba(25, 118, 210, 0.35); }
+[data-theme="light"] [data-tool="portfolio"] .cs-btn { border-color: rgba(25, 118, 210, 0.35); background: rgba(25, 118, 210, 0.06); color: #1976D2; }
+[data-theme="light"] [data-tool="portfolio"] .cs-btn:hover { background: #1976D2; color: #fff; }
+[data-theme="light"] [data-tool="portfolio"] .cs-pro-btn { background: #1976D2; color: #fff; }
+[data-theme="light"] [data-tool="portfolio"] .logo-accent { color: #1976D2 !important; }
+
+[data-theme="light"] [data-tool="goals"] .cs-badge { background: #00838F; color: #fff; }
+[data-theme="light"] [data-tool="goals"] .cs-ecosystem-badge { color: #00838F; border-color: rgba(0, 131, 143, 0.35); }
+[data-theme="light"] [data-tool="goals"] .cs-btn { border-color: rgba(0, 131, 143, 0.35); background: rgba(0, 131, 143, 0.06); color: #00838F; }
+[data-theme="light"] [data-tool="goals"] .cs-btn:hover { background: #00838F; color: #fff; }
+[data-theme="light"] [data-tool="goals"] .cs-pro-btn { background: #00838F; color: #fff; }
+[data-theme="light"] [data-tool="goals"] .logo-accent { color: #00838F !important; }
+
+[data-theme="light"] [data-tool="tax"] .cs-badge { background: #6A1B9A; color: #fff; }
+[data-theme="light"] [data-tool="tax"] .cs-ecosystem-badge { color: #6A1B9A; border-color: rgba(106, 27, 154, 0.35); }
+[data-theme="light"] [data-tool="tax"] .cs-btn { border-color: rgba(106, 27, 154, 0.35); background: rgba(106, 27, 154, 0.06); color: #6A1B9A; }
+[data-theme="light"] [data-tool="tax"] .cs-btn:hover { background: #6A1B9A; color: #fff; }
+[data-theme="light"] [data-tool="tax"] .cs-pro-btn { background: #6A1B9A; color: #fff; }
+[data-theme="light"] [data-tool="tax"] .logo-accent { color: #6A1B9A !important; }
+
 /* Responsive */
 @media (max-width: 600px) {
     .cs-features {

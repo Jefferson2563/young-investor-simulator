@@ -109,6 +109,92 @@
         .dc-pro a{display:inline-block;padding:13px 30px;background:var(--gold);color:#000;font-family:var(--font-main);font-size:14px;font-weight:700;border-radius:100px;text-decoration:none;transition:all 0.2s;}
         .dc-pro a:hover{transform:translateY(-2px);box-shadow:0 4px 20px var(--gold-glow);}
 
+        /* ===== PRO FEATURES ===== */
+        /* Pro Banner */
+        .dc-pro-banner{display:none;background:linear-gradient(135deg,rgba(212,168,67,0.08),rgba(212,168,67,0.02));border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:20px 28px;max-width:880px;margin:0 auto 28px;text-align:center;}
+        .is-pro .dc-pro-banner{display:block;}
+        .dc-pro-banner-t{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--gold);margin:0 0 4px;}
+        .dc-pro-banner-s{font-size:12px;color:var(--text-secondary);margin:0;}
+
+        /* Pro Controls */
+        .dc-pro-controls{display:none;background:var(--bg-card);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:24px 28px;max-width:880px;margin:0 auto 28px;}
+        .is-pro .dc-pro-controls{display:block;}
+        .dc-pro-controls-h{display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+        .dc-pro-controls-h svg{flex-shrink:0;}
+        .dc-pro-controls-t{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--gold);}
+        .dc-pro-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:end;}
+        .dc-pro-slider{display:flex;flex-direction:column;gap:6px;}
+        .dc-pro-slider label{font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;display:flex;justify-content:space-between;}
+        .dc-pro-slider label span{color:var(--gold);font-weight:700;}
+        .dc-pro-slider input[type="range"]{-webkit-appearance:none;width:100%;height:6px;border-radius:3px;background:var(--border);outline:none;cursor:pointer;}
+        .dc-pro-slider input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--gold);cursor:pointer;border:2px solid var(--bg-card);}
+
+        /* Stock Presets */
+        .dc-presets{display:flex;gap:6px;flex-wrap:wrap;grid-column:1/-1;}
+        .dc-preset-btn{padding:6px 14px;border:1px solid var(--gold-border);border-radius:100px;background:transparent;color:var(--text-secondary);font-family:var(--font-main);font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+        .dc-preset-btn:hover{background:var(--gold-soft);color:var(--gold);border-color:var(--gold);}
+        .dc-preset-btn.active{background:var(--gold);color:#000;border-color:var(--gold);}
+
+        /* Pro Stats Grid */
+        .dc-pro-stats{display:none;grid-template-columns:repeat(4,1fr);gap:12px;max-width:880px;margin:0 auto 28px;}
+        .is-pro .dc-pro-stats{display:grid;}
+        .dc-ps{background:var(--bg-card);border:1px solid var(--gold-border);border-radius:var(--radius);padding:16px;text-align:center;}
+        .dc-ps-v{font-family:var(--font-display);font-size:22px;font-weight:800;color:var(--gold);margin-bottom:2px;}
+        .dc-ps-l{font-size:10px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;}
+        .dc-ps.fire .dc-ps-v{color:#4CAF50;}
+
+        /* Income Growth Chart */
+        .dc-income-chart{display:none;background:var(--bg-card);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:24px;max-width:880px;margin:0 auto 28px;}
+        .is-pro .dc-income-chart{display:block;}
+        .dc-income-chart canvas{width:100%!important;height:280px!important;}
+
+        /* FIRE Meter */
+        .dc-fire{display:none;background:var(--bg-card);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:24px;max-width:880px;margin:0 auto 28px;}
+        .is-pro .dc-fire{display:block;}
+        .dc-fire-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+        .dc-fire-t{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text);}
+        .dc-fire-input{display:flex;align-items:center;gap:8px;}
+        .dc-fire-input label{font-size:12px;color:var(--text-muted);font-weight:600;}
+        .dc-fire-input input{width:120px;padding:8px 10px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-family:var(--font-main);font-size:14px;font-weight:600;outline:none;text-align:right;}
+        .dc-fire-input input:focus{border-color:var(--gold);}
+        .dc-fire-bar{height:28px;border-radius:14px;background:var(--bg-secondary);overflow:hidden;position:relative;margin-bottom:12px;}
+        .dc-fire-fill{height:100%;border-radius:14px;background:linear-gradient(90deg,var(--gold),#4CAF50);transition:width 0.6s ease;min-width:2%;}
+        .dc-fire-pct{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text);}
+        .dc-fire-detail{display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);}
+        .dc-fire-detail span{font-weight:600;}
+
+        /* Pro Teaser (free users) */
+        .dc-teaser{display:none;background:var(--bg-card);border:1px dashed var(--gold-border);border-radius:var(--radius-lg);padding:28px;text-align:center;max-width:880px;margin:0 auto 28px;cursor:pointer;transition:all 0.2s;}
+        .is-free .dc-teaser{display:block;}
+        .is-pro .dc-teaser{display:none!important;}
+        .dc-teaser:hover{border-color:var(--gold);background:var(--gold-soft);}
+        .dc-teaser-t{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text);margin:0 0 8px;}
+        .dc-teaser-feats{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;}
+        .dc-teaser-feat{font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:4px;}
+        .dc-teaser-feat::before{content:'';display:block;width:8px;height:8px;border-radius:50%;background:var(--gold);}
+        .dc-teaser a{display:inline-block;padding:10px 24px;background:var(--gold);color:#000;font-size:13px;font-weight:700;border-radius:100px;text-decoration:none;transition:all 0.2s;}
+
+        /* Saved Sims Modal */
+        .dc-saved-modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:2000;opacity:0;pointer-events:none;transition:opacity 0.2s;}
+        .dc-saved-modal.active{opacity:1;pointer-events:all;}
+        .dc-saved-inner{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;max-width:500px;width:90%;max-height:70vh;overflow-y:auto;}
+        .dc-saved-inner h3{font-family:var(--font-display);font-size:16px;font-weight:700;color:var(--text);margin:0 0 16px;}
+        .dc-saved-item{display:flex;justify-content:space-between;align-items:center;padding:12px;border:1px solid var(--border);border-radius:var(--radius);margin-bottom:8px;cursor:pointer;transition:all 0.2s;}
+        .dc-saved-item:hover{border-color:var(--gold-border);background:var(--gold-soft);}
+        .dc-saved-name{font-weight:600;font-size:14px;color:var(--text);}
+        .dc-saved-meta{font-size:11px;color:var(--text-muted);}
+        .dc-saved-del{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:16px;padding:4px 8px;border-radius:4px;transition:all 0.2s;}
+        .dc-saved-del:hover{color:#f44336;background:rgba(244,67,54,0.1);}
+        .dc-pro-actions{display:none;flex-direction:row;gap:8px;max-width:880px;margin:0 auto 28px;justify-content:flex-end;}
+        .is-pro .dc-pro-actions{display:flex;}
+        .dc-pro-act{padding:10px 20px;border:1px solid var(--gold-border);border-radius:100px;background:transparent;color:var(--gold);font-family:var(--font-main);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+        .dc-pro-act:hover{background:var(--gold-soft);}
+        .dc-pro-act.primary{background:var(--gold);color:#000;border-color:var(--gold);}
+        .dc-pro-act.primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px var(--gold-glow);}
+
+        @media(max-width:768px){.dc-pro-grid{grid-template-columns:1fr;}.dc-pro-stats{grid-template-columns:repeat(2,1fr);}.dc-fire-h{flex-direction:column;align-items:flex-start;gap:10px;}}
+        @media(max-width:480px){.dc-pro-stats{grid-template-columns:1fr;}}
+
         /* Disclaimer */
         .dc-disc{max-width:880px;margin:0 auto 28px;padding:20px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);font-size:11px;color:var(--text-muted);line-height:1.6;}
         .dc-disc strong{color:var(--text-secondary);}
@@ -131,10 +217,10 @@
             </a>
             <div class="nav-links">
                 <a href="../#simulator">Simulator</a>
-                <a href="../portfolio/" class="nav-soon">Net Worth</a>
+                <a href="../portfolio/" class="nav-soon" data-tool-color="portfolio">Net Worth</a>
                 <a href="../dividends/" class="nav-active" style="color:var(--gold);">Dividends</a>
-                <a href="../goals/" class="nav-soon">Goals</a>
-                <a href="../tax/" class="nav-soon">Tax</a>
+                <a href="../goals/" class="nav-soon" data-tool-color="goals">Goals</a>
+                <a href="../tax/" class="nav-soon" data-tool-color="tax">Tax</a>
             </div>
             <div class="nav-right">
                 <div class="lang-dropdown" id="langDropdown">
@@ -211,6 +297,49 @@
                 </div>
             </div>
 
+            <!-- PRO BANNER -->
+            <div class="dc-pro-banner" data-pro-only>
+                <div class="dc-pro-banner-t" id="dcProBannerName">Pro Dividend Analysis Active</div>
+                <p class="dc-pro-banner-s">Tax impact, inflation adjustment, stock presets, income projections, FIRE tracker, PDF export & cloud save</p>
+            </div>
+
+            <!-- PRO CONTROLS -->
+            <div class="dc-pro-controls" data-pro-only>
+                <div class="dc-pro-controls-h">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <span class="dc-pro-controls-t">Pro Analysis Controls</span>
+                </div>
+                <div class="dc-pro-grid">
+                    <div class="dc-pro-slider">
+                        <label>Tax Rate on Dividends <span id="taxVal">15%</span></label>
+                        <input type="range" id="taxRate" min="0" max="50" value="15" step="1">
+                    </div>
+                    <div class="dc-pro-slider">
+                        <label>Expected Inflation <span id="infVal">3%</span></label>
+                        <input type="range" id="infRate" min="0" max="15" value="3" step="0.5">
+                    </div>
+                    <div>
+                        <label style="font-size:11px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;display:block;margin-bottom:6px;">Stock/ETF Presets</label>
+                        <div class="dc-presets" id="presetBtns">
+                            <button class="dc-preset-btn" data-preset="SCHD">SCHD</button>
+                            <button class="dc-preset-btn" data-preset="VYM">VYM</button>
+                            <button class="dc-preset-btn" data-preset="JEPI">JEPI</button>
+                            <button class="dc-preset-btn" data-preset="KO">KO</button>
+                            <button class="dc-preset-btn" data-preset="JNJ">JNJ</button>
+                            <button class="dc-preset-btn" data-preset="O">O</button>
+                            <button class="dc-preset-btn" data-preset="CUSTOM" style="border-style:dashed;">Custom</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PRO ACTIONS (Save/Export) -->
+            <div class="dc-pro-actions" data-pro-only>
+                <button class="dc-pro-act" onclick="openDcSaved()">&#128193; My Saved</button>
+                <button class="dc-pro-act" onclick="dcExportPDF()">&#128196; PDF Report</button>
+                <button class="dc-pro-act primary" onclick="dcSaveCalc()">&#128190; Save Calculation</button>
+            </div>
+
             <!-- SUMMARY -->
             <div class="dc-sum" id="cards" style="display:none;">
                 <div class="dc-c hi"><div class="dc-c-v" id="cPort">$0</div><div class="dc-c-l">Final Portfolio</div></div>
@@ -228,6 +357,28 @@
                     <h4>Your Dividend Snowball</h4>
                     <p id="insightText"></p>
                 </div>
+            </div>
+
+            <!-- PRO STATS GRID -->
+            <div class="dc-pro-stats" id="proStats" data-pro-only style="display:none;">
+                <div class="dc-ps"><div class="dc-ps-v" id="psAfterTax">$0</div><div class="dc-ps-l">After-Tax Annual Income</div></div>
+                <div class="dc-ps"><div class="dc-ps-v" id="psMonthly">$0</div><div class="dc-ps-l">After-Tax Monthly Income</div></div>
+                <div class="dc-ps"><div class="dc-ps-v" id="psRealIncome">$0</div><div class="dc-ps-l">Inflation-Adjusted Income</div></div>
+                <div class="dc-ps fire"><div class="dc-ps-v" id="psFire">0%</div><div class="dc-ps-l">FIRE Progress</div></div>
+            </div>
+
+            <!-- PRO TEASER (free users) -->
+            <div class="dc-teaser" data-free-only onclick="window.location.href='../index.html#pro'">
+                <div class="dc-teaser-t">Unlock Pro Dividend Analysis</div>
+                <div class="dc-teaser-feats">
+                    <span class="dc-teaser-feat">Tax Impact</span>
+                    <span class="dc-teaser-feat">Inflation Adjustment</span>
+                    <span class="dc-teaser-feat">Stock Presets</span>
+                    <span class="dc-teaser-feat">Income Chart</span>
+                    <span class="dc-teaser-feat">FIRE Tracker</span>
+                    <span class="dc-teaser-feat">PDF Export</span>
+                </div>
+                <a href="../index.html#pro">Upgrade to Pro</a>
             </div>
 
             <!-- CHART -->
@@ -252,11 +403,56 @@
                 </table>
             </div>
 
-            <!-- PRO -->
-            <div class="dc-pro" id="proBox" style="display:none;">
-                <h3>Want to track your real dividends?</h3>
-                <p>Pro unlocks portfolio sync, dividend calendar with notifications, tax optimization, and PDF exports.</p>
-                <a href="../index.html#pro">Start 14-Day Free Trial</a>
+            <!-- PRO: INCOME GROWTH CHART -->
+            <div class="dc-income-chart" id="incomeChartWrap" data-pro-only style="display:none;">
+                <div class="dc-chart-h">
+                    <span class="dc-chart-t">Dividend Income Trajectory</span>
+                    <div class="dc-leg">
+                        <span class="dc-leg-i"><span class="dc-leg-d" style="background:var(--gold);"></span> Gross Income</span>
+                        <span class="dc-leg-i"><span class="dc-leg-d" style="background:#4CAF50;"></span> After Tax</span>
+                        <span class="dc-leg-i"><span class="dc-leg-d" style="background:rgba(255,255,255,0.15);border:1px dashed rgba(255,255,255,0.3);"></span> Inflation-Adjusted</span>
+                    </div>
+                </div>
+                <canvas id="incomeChart"></canvas>
+            </div>
+
+            <!-- PRO: FIRE METER -->
+            <div class="dc-fire" id="fireWrap" data-pro-only style="display:none;">
+                <div class="dc-fire-h">
+                    <span class="dc-fire-t">Financial Independence Progress</span>
+                    <div class="dc-fire-input">
+                        <label>Monthly Expenses $</label>
+                        <input type="number" id="fireExpenses" value="3000" min="100" step="100">
+                    </div>
+                </div>
+                <div class="dc-fire-bar">
+                    <div class="dc-fire-fill" id="fireFill" style="width:2%;"></div>
+                    <span class="dc-fire-pct" id="firePct">0%</span>
+                </div>
+                <div class="dc-fire-detail">
+                    <span>Dividend Income: <span id="fireIncome">$0/mo</span></span>
+                    <span>Expenses: <span id="fireExp">$3,000/mo</span></span>
+                    <span>Gap: <span id="fireGap">$3,000/mo</span></span>
+                </div>
+            </div>
+
+            <!-- SAVED SIMULATIONS MODAL -->
+            <div class="dc-saved-modal" id="dcSavedModal">
+                <div class="dc-saved-inner">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                        <h3 style="margin:0;">Saved Calculations</h3>
+                        <button onclick="closeDcSaved()" style="background:none;border:none;font-size:20px;color:var(--text-muted);cursor:pointer;">&times;</button>
+                    </div>
+                    <div id="dcSavedList"><p style="color:var(--text-muted);font-size:13px;">No saved calculations yet.</p></div>
+                    <p style="font-size:11px;color:var(--text-muted);margin-top:12px;" id="dcSavedCount">0 / 10 slots used</p>
+                </div>
+            </div>
+
+            <!-- PRO CTA (free users only) -->
+            <div class="dc-pro" id="proBox" data-free-only style="display:none;">
+                <h3>Want deeper dividend analysis?</h3>
+                <p>Pro unlocks tax impact, inflation adjustment, stock presets, income projections, FIRE tracker, PDF export & cloud save.</p>
+                <a href="../index.html#pro">Upgrade to Pro</a>
             </div>
 
             <!-- DISCLAIMER -->
@@ -471,6 +667,388 @@
 
     // Auto-calc on load
     run();
+
+    /* ========================================================
+       PRO FEATURES — Dividend Calculator
+       Tax impact, inflation, stock presets, income chart,
+       FIRE meter, PDF export, cloud save
+       ======================================================== */
+
+    /* ===== STOCK PRESETS ===== */
+    var PRESETS = {
+        SCHD: { price: 82, yield: 3.4, divGr: 10, prGr: 8, freq: 4, name: 'Schwab US Dividend Equity ETF' },
+        VYM:  { price: 120, yield: 3.0, divGr: 5, prGr: 7, freq: 4, name: 'Vanguard High Dividend Yield ETF' },
+        JEPI: { price: 57, yield: 7.5, divGr: 0, prGr: 3, freq: 12, name: 'JPMorgan Equity Premium Income ETF' },
+        KO:   { price: 62, yield: 3.0, divGr: 6, prGr: 5, freq: 4, name: 'Coca-Cola Company' },
+        JNJ:  { price: 155, yield: 2.8, divGr: 5, prGr: 6, freq: 4, name: 'Johnson & Johnson' },
+        O:    { price: 58, yield: 5.5, divGr: 4, prGr: 3, freq: 12, name: 'Realty Income Corporation' }
+    };
+
+    function applyPreset(key) {
+        var p = PRESETS[key];
+        if (!p) return;
+        document.getElementById('fPrice').value = p.price;
+        document.getElementById('fYield').value = p.yield;
+        document.getElementById('fDivGr').value = p.divGr;
+        document.getElementById('fPrGr').value = p.prGr;
+        document.getElementById('fFreq').value = p.freq;
+        document.querySelectorAll('.dc-preset-btn').forEach(function(b) {
+            b.classList.toggle('active', b.dataset.preset === key);
+        });
+        run();
+    }
+
+    // Wire preset buttons
+    document.querySelectorAll('.dc-preset-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            if (btn.dataset.preset === 'CUSTOM') {
+                document.querySelectorAll('.dc-preset-btn').forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                return;
+            }
+            applyPreset(btn.dataset.preset);
+        });
+    });
+
+    /* ===== PRO SLIDER CONTROLS ===== */
+    var taxSlider = document.getElementById('taxRate');
+    var taxVal = document.getElementById('taxVal');
+    var infSlider = document.getElementById('infRate');
+    var infVal = document.getElementById('infVal');
+
+    if (taxSlider && taxVal) {
+        taxSlider.addEventListener('input', function() {
+            taxVal.textContent = taxSlider.value + '%';
+            updateProFeatures();
+        });
+    }
+    if (infSlider && infVal) {
+        infSlider.addEventListener('input', function() {
+            infVal.textContent = parseFloat(infSlider.value).toFixed(1) + '%';
+            updateProFeatures();
+        });
+    }
+
+    /* ===== FIRE EXPENSES INPUT ===== */
+    var fireExpInput = document.getElementById('fireExpenses');
+    if (fireExpInput) {
+        fireExpInput.addEventListener('input', function() { updateProFeatures(); });
+    }
+
+    /* ===== PRO CALCULATIONS ===== */
+    function getProParams() {
+        var tax = taxSlider ? parseFloat(taxSlider.value) / 100 : 0.15;
+        var inf = infSlider ? parseFloat(infSlider.value) / 100 : 0.03;
+        var expenses = fireExpInput ? parseFloat(fireExpInput.value) || 3000 : 3000;
+        return { tax: tax, inf: inf, expenses: expenses };
+    }
+
+    function updateProFeatures() {
+        if (!lastResult || !lastResult.rows || !lastResult.rows.length) return;
+        if (!window.YIS_PREMIUM || !window.YIS_PREMIUM.isPro) return;
+
+        var pp = getProParams();
+        var rows = lastResult.rows;
+        var last = rows[rows.length - 1];
+
+        // After-tax income
+        var grossAnnual = last.aDiv;
+        var afterTaxAnnual = grossAnnual * (1 - pp.tax);
+        var afterTaxMonthly = afterTaxAnnual / 12;
+
+        // Inflation-adjusted final year income
+        var years = rows.length;
+        var realIncome = afterTaxAnnual / Math.pow(1 + pp.inf, years);
+
+        // FIRE progress
+        var fireAnnualExpenses = pp.expenses * 12;
+        var firePct = fireAnnualExpenses > 0 ? Math.min((afterTaxAnnual / fireAnnualExpenses) * 100, 100) : 0;
+
+        // Update Pro Stats
+        var el;
+        el = document.getElementById('psAfterTax');
+        if (el) el.textContent = fmt(afterTaxAnnual) + '/yr';
+        el = document.getElementById('psMonthly');
+        if (el) el.textContent = fmt(afterTaxMonthly) + '/mo';
+        el = document.getElementById('psRealIncome');
+        if (el) el.textContent = fmt(realIncome) + '/yr';
+        el = document.getElementById('psFire');
+        if (el) {
+            el.textContent = firePct.toFixed(1) + '%';
+            el.style.color = firePct >= 100 ? '#4CAF50' : firePct >= 50 ? 'var(--gold)' : '';
+        }
+
+        // Show Pro Stats
+        var proStats = document.getElementById('proStats');
+        if (proStats) proStats.style.display = '';
+
+        // Update FIRE Meter
+        updateFireMeter(afterTaxMonthly, pp.expenses, firePct);
+
+        // Update Income Growth Chart
+        drawIncomeChart(rows, pp.tax, pp.inf);
+
+        // Show pro sections
+        var el2;
+        el2 = document.getElementById('incomeChartWrap');
+        if (el2) el2.style.display = '';
+        el2 = document.getElementById('fireWrap');
+        if (el2) el2.style.display = '';
+    }
+
+    function updateFireMeter(monthlyIncome, monthlyExpenses, pct) {
+        var fill = document.getElementById('fireFill');
+        var pctEl = document.getElementById('firePct');
+        var incEl = document.getElementById('fireIncome');
+        var expEl = document.getElementById('fireExp');
+        var gapEl = document.getElementById('fireGap');
+        if (!fill) return;
+
+        fill.style.width = Math.max(pct, 2) + '%';
+        if (pct >= 100) {
+            fill.style.background = 'linear-gradient(90deg, #4CAF50, #66BB6A)';
+        } else {
+            fill.style.background = 'linear-gradient(90deg, var(--gold), #4CAF50)';
+        }
+        if (pctEl) pctEl.textContent = pct.toFixed(1) + '%';
+        if (incEl) incEl.textContent = fmt(monthlyIncome) + '/mo';
+        if (expEl) expEl.textContent = fmt(monthlyExpenses) + '/mo';
+        var gap = monthlyExpenses - monthlyIncome;
+        if (gapEl) {
+            if (gap <= 0) {
+                gapEl.textContent = 'Covered!';
+                gapEl.style.color = '#4CAF50';
+            } else {
+                gapEl.textContent = fmt(gap) + '/mo';
+                gapEl.style.color = '';
+            }
+        }
+    }
+
+    /* ===== INCOME GROWTH CHART ===== */
+    var incomeChart = null;
+
+    function drawIncomeChart(rows, taxRate, infRate) {
+        var canvas = document.getElementById('incomeChart');
+        if (!canvas) return;
+
+        var dk = document.documentElement.getAttribute('data-theme') === 'dark';
+        var gc = dk ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+        var tc = dk ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)';
+        var gold = getComputedStyle(document.documentElement).getPropertyValue('--gold').trim();
+
+        var labels = rows.map(function(r) { return 'Yr ' + r.y; });
+        var grossData = rows.map(function(r) { return Math.round(r.aDiv); });
+        var afterTaxData = rows.map(function(r) { return Math.round(r.aDiv * (1 - taxRate)); });
+        var realData = rows.map(function(r, i) { return Math.round(r.aDiv * (1 - taxRate) / Math.pow(1 + infRate, i + 1)); });
+
+        if (incomeChart) incomeChart.destroy();
+        incomeChart = new Chart(canvas, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    { label: 'Gross Income', data: grossData, borderColor: gold, backgroundColor: gold + '20', fill: true, tension: 0.3, pointRadius: 2, borderWidth: 2 },
+                    { label: 'After Tax', data: afterTaxData, borderColor: '#4CAF50', backgroundColor: 'transparent', tension: 0.3, pointRadius: 2, borderWidth: 2 },
+                    { label: 'Inflation-Adjusted', data: realData, borderColor: dk ? 'rgba(255,255,255,0.25)' : 'rgba(0,0,0,0.2)', backgroundColor: 'transparent', borderDash: [6, 4], tension: 0.3, pointRadius: 0, borderWidth: 1.5 }
+                ]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: dk ? '#1a1a1a' : '#fff', titleColor: dk ? '#fff' : '#000',
+                        bodyColor: dk ? '#ccc' : '#333', borderColor: dk ? '#333' : '#ddd', borderWidth: 1, padding: 12,
+                        callbacks: { label: function(c) { return c.dataset.label + ': ' + fmt(c.raw); } }
+                    }
+                },
+                scales: {
+                    x: { grid: { display: false }, ticks: { color: tc, font: { size: 11 } } },
+                    y: { grid: { color: gc }, ticks: { color: tc, font: { size: 11 }, callback: function(v) { return fmt(v); } } }
+                }
+            }
+        });
+    }
+
+    /* ===== PDF EXPORT ===== */
+    window.dcExportPDF = function() {
+        if (!window.YIS_PREMIUM || !window.YIS_PREMIUM.isPro) return;
+        if (!lastResult || !lastResult.rows.length) return;
+
+        var pp = getProParams();
+        var rows = lastResult.rows;
+        var last = rows[rows.length - 1];
+        var first = rows[0];
+        var afterTax = last.aDiv * (1 - pp.tax);
+
+        var html = '<!DOCTYPE html><html><head><title>Dividend Report</title><style>';
+        html += 'body{font-family:Inter,sans-serif;max-width:800px;margin:0 auto;padding:40px;color:#222;}';
+        html += 'h1{font-size:24px;color:#D4A843;margin-bottom:4px;}h2{font-size:16px;color:#666;margin:32px 0 12px;border-bottom:2px solid #D4A843;padding-bottom:6px;}';
+        html += '.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin:16px 0;}.card{background:#f9f7f2;border:1px solid #e8e0d0;border-radius:8px;padding:16px;text-align:center;}';
+        html += '.card .v{font-size:22px;font-weight:800;color:#D4A843;}.card .l{font-size:11px;color:#888;text-transform:uppercase;}';
+        html += 'table{width:100%;border-collapse:collapse;font-size:12px;margin:12px 0;}th{text-align:right;padding:8px;border-bottom:2px solid #ddd;font-size:10px;text-transform:uppercase;color:#888;}';
+        html += 'td{text-align:right;padding:8px;border-bottom:1px solid #eee;}td:first-child,th:first-child{text-align:center;}';
+        html += '.gold{color:#D4A843;font-weight:600;}.footer{margin-top:32px;font-size:11px;color:#aaa;text-align:center;}';
+        html += '</style></head><body>';
+        html += '<h1>Dividend Analysis Report</h1>';
+        html += '<p style="color:#888;font-size:13px;">Generated ' + new Date().toLocaleDateString() + ' by Young Investor Pro</p>';
+
+        html += '<h2>Parameters</h2><div class="grid">';
+        html += '<div class="card"><div class="v">' + fmt(v('fInit')) + '</div><div class="l">Initial Investment</div></div>';
+        html += '<div class="card"><div class="v">' + fmt(v('fMonth')) + '/mo</div><div class="l">Monthly Contribution</div></div>';
+        html += '<div class="card"><div class="v">' + v('fYield') + '%</div><div class="l">Dividend Yield</div></div>';
+        html += '<div class="card"><div class="v">' + v('fDivGr') + '%</div><div class="l">Dividend Growth</div></div>';
+        html += '<div class="card"><div class="v">' + v('fPrGr') + '%</div><div class="l">Price Growth</div></div>';
+        html += '<div class="card"><div class="v">' + rows.length + ' yrs</div><div class="l">Time Horizon</div></div>';
+        html += '</div>';
+
+        html += '<h2>Results Summary</h2><div class="grid">';
+        html += '<div class="card"><div class="v">' + fmt(last.bal) + '</div><div class="l">Final Portfolio</div></div>';
+        html += '<div class="card"><div class="v">' + fmt(last.tDiv) + '</div><div class="l">Total Dividends Earned</div></div>';
+        html += '<div class="card"><div class="v">' + fmt(last.aDiv) + '/yr</div><div class="l">Final Year Income</div></div>';
+        html += '</div>';
+
+        html += '<h2>Pro Analysis</h2><div class="grid">';
+        html += '<div class="card"><div class="v">' + fmt(afterTax) + '/yr</div><div class="l">After-Tax Income (' + (pp.tax * 100) + '% tax)</div></div>';
+        html += '<div class="card"><div class="v">' + fmt(afterTax / 12) + '/mo</div><div class="l">Monthly Passive Income</div></div>';
+        html += '<div class="card"><div class="v">' + fmt(afterTax / Math.pow(1 + pp.inf, rows.length)) + '/yr</div><div class="l">Inflation-Adjusted (' + (pp.inf * 100) + '%)</div></div>';
+        html += '</div>';
+
+        html += '<h2>Year-by-Year Breakdown</h2>';
+        html += '<table><thead><tr><th>Year</th><th>Shares</th><th>Price</th><th>Annual Div.</th><th>After Tax</th><th>Total Div.</th><th>Balance</th></tr></thead><tbody>';
+        rows.forEach(function(r) {
+            html += '<tr><td>' + r.y + '</td><td>' + Math.round(r.sh).toLocaleString() + '</td><td>$' + r.pr.toFixed(2) + '</td>';
+            html += '<td class="gold">' + fmt(r.aDiv) + '</td><td>' + fmt(r.aDiv * (1 - pp.tax)) + '</td>';
+            html += '<td class="gold">' + fmt(r.tDiv) + '</td><td>' + fmt(r.bal) + '</td></tr>';
+        });
+        html += '</tbody></table>';
+
+        html += '<div class="footer">Young Investor Pro &middot; younginvestor.app &middot; For educational purposes only</div>';
+        html += '</body></html>';
+
+        var w = window.open('', '_blank');
+        if (w) { w.document.write(html); w.document.close(); setTimeout(function() { w.print(); }, 500); }
+    };
+
+    /* ===== CLOUD SAVE ===== */
+    window.openDcSaved = function() {
+        document.getElementById('dcSavedModal').classList.add('active');
+        loadDcSavedList();
+    };
+    window.closeDcSaved = function() {
+        document.getElementById('dcSavedModal').classList.remove('active');
+    };
+
+    async function loadDcSavedList() {
+        if (!currentUser || !window.YIS_PREMIUM || !window.YIS_PREMIUM.isPro) return;
+        var list = document.getElementById('dcSavedList');
+        if (!list) return;
+        list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">Loading...</p>';
+
+        try {
+            var snap = await db.collection('users').doc(currentUser.uid).collection('savedDividends').orderBy('createdAt', 'desc').get();
+            if (snap.empty) {
+                list.innerHTML = '<p style="color:var(--text-muted);font-size:13px;">No saved calculations yet. Run a calculation and click Save.</p>';
+                document.getElementById('dcSavedCount').textContent = '0 / 10 slots used';
+                return;
+            }
+            list.innerHTML = '';
+            snap.forEach(function(doc) {
+                var d = doc.data();
+                var item = document.createElement('div');
+                item.className = 'dc-saved-item';
+                item.innerHTML = '<div><div class="dc-saved-name">' + (d.name || 'Untitled') + '</div><div class="dc-saved-meta">' + fmt(d.finalBalance || 0) + ' portfolio &middot; ' + fmt(d.finalIncome || 0) + '/yr income</div></div><button class="dc-saved-del" onclick="event.stopPropagation();deleteDcSaved(\'' + doc.id + '\')">&times;</button>';
+                item.addEventListener('click', function() {
+                    if (d.params) {
+                        document.getElementById('fInit').value = d.params.init || 10000;
+                        document.getElementById('fMonth').value = d.params.monthly || 200;
+                        document.getElementById('fPrice').value = d.params.price || 50;
+                        document.getElementById('fYield').value = d.params.yield || 3.5;
+                        document.getElementById('fDivGr').value = d.params.divGr || 5;
+                        document.getElementById('fPrGr').value = d.params.prGr || 7;
+                        document.getElementById('fFreq').value = d.params.freq || 4;
+                        document.getElementById('fYrs').value = d.params.years || 10;
+                        document.getElementById('fDrip').checked = d.params.drip !== false;
+                        closeDcSaved();
+                        run();
+                    }
+                });
+                list.appendChild(item);
+            });
+            document.getElementById('dcSavedCount').textContent = snap.size + ' / 10 slots used';
+        } catch(err) {
+            list.innerHTML = '<p style="color:#f44336;font-size:13px;">Error loading: ' + err.message + '</p>';
+        }
+    }
+
+    window.dcSaveCalc = async function() {
+        if (!currentUser || !window.YIS_PREMIUM || !window.YIS_PREMIUM.isPro) return;
+        if (!lastResult || !lastResult.rows.length) return;
+
+        var name = prompt('Name this calculation:');
+        if (!name || !name.trim()) return;
+
+        try {
+            var col = db.collection('users').doc(currentUser.uid).collection('savedDividends');
+            var snap = await col.get();
+            if (snap.size >= 10) { alert('Maximum 10 saves. Delete one first.'); return; }
+
+            var last = lastResult.rows[lastResult.rows.length - 1];
+            await col.add({
+                name: name.trim(),
+                params: {
+                    init: v('fInit'), monthly: v('fMonth'), price: v('fPrice'),
+                    yield: v('fYield'), divGr: v('fDivGr'), prGr: v('fPrGr'),
+                    freq: parseInt(document.getElementById('fFreq').value),
+                    years: v('fYrs'), drip: document.getElementById('fDrip').checked
+                },
+                finalBalance: last.bal,
+                finalIncome: last.aDiv,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            alert('Saved "' + name.trim() + '" successfully!');
+        } catch(err) {
+            alert('Error saving: ' + err.message);
+        }
+    };
+
+    window.deleteDcSaved = async function(id) {
+        if (!currentUser) return;
+        if (!confirm('Delete this saved calculation?')) return;
+        try {
+            await db.collection('users').doc(currentUser.uid).collection('savedDividends').doc(id).delete();
+            loadDcSavedList();
+        } catch(err) {
+            alert('Error: ' + err.message);
+        }
+    };
+
+    /* ===== HOOK PRO INTO MAIN RUN ===== */
+    var _origRun = window.run;
+    window.run = function() {
+        _origRun();
+        updateProFeatures();
+    };
+
+    /* ===== PRO BANNER NAME ===== */
+    if (window.YIS_PREMIUM) {
+        window.YIS_PREMIUM.onStatusChange(function(state) {
+            if (state.isPro) {
+                var bannerEl = document.getElementById('dcProBannerName');
+                if (bannerEl) {
+                    var user = (typeof auth !== 'undefined' && auth.currentUser) ? auth.currentUser : null;
+                    if (user) {
+                        var firstName = (user.displayName || user.email || 'Pro').split(' ')[0];
+                        bannerEl.textContent = firstName + ', your Pro Dividend Analysis is active';
+                    }
+                }
+                // Re-run pro features now that we know user is Pro
+                updateProFeatures();
+            }
+        });
+    }
 
     })();
     </script>
