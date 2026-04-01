@@ -815,6 +815,408 @@ function closeFullscreen() {
     // Expose update and data globally for fullscreen chart
     window._yisGetData = () => ({ yearlyData: lastYearlyData, result: lastResult });
 
+    /* ===== PRO FEATURES ===== */
+
+    // --- Pro: Inflation-adjusted calculation ---
+    function calculateInflationAdjusted(yearlyData, inflationRate) {
+        return yearlyData.map(function(d) {
+            var factor = Math.pow(1 + inflationRate / 100, d.year);
+            return {
+                year: d.year,
+                balance: d.balance / factor,
+                invested: d.invested / factor
+            };
+        });
+    }
+
+    // --- Pro: S&P 500 historical average benchmark ---
+    // Uses 10.5% nominal average for S&P 500 benchmark
+    function calculateSP500Benchmark(initial, monthly, years) {
+        var sp500Rate = 10.5;
+        return calculate(initial, monthly, sp500Rate, years).yearlyData;
+    }
+
+    // --- Pro: Update advanced stats ---
+    function updateProStats(result, inflationRate) {
+        var realReturn = document.getElementById('realReturn');
+        var inflationLost = document.getElementById('inflationLost');
+        var monthlyIncome = document.getElementById('monthlyIncome');
+        var fireNumber = document.getElementById('fireNumber');
+
+        if (!realReturn) return; // Not on main page
+
+        var years = parseInt(els.years.value);
+        var factor = Math.pow(1 + inflationRate / 100, years);
+        var realFinal = result.finalBalance / factor;
+        var lost = result.finalBalance - realFinal;
+
+        realReturn.textContent = formatMoney(realFinal, realFinal >= 1e9);
+        inflationLost.textContent = '-' + formatMoney(lost, lost >= 1e9);
+
+        // 4% rule: safe withdrawal rate for retirement
+        var annualIncome = realFinal * 0.04;
+        var monthlyInc = annualIncome / 12;
+        monthlyIncome.textContent = formatMoney(monthlyInc, monthlyInc >= 1e6) + '/mo';
+
+        // FIRE number: 25x annual expenses (assume expenses = monthly contribution * 12 * 2)
+        var monthlyContrib = getMappedValue('monthly');
+        var annualExpenses = Math.max(monthlyContrib * 12 * 2, 30000); // min $30k
+        var fireTarget = annualExpenses * 25;
+        fireNumber.textContent = formatMoney(fireTarget, fireTarget >= 1e9);
+
+        // Color the FIRE number green if you've reached it
+        var fireEl = fireNumber.parentElement;
+        if (fireEl && realFinal >= fireTarget) {
+            fireNumber.style.color = '#00e676';
+        } else if (fireNumber) {
+            fireNumber.style.color = '';
+        }
+    }
+
+    // --- Pro: Update chart with extra datasets ---
+    function updateProChart() {
+        if (!chart || !lastYearlyData) return;
+        var isPro = window.YIS_PREMIUM && window.YIS_PREMIUM.isPro;
+        if (!isPro) {
+            // Remove pro datasets if they exist
+            while (chart.data.datasets.length > 2) {
+                chart.data.datasets.pop();
+            }
+            chart.update('none');
+            return;
+        }
+
+        var inflationEl = document.getElementById('inflationRate');
+        var inflationRate = parseFloat(inflationEl ? inflationEl.value : 3) || 3;
+        var spToggleEl = document.getElementById('spToggle');
+        var showSP = spToggleEl && spToggleEl.checked;
+
+        // Inflation-adjusted line (dataset index 2)
+        var inflationData = calculateInflationAdjusted(lastYearlyData, inflationRate);
+        var inflationBalances = inflationData.map(function(d) { return d.balance; });
+
+        // Ensure we have the inflation dataset
+        if (chart.data.datasets.length < 3) {
+            chart.data.datasets.push({
+                label: 'After Inflation',
+                data: inflationBalances,
+                borderColor: '#D4A843',
+                backgroundColor: 'rgba(212, 168, 67, 0.05)',
+                borderWidth: 2,
+                borderDash: [4, 3],
+                fill: false,
+                tension: 0.35,
+                pointRadius: 0,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: '#D4A843',
+            });
+        } else {
+            chart.data.datasets[2].data = inflationBalances;
+        }
+
+        // S&P 500 benchmark (dataset index 3)
+        if (showSP) {
+            var initial = getMappedValue('initial');
+            var monthly = getMappedValue('monthly');
+            var years = parseInt(els.years.value);
+            var spData = calculateSP500Benchmark(initial, monthly, years);
+            var spBalances = spData.map(function(d) { return d.balance; });
+
+            if (chart.data.datasets.length < 4) {
+                chart.data.datasets.push({
+                    label: 'S&P 500 Avg (10.5%)',
+                    data: spBalances,
+                    borderColor: '#4CAF50',
+                    backgroundColor: 'transparent',
+                    borderWidth: 1.5,
+                    borderDash: [8, 4],
+                    fill: false,
+                    tension: 0.35,
+                    pointRadius: 0,
+                    pointHoverRadius: 4,
+                });
+            } else {
+                chart.data.datasets[3].data = spBalances;
+            }
+        } else {
+            // Remove S&P dataset if toggled off (by label, not index)
+            chart.data.datasets = chart.data.datasets.filter(function(ds) {
+                return ds.label !== 'S&P 500 Avg (10.5%)';
+            });
+        }
+
+        chart.update('none');
+
+        // Update pro stats
+        updateProStats(lastResult, inflationRate);
+    }
+
+    // --- Pro: Wire inflation slider and S&P toggle ---
+    function wireProControls() {
+        var inflationSlider = document.getElementById('inflationRate');
+        var inflationVal = document.getElementById('inflationValue');
+        var spToggleEl = document.getElementById('spToggle');
+
+        if (inflationSlider && inflationVal) {
+            inflationSlider.addEventListener('input', function() {
+                inflationVal.textContent = inflationSlider.value + '%';
+                updateProChart();
+                // Update slider fill with gold accent
+                var pct = ((inflationSlider.value - inflationSlider.min) / (inflationSlider.max - inflationSlider.min)) * 100;
+                var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+                inflationSlider.style.background = 'linear-gradient(to right, #D4A843 ' + pct + '%, ' + (isDark ? '#1a1a1a' : '#e0e0e0') + ' ' + pct + '%)';
+            });
+        }
+
+        if (spToggleEl) {
+            spToggleEl.addEventListener('change', function() {
+                updateProChart();
+            });
+        }
+
+        // Re-run pro chart when premium status changes
+        if (window.YIS_PREMIUM) {
+            window.YIS_PREMIUM.onStatusChange(function() {
+                updateProChart();
+                // Initialize inflation slider fill
+                if (inflationSlider) {
+                    inflationSlider.dispatchEvent(new Event('input'));
+                }
+            });
+        }
+    }
+
+    // Handle both cases: DOM already loaded or not yet
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', wireProControls);
+    } else {
+        wireProControls();
+    }
+
+    // --- Pro: PDF Export ---
+    window.exportPDF = function() {
+        if (!window.YIS_PREMIUM || !window.YIS_PREMIUM.isPro) return;
+        if (!lastResult || !lastYearlyData) return;
+
+        var initial = getMappedValue('initial');
+        var monthly = getMappedValue('monthly');
+        var rate = parseFloat(els.rate.value);
+        var years = parseInt(els.years.value);
+        var inflationRate = parseFloat((document.getElementById('inflationRate') || {}).value) || 3;
+        var factor = Math.pow(1 + inflationRate / 100, years);
+        var realFinal = lastResult.finalBalance / factor;
+
+        // Build HTML content for print
+        var html = '<!DOCTYPE html><html><head><title>Investment Report - Young Investor Simulator</title>';
+        html += '<style>';
+        html += 'body{font-family:Inter,system-ui,sans-serif;max-width:700px;margin:40px auto;padding:20px;color:#222}';
+        html += 'h1{font-size:24px;border-bottom:3px solid #D4A843;padding-bottom:12px;color:#D4A843}';
+        html += 'h2{font-size:18px;margin-top:28px;color:#333}';
+        html += '.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}';
+        html += '.card{background:#f8f8f8;border-radius:8px;padding:16px;border-left:3px solid #D4A843}';
+        html += '.card-label{font-size:11px;color:#888;text-transform:uppercase;letter-spacing:0.5px}';
+        html += '.card-value{font-size:22px;font-weight:700;margin-top:4px}';
+        html += '.green{color:#00a854}';
+        html += '.gold{color:#D4A843}';
+        html += 'table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px}';
+        html += 'th{background:#D4A843;color:#fff;padding:8px 12px;text-align:left}';
+        html += 'td{padding:6px 12px;border-bottom:1px solid #eee}';
+        html += 'tr:nth-child(even){background:#f9f9f9}';
+        html += '.footer{margin-top:40px;padding-top:16px;border-top:1px solid #ddd;font-size:11px;color:#999;text-align:center}';
+        html += '.pro-badge{display:inline-block;background:#D4A843;color:#000;font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;margin-left:8px}';
+        html += '</style></head><body>';
+
+        html += '<h1>Investment Simulation Report <span class="pro-badge">PRO</span></h1>';
+        html += '<p style="color:#666;font-size:13px;">Generated on ' + new Date().toLocaleDateString() + ' by Young Investor Simulator</p>';
+
+        html += '<h2>Parameters</h2>';
+        html += '<div class="grid">';
+        html += '<div class="card"><div class="card-label">Starting Amount</div><div class="card-value">' + formatMoney(initial) + '</div></div>';
+        html += '<div class="card"><div class="card-label">Monthly Contribution</div><div class="card-value">' + formatMoney(monthly) + '</div></div>';
+        html += '<div class="card"><div class="card-label">Annual Return</div><div class="card-value">' + rate + '%</div></div>';
+        html += '<div class="card"><div class="card-label">Duration</div><div class="card-value">' + years + ' years</div></div>';
+        html += '</div>';
+
+        html += '<h2>Results</h2>';
+        html += '<div class="grid">';
+        html += '<div class="card"><div class="card-label">Final Portfolio Value</div><div class="card-value green">' + formatMoney(lastResult.finalBalance) + '</div></div>';
+        html += '<div class="card"><div class="card-label">Total Invested</div><div class="card-value">' + formatMoney(lastResult.totalContributed) + '</div></div>';
+        html += '<div class="card"><div class="card-label">Market Returns</div><div class="card-value green">' + formatMoney(lastResult.totalInterest) + '</div></div>';
+        var mult = lastResult.totalContributed > 0 ? (lastResult.finalBalance / lastResult.totalContributed).toFixed(1) : '0';
+        html += '<div class="card"><div class="card-label">Money Multiplied</div><div class="card-value">' + mult + 'x</div></div>';
+        html += '</div>';
+
+        html += '<h2>Pro Analysis</h2>';
+        html += '<div class="grid">';
+        html += '<div class="card"><div class="card-label">After Inflation (' + inflationRate + '%)</div><div class="card-value gold">' + formatMoney(realFinal) + '</div></div>';
+        html += '<div class="card"><div class="card-label">Purchasing Power Lost</div><div class="card-value" style="color:#e53935">-' + formatMoney(lastResult.finalBalance - realFinal) + '</div></div>';
+        var monthlyPassive = (realFinal * 0.04 / 12);
+        html += '<div class="card"><div class="card-label">Monthly Passive Income (4%)</div><div class="card-value green">' + formatMoney(monthlyPassive) + '/mo</div></div>';
+        var annualExpenses = Math.max(monthly * 12 * 2, 30000);
+        html += '<div class="card"><div class="card-label">FIRE Number (25x expenses)</div><div class="card-value gold">' + formatMoney(annualExpenses * 25) + '</div></div>';
+        html += '</div>';
+
+        html += '<h2>Year-by-Year Breakdown</h2>';
+        html += '<table><tr><th>Year</th><th>Invested</th><th>Portfolio Value</th><th>After Inflation</th><th>Interest Earned</th></tr>';
+        var inflAdj = calculateInflationAdjusted(lastYearlyData, inflationRate);
+        lastYearlyData.forEach(function(d, i) {
+            // Show every year for short durations, every 5 for longer
+            if (years <= 20 || d.year % 5 === 0 || d.year === years) {
+                html += '<tr>';
+                html += '<td>' + d.year + '</td>';
+                html += '<td>' + formatMoney(d.invested) + '</td>';
+                html += '<td style="font-weight:600">' + formatMoney(d.balance) + '</td>';
+                html += '<td style="color:#D4A843">' + formatMoney(inflAdj[i].balance) + '</td>';
+                html += '<td style="color:#00a854">' + formatMoney(d.interest) + '</td>';
+                html += '</tr>';
+            }
+        });
+        html += '</table>';
+
+        html += '<div class="footer">';
+        html += '<strong>Young Investor Simulator</strong> &mdash; younginvestor.app<br>';
+        html += 'This is a projection, not financial advice. Past performance does not guarantee future results.';
+        html += '</div>';
+
+        html += '</body></html>';
+
+        // Open in new window and trigger print
+        var win = window.open('', '_blank');
+        win.document.write(html);
+        win.document.close();
+        setTimeout(function() { win.print(); }, 500);
+    };
+
+    // --- Pro: Saved Simulations (cloud) ---
+    var SAVED_SIMS_KEY = 'saved-simulations';
+
+    window.openSavedSimulations = function() {
+        document.getElementById('savedSimsModal').classList.add('active');
+        loadSavedSimulationsList();
+    };
+
+    window.closeSavedSimulations = function() {
+        document.getElementById('savedSimsModal').classList.remove('active');
+    };
+
+    async function loadSavedSimulationsList() {
+        var listEl = document.getElementById('savedSimsList');
+        var countEl = document.getElementById('savedSimsCount');
+        if (!listEl || !currentUser) return;
+
+        listEl.innerHTML = '<div class="saved-sims-empty">Loading...</div>';
+
+        try {
+            var snap = await db.collection('users').doc(currentUser.uid)
+                .collection('savedSimulations').orderBy('savedAt', 'desc').limit(10).get();
+
+            if (snap.empty) {
+                listEl.innerHTML = '<div class="saved-sims-empty">No saved simulations yet. Use "Save Current as New" below.</div>';
+                countEl.textContent = '0';
+                return;
+            }
+
+            countEl.textContent = snap.size;
+            listEl.innerHTML = '';
+
+            snap.forEach(function(doc) {
+                var d = doc.data();
+                var item = document.createElement('div');
+                item.className = 'saved-sim-item';
+                item.innerHTML = '<div class="saved-sim-info">' +
+                    '<div class="saved-sim-name">' + escapeHtml(d.name || 'Untitled') + '</div>' +
+                    '<div class="saved-sim-detail">' + formatMoney(d.initialMapped || 0) + ' start · ' + formatMoney(d.monthlyMapped || 0) + '/mo · ' + (d.rate || 10) + '% · ' + (d.years || 30) + 'y</div>' +
+                    '</div>' +
+                    '<div class="saved-sim-amount">' + formatMoney(d.finalBalance || 0, true) + '</div>' +
+                    '<div class="saved-sim-actions">' +
+                    '<button class="saved-sim-del" title="Delete" data-id="' + doc.id + '">&times;</button>' +
+                    '</div>';
+
+                // Click to load
+                item.querySelector('.saved-sim-info').addEventListener('click', function() {
+                    applySimData(d);
+                    update();
+                    closeSavedSimulations();
+                    showToast('Loaded: ' + (d.name || 'Untitled'));
+                });
+
+                // Delete button
+                item.querySelector('.saved-sim-del').addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    deleteSavedSimulation(doc.id);
+                });
+
+                listEl.appendChild(item);
+            });
+        } catch(err) {
+            listEl.innerHTML = '<div class="saved-sims-empty">Could not load. Try again.</div>';
+        }
+    }
+
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    }
+
+    window.saveNamedSimulation = async function() {
+        if (!currentUser || !window.YIS_PREMIUM || !window.YIS_PREMIUM.isPro) return;
+
+        // Check slot limit
+        var snap = await db.collection('users').doc(currentUser.uid)
+            .collection('savedSimulations').get();
+        if (snap.size >= 10) {
+            showToast('You have reached the 10-simulation limit. Delete one first.');
+            return;
+        }
+
+        var name = prompt('Name this simulation:');
+        if (!name || !name.trim()) return;
+
+        var data = {
+            name: name.trim(),
+            initial: els.initial.value,
+            initialMapped: getMappedValue('initial'),
+            monthly: els.monthly.value,
+            monthlyMapped: getMappedValue('monthly'),
+            rate: els.rate.value,
+            years: els.years.value,
+            currency: currency,
+            finalBalance: lastResult ? lastResult.finalBalance : 0,
+            savedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        try {
+            await db.collection('users').doc(currentUser.uid)
+                .collection('savedSimulations').add(data);
+            showToast('Saved: ' + name.trim());
+            loadSavedSimulationsList();
+        } catch(err) {
+            showToast('Save failed. Try again.');
+        }
+    };
+
+    async function deleteSavedSimulation(docId) {
+        if (!currentUser) return;
+        try {
+            await db.collection('users').doc(currentUser.uid)
+                .collection('savedSimulations').doc(docId).delete();
+            showToast('Simulation deleted.');
+            loadSavedSimulationsList();
+        } catch(err) {
+            showToast('Delete failed.');
+        }
+    }
+
+    // Hook into main update() to also update pro features
+    var _origUpdate = update;
+    update = function() {
+        _origUpdate();
+        if (window.YIS_PREMIUM && window.YIS_PREMIUM.isPro) {
+            updateProChart();
+        }
+    };
+
     // --- Theme ---
     function initTheme() {
         const saved = localStorage.getItem('yis-theme') || 'dark';

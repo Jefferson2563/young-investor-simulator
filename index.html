@@ -86,13 +86,30 @@
                             <div class="profile-email" id="profileEmail"></div>
                         </div>
                         <div class="profile-divider"></div>
-                        <div class="profile-badge" id="profileBadge">
+
+                        <!-- FREE user badge -->
+                        <div class="profile-badge profile-badge-free" id="profileBadgeFree" data-free-only>
                             <span class="badge-icon">&#9734;</span> Free Plan
                         </div>
-                        <a href="#pro" class="profile-link" onclick="closeProfileDropdown()">Upgrade to Pro</a>
+                        <a href="#pro" class="profile-link" data-free-only onclick="closeProfileDropdown()">Upgrade to Pro</a>
+
+                        <!-- PRO user badge -->
+                        <div class="profile-badge-pro" id="profileBadgePro" data-pro-only style="display:none;">
+                            <div class="pro-badge-header">
+                                <span class="pro-star">&#9733;</span>
+                                <span class="pro-badge-title">Pro Member</span>
+                            </div>
+                            <div class="pro-badge-detail" id="proPlanDetail">Annual Plan</div>
+                            <div class="pro-badge-expiry" id="proPlanExpiry">Renews Apr 2027</div>
+                        </div>
+
                         <div class="profile-divider"></div>
                         <button class="profile-action" id="saveBtn" onclick="closeProfileDropdown()">
                             <span>💾</span> Save Simulation
+                        </button>
+                        <!-- PRO: saved simulations list -->
+                        <button class="profile-action" id="loadSavedBtn" data-pro-only style="display:none;" onclick="openSavedSimulations()">
+                            <span>📂</span> My Saved Simulations
                         </button>
                         <div class="profile-divider"></div>
                         <button class="profile-signout" onclick="handleSignOut()">Sign Out</button>
@@ -175,6 +192,41 @@
 
     <!-- ========== SAVE TOAST ========== -->
     <div class="toast" id="toast"></div>
+
+    <!-- ========== SAVED SIMULATIONS MODAL (Pro only) ========== -->
+    <div class="modal-overlay" id="savedSimsModal">
+        <div class="modal saved-sims-modal">
+            <button class="modal-close" onclick="closeSavedSimulations()">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">
+                    <span class="pro-star">&#9733;</span> My Saved Simulations
+                </h2>
+                <p class="modal-desc">Save up to 10 named simulations to the cloud. Access them from any device.</p>
+            </div>
+            <div class="saved-sims-list" id="savedSimsList">
+                <div class="saved-sims-empty">No saved simulations yet. Use the save button to save your first one.</div>
+            </div>
+            <div class="saved-sims-actions">
+                <button class="btn-save-new" id="saveNewSimBtn" onclick="saveNamedSimulation()">
+                    <span>+</span> Save Current as New
+                </button>
+                <div class="saved-sims-count"><span id="savedSimsCount">0</span>/10 slots used</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== PRO WELCOME BANNER (Pro users only) ========== -->
+    <div class="pro-banner" id="proBanner" data-pro-only style="display:none;">
+        <div class="container pro-banner-inner">
+            <div class="pro-banner-left">
+                <span class="pro-banner-star">&#9733;</span>
+                <span class="pro-banner-text">Welcome back, <strong id="proBannerName">Pro Member</strong></span>
+            </div>
+            <div class="pro-banner-right">
+                <span class="pro-banner-features">Inflation Projections &middot; S&P 500 Benchmark &middot; PDF Export &middot; Cloud Saves</span>
+            </div>
+        </div>
+    </div>
 
     <!-- ========== HERO ========== -->
     <header class="hero" id="hero">
@@ -297,6 +349,41 @@
                         <button class="currency-btn active" data-currency="$">$ USD</button>
                         <button class="currency-btn" data-currency="€">€ EUR</button>
                     </div>
+
+                    <!-- ===== PRO-ONLY CONTROLS ===== -->
+                    <div class="pro-controls" data-pro-only style="display:none;">
+                        <div class="pro-controls-label">
+                            <span class="pro-controls-star">&#9733;</span> Pro Tools
+                        </div>
+
+                        <!-- Inflation Rate -->
+                        <div class="control-group">
+                            <div class="control-header">
+                                <label for="inflationRate">Inflation rate</label>
+                                <span class="control-value" id="inflationValue">3%</span>
+                            </div>
+                            <input type="range" id="inflationRate" min="0" max="15" step="0.5" value="3">
+                            <div class="control-range"><span>0%</span><span>15%</span></div>
+                        </div>
+
+                        <!-- S&P 500 Benchmark Toggle -->
+                        <div class="pro-toggle-row">
+                            <label class="pro-toggle-label" for="spToggle">Show S&P 500 benchmark</label>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="spToggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- PRO: Upgrade teaser for free users -->
+                    <div class="pro-teaser" data-free-only>
+                        <div class="pro-teaser-inner" onclick="document.getElementById('pro').scrollIntoView({behavior:'smooth'})">
+                            <span class="pro-teaser-star">&#9733;</span>
+                            <span>Unlock inflation projections, S&P 500 benchmark, PDF export &amp; more</span>
+                            <span class="pro-teaser-arrow">&rarr;</span>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Chart + Stats -->
@@ -323,11 +410,38 @@
                             <div class="stat-label" id="goalLabel">To hit $100K</div>
                         </div>
                     </div>
-                    <!-- Share Button -->
-                    <button class="share-btn" id="shareBtn" onclick="shareResults()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                        <span data-i18n="share">Share my results</span>
-                    </button>
+                    <!-- ===== PRO ADVANCED STATS ===== -->
+                    <div class="pro-stats-grid" data-pro-only style="display:none;">
+                        <div class="stat-card pro-stat">
+                            <div class="stat-value" id="realReturn">$0</div>
+                            <div class="stat-label">After inflation</div>
+                        </div>
+                        <div class="stat-card pro-stat">
+                            <div class="stat-value" id="inflationLost">$0</div>
+                            <div class="stat-label">Purchasing power lost</div>
+                        </div>
+                        <div class="stat-card pro-stat">
+                            <div class="stat-value" id="monthlyIncome">$0</div>
+                            <div class="stat-label">Monthly passive income (4% rule)</div>
+                        </div>
+                        <div class="stat-card pro-stat">
+                            <div class="stat-value" id="fireNumber">$0</div>
+                            <div class="stat-label">FIRE number (25x expenses)</div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons Row -->
+                    <div class="sim-actions">
+                        <button class="share-btn" id="shareBtn" onclick="shareResults()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                            <span data-i18n="share">Share my results</span>
+                        </button>
+                        <!-- PRO: PDF Export -->
+                        <button class="share-btn pro-export-btn" id="pdfExportBtn" data-pro-only style="display:none;" onclick="exportPDF()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                            <span>Export PDF Report</span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -502,8 +616,8 @@
         </div>
     </section>
 
-    <!-- ========== FREE vs PRO COMPARISON ========== -->
-    <section class="pro-section" id="pro">
+    <!-- ========== FREE vs PRO COMPARISON (hidden for Pro users) ========== -->
+    <section class="pro-section" id="pro" data-free-only>
         <div class="container">
             <div class="section-header center">
                 <h2 class="section-title">Free vs Pro</h2>

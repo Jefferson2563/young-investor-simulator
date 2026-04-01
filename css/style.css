@@ -1958,6 +1958,400 @@ a.pro-hl-card,
     color: var(--text-muted);
 }
 
+/* ========== PRO USER SYSTEM ========== */
+
+/* --- Gold Pro Variables --- */
+:root {
+    --gold: #D4A843;
+    --gold-soft: rgba(212, 168, 67, 0.08);
+    --gold-border: rgba(212, 168, 67, 0.3);
+    --gold-glow: rgba(212, 168, 67, 0.15);
+}
+
+/* --- Pro Banner --- */
+.pro-banner {
+    background: linear-gradient(90deg, var(--gold-soft) 0%, transparent 50%, var(--gold-soft) 100%);
+    border-bottom: 1px solid var(--gold-border);
+    padding: 10px 0;
+    position: relative;
+    z-index: 90;
+}
+
+.pro-banner-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.pro-banner-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--text);
+}
+
+.pro-banner-star {
+    color: var(--gold);
+    font-size: 18px;
+}
+
+.pro-banner-right {
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.3px;
+}
+
+.pro-banner-features {
+    opacity: 0.8;
+}
+
+/* --- Profile Badge (Pro) --- */
+.profile-badge-pro {
+    padding: 10px 14px;
+    background: var(--gold-soft);
+    border: 1px solid var(--gold-border);
+    border-radius: 8px;
+    margin: 4px 0;
+}
+
+.pro-badge-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.pro-badge-header .pro-star {
+    color: var(--gold);
+    font-size: 16px;
+}
+
+.pro-badge-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--gold);
+}
+
+.pro-badge-detail {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-left: 22px;
+}
+
+.pro-badge-expiry {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-left: 22px;
+}
+
+/* --- Pro Avatar Ring --- */
+.is-pro .user-avatar {
+    box-shadow: 0 0 0 2px var(--gold), 0 0 12px var(--gold-glow);
+}
+
+/* --- Pro Controls Section --- */
+.pro-controls {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gold-border);
+}
+
+.pro-controls-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+}
+
+.pro-controls-star {
+    font-size: 14px;
+}
+
+/* Pro slider accent */
+.pro-controls input[type="range"]::-webkit-slider-thumb {
+    background: var(--gold);
+}
+
+/* --- Toggle Switch --- */
+.pro-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    margin-top: 8px;
+}
+
+.pro-toggle-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.toggle-switch {
+    position: relative;
+    width: 42px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border-light);
+    border-radius: 22px;
+    transition: all 0.2s;
+}
+
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    left: 2px;
+    top: 2px;
+    background: var(--text);
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+    background: var(--gold);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+    transform: translateX(20px);
+    background: #000;
+}
+
+/* --- Pro Teaser (for Free users) --- */
+.pro-teaser {
+    margin-top: 16px;
+}
+
+.pro-teaser-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    background: var(--gold-soft);
+    border: 1px solid var(--gold-border);
+    border-radius: var(--radius);
+    font-size: 12px;
+    color: var(--gold);
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.pro-teaser-inner:hover {
+    background: rgba(212, 168, 67, 0.14);
+    transform: translateY(-1px);
+}
+
+.pro-teaser-star {
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.pro-teaser-arrow {
+    margin-left: auto;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+/* --- Pro Stats Grid --- */
+.pro-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.pro-stat {
+    border-color: var(--gold-border) !important;
+    background: var(--gold-soft) !important;
+}
+
+.pro-stat .stat-value {
+    color: var(--gold);
+    font-size: 18px;
+}
+
+.pro-stat .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+/* --- Sim Actions Row --- */
+.sim-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.pro-export-btn {
+    background: var(--gold-soft) !important;
+    border-color: var(--gold-border) !important;
+    color: var(--gold) !important;
+}
+
+.pro-export-btn:hover {
+    background: rgba(212, 168, 67, 0.15) !important;
+    transform: translateY(-1px);
+}
+
+/* --- Saved Simulations Modal --- */
+.saved-sims-modal {
+    max-width: 520px;
+}
+
+.saved-sims-modal .modal-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.saved-sims-modal .modal-title .pro-star {
+    color: var(--gold);
+}
+
+.saved-sims-list {
+    max-height: 320px;
+    overflow-y: auto;
+    margin: 16px 0;
+}
+
+.saved-sims-empty {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 13px;
+    padding: 32px 16px;
+}
+
+.saved-sim-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: var(--bg-card);
+    transition: all var(--transition);
+    cursor: pointer;
+}
+
+.saved-sim-item:hover {
+    border-color: var(--gold-border);
+    background: var(--gold-soft);
+}
+
+.saved-sim-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.saved-sim-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.saved-sim-detail {
+    font-size: 11px;
+    color: var(--text-muted);
+}
+
+.saved-sim-amount {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--green);
+    flex-shrink: 0;
+    margin: 0 12px;
+}
+
+.saved-sim-actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.saved-sim-del {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.15s;
+}
+
+.saved-sim-del:hover {
+    color: #ff5252;
+    background: rgba(255, 82, 82, 0.1);
+}
+
+.saved-sims-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+}
+
+.btn-save-new {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    background: var(--gold);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-save-new:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px var(--gold-glow);
+}
+
+.saved-sims-count {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* --- Pro Chart Lines --- */
+/* Inflation and S&P lines use distinct styles via Chart.js config */
+
+/* --- Pro Data Attribute Gating (CSS fallback) --- */
+.is-free [data-pro-only] { display: none !important; }
+.is-pro [data-free-only] { display: none !important; }
+
 /* ========== RESPONSIVE ========== */
 @media (max-width: 900px) {
     .sim-grid { grid-template-columns: 1fr; }
@@ -1967,6 +2361,8 @@ a.pro-hl-card,
     .nav-links { display: none; }
     .brokers-grid { grid-template-columns: repeat(2, 1fr); }
     .save-text { display: none; }
+    .pro-banner-right { display: none; }
+    .pro-stats-grid { grid-template-columns: repeat(2, 1fr); }
     .fullscreen-overlay { padding: 20px; }
     .fullscreen-chart-wrap { height: 60vh; }
     .fullscreen-stats { flex-wrap: wrap; gap: 16px; }
@@ -2019,6 +2415,9 @@ a.pro-hl-card,
     /* Stats grid */
     .stats-grid { grid-template-columns: 1fr; gap: 12px; }
     .stat-card { padding: 16px; }
+    .pro-stats-grid { grid-template-columns: 1fr 1fr; }
+    .sim-actions { flex-direction: column; }
+    .pro-banner-inner { flex-direction: column; text-align: center; gap: 4px; }
 
     /* Milestones */
     .milestones-grid { gap: 8px; }

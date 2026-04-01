@@ -36,26 +36,6 @@
 
     // Update all UI elements that show Pro/Free status
     function updateUI() {
-        // Profile badge
-        var badges = document.querySelectorAll('.profile-badge, #profileBadge');
-        badges.forEach(function(b) {
-            if (state.isPro) {
-                b.innerHTML = '<span class="badge-icon" style="color:#D4A843;">★</span> Pro Plan';
-                b.style.color = '#D4A843';
-                b.style.fontWeight = '700';
-            } else {
-                b.innerHTML = '<span class="badge-icon">☆</span> Free Plan';
-                b.style.color = '';
-                b.style.fontWeight = '';
-            }
-        });
-
-        // Upgrade links — hide if Pro
-        var upgradeLinks = document.querySelectorAll('.profile-link[href*="#pro"], a.profile-link[href*="#pro"]');
-        upgradeLinks.forEach(function(l) {
-            l.style.display = state.isPro ? 'none' : '';
-        });
-
         // Body class for CSS-based gating
         if (state.isPro) {
             document.body.classList.add('is-pro');
@@ -65,10 +45,6 @@
             document.body.classList.remove('is-pro');
         }
 
-        // Pro CTA sections — hide if Pro
-        var proCTAs = document.querySelectorAll('.dc-pro, .pro-cta, [data-pro-cta]');
-        proCTAs.forEach(function(el) { el.style.display = state.isPro ? 'none' : ''; });
-
         // Pro-only elements — show only if Pro
         var proOnly = document.querySelectorAll('[data-pro-only]');
         proOnly.forEach(function(el) { el.style.display = state.isPro ? '' : 'none'; });
@@ -76,6 +52,30 @@
         // Free-only elements — show only if Free
         var freeOnly = document.querySelectorAll('[data-free-only]');
         freeOnly.forEach(function(el) { el.style.display = state.isPro ? 'none' : ''; });
+
+        // Pro CTA sections — hide if Pro
+        var proCTAs = document.querySelectorAll('.dc-pro, .pro-cta, [data-pro-cta]');
+        proCTAs.forEach(function(el) { el.style.display = state.isPro ? 'none' : ''; });
+
+        // --- Pro Profile Badge detail ---
+        var planDetail = document.getElementById('proPlanDetail');
+        var planExpiry = document.getElementById('proPlanExpiry');
+        if (planDetail && state.isPro) {
+            planDetail.textContent = state.planType === 'annual' ? 'Annual Plan' : 'Monthly Plan';
+        }
+        if (planExpiry && state.isPro && state.planExpiry) {
+            var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+            planExpiry.textContent = 'Renews ' + months[state.planExpiry.getMonth()] + ' ' + state.planExpiry.getFullYear();
+        }
+
+        // --- Pro Banner name ---
+        var bannerName = document.getElementById('proBannerName');
+        if (bannerName && state.isPro) {
+            var user = (typeof auth !== 'undefined' && auth.currentUser) ? auth.currentUser : null;
+            if (user) {
+                bannerName.textContent = (user.displayName || user.email || 'Pro Member').split(' ')[0];
+            }
+        }
     }
 
     // Check Firestore for user's subscription status
