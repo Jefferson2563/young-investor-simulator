@@ -192,8 +192,57 @@
         .dc-pro-act.primary{background:var(--gold);color:#000;border-color:var(--gold);}
         .dc-pro-act.primary:hover{transform:translateY(-1px);box-shadow:0 4px 16px var(--gold-glow);}
 
-        @media(max-width:768px){.dc-pro-grid{grid-template-columns:1fr;}.dc-pro-stats{grid-template-columns:repeat(2,1fr);}.dc-fire-h{flex-direction:column;align-items:flex-start;gap:10px;}}
-        @media(max-width:480px){.dc-pro-stats{grid-template-columns:1fr;}}
+        /* Dividend Milestones (Pro) */
+        .dc-milestones{display:none;background:var(--bg-card);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:24px;max-width:880px;margin:0 auto 28px;}
+        .is-pro .dc-milestones{display:block;}
+        .dc-milestones-t{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+        .dc-milestone{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+        .dc-milestone:last-child{border-bottom:none;}
+        .dc-milestone-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;font-family:var(--font-display);}
+        .dc-milestone-icon.reached{background:var(--gold);color:#000;}
+        .dc-milestone-icon.pending{background:var(--bg-secondary);color:var(--text-muted);border:1px dashed var(--border);}
+        .dc-milestone-info{flex:1;}
+        .dc-milestone-label{font-size:13px;font-weight:700;color:var(--text);}
+        .dc-milestone-detail{font-size:11px;color:var(--text-muted);}
+        .dc-milestone-status{font-size:12px;font-weight:700;}
+        .dc-milestone-status.reached{color:var(--gold);}
+        .dc-milestone-status.pending{color:var(--text-muted);}
+
+        /* Dividend Calendar (Pro) */
+        .dc-calendar{display:none;background:var(--bg-card);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:24px;max-width:880px;margin:0 auto 28px;}
+        .is-pro .dc-calendar{display:block;}
+        .dc-calendar-t{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+        .dc-cal-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+        .dc-cal-month{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:12px;text-align:center;transition:all 0.2s;}
+        .dc-cal-month.payout{border-color:var(--gold-border);background:var(--gold-soft);}
+        .dc-cal-month-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);margin-bottom:4px;}
+        .dc-cal-month-val{font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--text);}
+        .dc-cal-month.payout .dc-cal-month-val{color:var(--gold);}
+        .dc-cal-total{margin-top:12px;text-align:center;padding:12px;background:var(--gold-soft);border:1px solid var(--gold-border);border-radius:var(--radius);}
+        .dc-cal-total-v{font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--gold);}
+        .dc-cal-total-l{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.4px;}
+
+        /* Scenario Compare (Pro) */
+        .dc-compare{display:none;background:var(--bg-card);border:1px solid var(--gold-border);border-radius:var(--radius-lg);padding:24px;max-width:880px;margin:0 auto 28px;}
+        .is-pro .dc-compare{display:block;}
+        .dc-compare-t{font-family:var(--font-display);font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;display:flex;align-items:center;gap:8px;}
+        .dc-compare-grid{display:grid;grid-template-columns:1fr 60px 1fr;gap:12px;align-items:center;}
+        .dc-compare-col{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:16px;}
+        .dc-compare-col h4{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;margin:0 0 12px;}
+        .dc-compare-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);}
+        .dc-compare-row:last-child{border-bottom:none;}
+        .dc-compare-row .label{color:var(--text-muted);}
+        .dc-compare-row .val{font-weight:700;color:var(--text);}
+        .dc-compare-vs{font-family:var(--font-display);font-size:16px;font-weight:800;color:var(--text-muted);text-align:center;}
+        .dc-compare-winner{margin-top:12px;padding:12px;border-radius:var(--radius);text-align:center;font-size:13px;font-weight:700;}
+        .dc-compare-winner.a{background:var(--gold-soft);border:1px solid var(--gold-border);color:var(--gold);}
+        .dc-compare-winner.b{background:rgba(76,175,80,0.08);border:1px solid rgba(76,175,80,0.25);color:#4CAF50;}
+
+        @media(max-width:768px){.dc-pro-grid{grid-template-columns:1fr;}.dc-pro-stats{grid-template-columns:repeat(2,1fr);}.dc-fire-h{flex-direction:column;align-items:flex-start;gap:10px;}.dc-cal-grid{grid-template-columns:repeat(3,1fr);}.dc-compare-grid{grid-template-columns:1fr;}.dc-compare-vs{display:none;}}
+        @media(max-width:480px){.dc-pro-stats{grid-template-columns:1fr;}.dc-cal-grid{grid-template-columns:repeat(2,1fr);}}
+
+        /* Gold text selection for dividend tool */
+        [data-tool="dividends"] ::selection { background: var(--gold) !important; color: #000 !important; }
 
         /* Disclaimer */
         .dc-disc{max-width:880px;margin:0 auto 28px;padding:20px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);font-size:11px;color:var(--text-muted);line-height:1.6;}
@@ -206,7 +255,7 @@
         @media(max-width:480px){.dc-grid{grid-template-columns:1fr;}.dc-sum{grid-template-columns:1fr;}.dc-chart-h{flex-direction:column;align-items:flex-start;}}
     </style>
 </head>
-<body>
+<body data-tool="dividends">
 
     <!-- NAVBAR -->
     <nav class="navbar" id="navbar">
@@ -300,7 +349,7 @@
             <!-- PRO BANNER -->
             <div class="dc-pro-banner" data-pro-only>
                 <div class="dc-pro-banner-t" id="dcProBannerName">Pro Dividend Analysis Active</div>
-                <p class="dc-pro-banner-s">Tax impact, inflation adjustment, stock presets, income projections, FIRE tracker, PDF export & cloud save</p>
+                <p class="dc-pro-banner-s">Tax impact, inflation adjustment, stock presets, income projections, FIRE tracker, income milestones, dividend calendar, DRIP comparison, PDF export & cloud save</p>
             </div>
 
             <!-- PRO CONTROLS -->
@@ -324,9 +373,15 @@
                             <button class="dc-preset-btn" data-preset="SCHD">SCHD</button>
                             <button class="dc-preset-btn" data-preset="VYM">VYM</button>
                             <button class="dc-preset-btn" data-preset="JEPI">JEPI</button>
+                            <button class="dc-preset-btn" data-preset="VOO">VOO</button>
                             <button class="dc-preset-btn" data-preset="KO">KO</button>
                             <button class="dc-preset-btn" data-preset="JNJ">JNJ</button>
                             <button class="dc-preset-btn" data-preset="O">O</button>
+                            <button class="dc-preset-btn" data-preset="PG">PG</button>
+                            <button class="dc-preset-btn" data-preset="MSFT">MSFT</button>
+                            <button class="dc-preset-btn" data-preset="AAPL">AAPL</button>
+                            <button class="dc-preset-btn" data-preset="T">T</button>
+                            <button class="dc-preset-btn" data-preset="MAIN">MAIN</button>
                             <button class="dc-preset-btn" data-preset="CUSTOM" style="border-style:dashed;">Custom</button>
                         </div>
                     </div>
@@ -335,9 +390,9 @@
 
             <!-- PRO ACTIONS (Save/Export) -->
             <div class="dc-pro-actions" data-pro-only>
-                <button class="dc-pro-act" onclick="openDcSaved()">&#128193; My Saved</button>
-                <button class="dc-pro-act" onclick="dcExportPDF()">&#128196; PDF Report</button>
-                <button class="dc-pro-act primary" onclick="dcSaveCalc()">&#128190; Save Calculation</button>
+                <button class="dc-pro-act" onclick="openDcSaved()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> My Saved</button>
+                <button class="dc-pro-act" onclick="dcExportPDF()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> PDF Report</button>
+                <button class="dc-pro-act primary" onclick="dcSaveCalc()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save Calculation</button>
             </div>
 
             <!-- SUMMARY -->
@@ -376,7 +431,11 @@
                     <span class="dc-teaser-feat">Stock Presets</span>
                     <span class="dc-teaser-feat">Income Chart</span>
                     <span class="dc-teaser-feat">FIRE Tracker</span>
+                    <span class="dc-teaser-feat">Income Milestones</span>
+                    <span class="dc-teaser-feat">Dividend Calendar</span>
+                    <span class="dc-teaser-feat">DRIP Comparison</span>
                     <span class="dc-teaser-feat">PDF Export</span>
+                    <span class="dc-teaser-feat">Cloud Save</span>
                 </div>
                 <a href="../index.html#pro">Upgrade to Pro</a>
             </div>
@@ -436,6 +495,38 @@
                 </div>
             </div>
 
+            <!-- PRO: DIVIDEND MILESTONES -->
+            <div class="dc-milestones" id="milestonesWrap" data-pro-only style="display:none;">
+                <div class="dc-milestones-t">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                    Income Milestones
+                </div>
+                <div id="milestonesList"></div>
+            </div>
+
+            <!-- PRO: DIVIDEND CALENDAR -->
+            <div class="dc-calendar" id="calendarWrap" data-pro-only style="display:none;">
+                <div class="dc-calendar-t">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Year 1 Dividend Calendar
+                </div>
+                <div class="dc-cal-grid" id="calGrid"></div>
+                <div class="dc-cal-total">
+                    <div class="dc-cal-total-v" id="calTotal">$0</div>
+                    <div class="dc-cal-total-l">Total Year 1 Dividends</div>
+                </div>
+            </div>
+
+            <!-- PRO: SCENARIO COMPARISON -->
+            <div class="dc-compare" id="compareWrap" data-pro-only style="display:none;">
+                <div class="dc-compare-t">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    DRIP vs No DRIP — The Snowball Difference
+                </div>
+                <div class="dc-compare-grid" id="compareGrid"></div>
+                <div class="dc-compare-winner" id="compareWinner"></div>
+            </div>
+
             <!-- SAVED SIMULATIONS MODAL -->
             <div class="dc-saved-modal" id="dcSavedModal">
                 <div class="dc-saved-inner">
@@ -451,7 +542,7 @@
             <!-- PRO CTA (free users only) -->
             <div class="dc-pro" id="proBox" data-free-only style="display:none;">
                 <h3>Want deeper dividend analysis?</h3>
-                <p>Pro unlocks tax impact, inflation adjustment, stock presets, income projections, FIRE tracker, PDF export & cloud save.</p>
+                <p>Pro unlocks tax impact, inflation adjustment, stock presets, income projections, FIRE tracker, income milestones, dividend calendar, DRIP comparison, PDF export & cloud save.</p>
                 <a href="../index.html#pro">Upgrade to Pro</a>
             </div>
 
@@ -501,10 +592,44 @@
     document.getElementById('themeToggle').addEventListener('click',function(){var c=document.documentElement.getAttribute('data-theme');var n=c==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);localStorage.setItem('yis-theme',n);document.getElementById('themeIcon').textContent=n==='dark'?'\u2600\uFE0F':'\uD83C\uDF19';if(chart)drawChart(lastResult);});
 
     /* ===== LANG ===== */
+    var DC_TRANSLATIONS = {
+        en: { h1part: 'passive income', h1pre: 'How much ', h1post: ' will you earn?', sub: 'See exactly where you\'ll be in 10, 20, or 30 years. Real formulas. Honest projections. No BS.', eco: 'YOUNG INVESTOR ECOSYSTEM', formTitle: 'Your Numbers', lblInit: 'Initial Investment', lblMonth: 'Monthly Contribution', lblPrice: 'Share Price', lblYield: 'Dividend Yield (annual)', lblDivGr: 'Dividend Growth / yr', lblPrGr: 'Share Price Growth / yr', lblFreq: 'Payout Frequency', lblYrs: 'Years', lblDrip: 'Reinvest Dividends (DRIP)', btnCalc: 'Calculate My Dividends', navSim: 'Simulator', navDiv: 'Dividends', disc: 'Disclaimer' },
+        fr: { h1part: 'revenus passifs', h1pre: 'Combien de ', h1post: ' allez-vous gagner ?', sub: 'Voyez exactement où vous serez dans 10, 20 ou 30 ans. Vraies formules. Projections honnêtes.', eco: 'ÉCOSYSTÈME YOUNG INVESTOR', formTitle: 'Vos chiffres', lblInit: 'Investissement initial', lblMonth: 'Contribution mensuelle', lblPrice: 'Prix de l\'action', lblYield: 'Rendement du dividende', lblDivGr: 'Croissance dividende / an', lblPrGr: 'Croissance prix / an', lblFreq: 'Fréquence de versement', lblYrs: 'Années', lblDrip: 'Réinvestir les dividendes (DRIP)', btnCalc: 'Calculer mes dividendes', navSim: 'Simulateur', navDiv: 'Dividendes', disc: 'Avertissement' },
+        es: { h1part: 'ingresos pasivos', h1pre: '¿Cuántos ', h1post: ' ganarás?', sub: 'Mira exactamente dónde estarás en 10, 20 o 30 años. Fórmulas reales. Proyecciones honestas.', eco: 'ECOSISTEMA YOUNG INVESTOR', formTitle: 'Tus números', lblInit: 'Inversión inicial', lblMonth: 'Aporte mensual', lblPrice: 'Precio de la acción', lblYield: 'Rendimiento del dividendo', lblDivGr: 'Crecimiento dividendo / año', lblPrGr: 'Crecimiento precio / año', lblFreq: 'Frecuencia de pago', lblYrs: 'Años', lblDrip: 'Reinvertir dividendos (DRIP)', btnCalc: 'Calcular mis dividendos', navSim: 'Simulador', navDiv: 'Dividendos', disc: 'Aviso legal' },
+        pt: { h1part: 'renda passiva', h1pre: 'Quanto de ', h1post: ' você vai ganhar?', sub: 'Veja exatamente onde estará em 10, 20 ou 30 anos. Fórmulas reais. Projeções honestas.', eco: 'ECOSSISTEMA YOUNG INVESTOR', formTitle: 'Seus números', lblInit: 'Investimento inicial', lblMonth: 'Aporte mensal', lblPrice: 'Preço da ação', lblYield: 'Rendimento do dividendo', lblDivGr: 'Crescimento dividendo / ano', lblPrGr: 'Crescimento preço / ano', lblFreq: 'Frequência de pagamento', lblYrs: 'Anos', lblDrip: 'Reinvestir dividendos (DRIP)', btnCalc: 'Calcular meus dividendos', navSim: 'Simulador', navDiv: 'Dividendos', disc: 'Aviso' },
+        de: { h1part: 'passives Einkommen', h1pre: 'Wie viel ', h1post: ' wirst du verdienen?', sub: 'Sieh genau, wo du in 10, 20 oder 30 Jahren stehst. Echte Formeln. Ehrliche Prognosen.', eco: 'YOUNG INVESTOR ÖKOSYSTEM', formTitle: 'Deine Zahlen', lblInit: 'Anfangsinvestition', lblMonth: 'Monatlicher Beitrag', lblPrice: 'Aktienkurs', lblYield: 'Dividendenrendite', lblDivGr: 'Dividendenwachstum / Jahr', lblPrGr: 'Kurswachstum / Jahr', lblFreq: 'Ausschüttungsfrequenz', lblYrs: 'Jahre', lblDrip: 'Dividenden reinvestieren (DRIP)', btnCalc: 'Meine Dividenden berechnen', navSim: 'Simulator', navDiv: 'Dividenden', disc: 'Haftungsausschluss' },
+        ar: { h1part: 'دخل سلبي', h1pre: 'كم من ', h1post: ' ستكسب؟', sub: 'اعرف بالضبط أين ستكون خلال 10 أو 20 أو 30 سنة. صيغ حقيقية. توقعات صادقة.', eco: 'منظومة YOUNG INVESTOR', formTitle: 'أرقامك', lblInit: 'الاستثمار الأولي', lblMonth: 'المساهمة الشهرية', lblPrice: 'سعر السهم', lblYield: 'عائد التوزيعات', lblDivGr: 'نمو التوزيعات / سنة', lblPrGr: 'نمو السعر / سنة', lblFreq: 'تكرار الدفع', lblYrs: 'سنوات', lblDrip: 'إعادة استثمار التوزيعات (DRIP)', btnCalc: 'احسب توزيعاتي', navSim: 'المحاكي', navDiv: 'الأرباح', disc: 'إخلاء مسؤولية' },
+        zh: { h1part: '被动收入', h1pre: '你能赚多少', h1post: '？', sub: '看看10年、20年或30年后你的准确位置。真实公式。诚实预测。', eco: 'YOUNG INVESTOR 生态系统', formTitle: '你的数据', lblInit: '初始投资', lblMonth: '每月定投', lblPrice: '股价', lblYield: '股息率', lblDivGr: '股息增长 / 年', lblPrGr: '价格增长 / 年', lblFreq: '派息频率', lblYrs: '年数', lblDrip: '股息再投资 (DRIP)', btnCalc: '计算我的股息', navSim: '模拟器', navDiv: '股息', disc: '免责声明' }
+    };
+    function applyDcLang(lang) {
+        var t = DC_TRANSLATIONS[lang]; if (!t) return;
+        var h1 = document.querySelector('.dc-h1');
+        if (h1) h1.innerHTML = t.h1pre + '<span>' + t.h1part + '</span>' + t.h1post;
+        var sub = document.querySelector('.dc-sub'); if (sub) sub.textContent = t.sub;
+        var eco = document.querySelector('.dc-eco'); if (eco) eco.textContent = t.eco;
+        var ft = document.querySelector('.dc-form-title'); if (ft) ft.textContent = t.formTitle;
+        var labels = document.querySelectorAll('.dc-f label');
+        var labelKeys = ['lblInit','lblMonth','lblPrice','lblYield','lblDivGr','lblPrGr','lblFreq','lblYrs'];
+        labels.forEach(function(lbl, i) { if (labelKeys[i] && t[labelKeys[i]]) lbl.textContent = t[labelKeys[i]]; });
+        var dripLbl = document.querySelector('label[for="fDrip"]'); if (dripLbl) dripLbl.textContent = t.lblDrip;
+        var goBtn = document.querySelector('.dc-go'); if (goBtn) goBtn.textContent = t.btnCalc;
+        // Nav
+        var navLinks = document.querySelectorAll('.nav-links a');
+        navLinks.forEach(function(a) {
+            if (a.getAttribute('href') && a.getAttribute('href').indexOf('#simulator') > -1) a.textContent = t.navSim;
+            if (a.classList.contains('nav-active')) a.textContent = t.navDiv;
+        });
+        // Direction
+        if (lang === 'ar') { document.documentElement.setAttribute('dir', 'rtl'); document.documentElement.setAttribute('lang', 'ar'); }
+        else { document.documentElement.setAttribute('dir', 'ltr'); document.documentElement.setAttribute('lang', lang); }
+        document.querySelectorAll('.lang-option').forEach(function(x){x.classList.toggle('active',x.dataset.lang===lang);});
+        document.getElementById('langFlag').textContent = lang.toUpperCase();
+        localStorage.setItem('yis-lang', lang);
+    }
     document.getElementById('langBtn').addEventListener('click',function(e){e.stopPropagation();document.getElementById('langDropdown').classList.toggle('open');});
-    document.querySelectorAll('.lang-option').forEach(function(o){o.addEventListener('click',function(){document.getElementById('langDropdown').classList.remove('open');localStorage.setItem('yis-lang',o.dataset.lang);document.querySelectorAll('.lang-option').forEach(function(x){x.classList.toggle('active',x.dataset.lang===o.dataset.lang);});document.getElementById('langFlag').textContent=o.dataset.lang.toUpperCase();});});
+    document.querySelectorAll('.lang-option').forEach(function(o){o.addEventListener('click',function(){document.getElementById('langDropdown').classList.remove('open');applyDcLang(o.dataset.lang);});});
     document.addEventListener('click',function(){document.getElementById('langDropdown').classList.remove('open');});
-    document.getElementById('langFlag').textContent=(localStorage.getItem('yis-lang')||'en').toUpperCase();
+    applyDcLang(localStorage.getItem('yis-lang')||'en');
 
     /* ===== HELPERS ===== */
     function fmt(n){if(n>=1e6)return '$'+(n/1e6).toFixed(1)+'M';return '$'+Math.round(n).toLocaleString('en-US');}
@@ -621,8 +746,10 @@
         tot.innerHTML='<td>Total</td><td>'+Math.round(l.sh).toLocaleString()+'</td><td></td><td></td><td></td><td>'+l.yoc.toFixed(1)+'%</td><td class="gd">'+fmt(l.aDiv)+'/yr</td><td class="gd">'+fmt(l.tDiv)+'</td><td>'+fmt(l.bal)+'</td>';
         tb.appendChild(tot);
 
-        // Show all sections
-        ['cards','insightBox','chartWrap','tblWrap','proBox','discBox'].forEach(function(id){document.getElementById(id).style.display='';});
+        // Show all sections (respect Pro/Free gating for proBox)
+        ['cards','insightBox','chartWrap','tblWrap','discBox'].forEach(function(id){document.getElementById(id).style.display='';});
+        var proBoxEl = document.getElementById('proBox');
+        if (proBoxEl && (!window.YIS_PREMIUM || !window.YIS_PREMIUM.isPro)) { proBoxEl.style.display = ''; }
     }
 
     /* ===== CHART ===== */
@@ -681,7 +808,13 @@
         JEPI: { price: 57, yield: 7.5, divGr: 0, prGr: 3, freq: 12, name: 'JPMorgan Equity Premium Income ETF' },
         KO:   { price: 62, yield: 3.0, divGr: 6, prGr: 5, freq: 4, name: 'Coca-Cola Company' },
         JNJ:  { price: 155, yield: 2.8, divGr: 5, prGr: 6, freq: 4, name: 'Johnson & Johnson' },
-        O:    { price: 58, yield: 5.5, divGr: 4, prGr: 3, freq: 12, name: 'Realty Income Corporation' }
+        O:    { price: 58, yield: 5.5, divGr: 4, prGr: 3, freq: 12, name: 'Realty Income Corporation' },
+        PG:   { price: 165, yield: 2.4, divGr: 6, prGr: 7, freq: 4, name: 'Procter & Gamble' },
+        MSFT: { price: 420, yield: 0.7, divGr: 10, prGr: 15, freq: 4, name: 'Microsoft Corporation' },
+        AAPL: { price: 185, yield: 0.5, divGr: 7, prGr: 12, freq: 4, name: 'Apple Inc.' },
+        T:    { price: 17, yield: 6.5, divGr: 2, prGr: 2, freq: 4, name: 'AT&T Inc.' },
+        MAIN: { price: 48, yield: 5.8, divGr: 3, prGr: 5, freq: 12, name: 'Main Street Capital' },
+        VOO:  { price: 460, yield: 1.3, divGr: 6, prGr: 10, freq: 4, name: 'Vanguard S&P 500 ETF' }
     };
 
     function applyPreset(key) {
@@ -695,8 +828,17 @@
         document.querySelectorAll('.dc-preset-btn').forEach(function(b) {
             b.classList.toggle('active', b.dataset.preset === key);
         });
+        // Show preset name in form title
+        var ft = document.querySelector('.dc-form-title');
+        if (ft) ft.textContent = 'Your Numbers — ' + p.name;
         run();
     }
+
+    // Add tooltips to preset buttons
+    document.querySelectorAll('.dc-preset-btn').forEach(function(btn) {
+        var key = btn.dataset.preset;
+        if (PRESETS[key]) btn.title = PRESETS[key].name + ' | $' + PRESETS[key].price + ' | ' + PRESETS[key].yield + '% yield';
+    });
 
     // Wire preset buttons
     document.querySelectorAll('.dc-preset-btn').forEach(function(btn) {
@@ -788,11 +930,22 @@
         // Update Income Growth Chart
         drawIncomeChart(rows, pp.tax, pp.inf);
 
+        // Update new Pro features
+        updateMilestones(rows, pp.tax);
+        updateCalendar(rows, pp.tax);
+        updateComparison(lastResult);
+
         // Show pro sections
         var el2;
         el2 = document.getElementById('incomeChartWrap');
         if (el2) el2.style.display = '';
         el2 = document.getElementById('fireWrap');
+        if (el2) el2.style.display = '';
+        el2 = document.getElementById('milestonesWrap');
+        if (el2) el2.style.display = '';
+        el2 = document.getElementById('calendarWrap');
+        if (el2) el2.style.display = '';
+        el2 = document.getElementById('compareWrap');
         if (el2) el2.style.display = '';
     }
 
@@ -1024,6 +1177,119 @@
             alert('Error: ' + err.message);
         }
     };
+
+    /* ===== INCOME MILESTONES ===== */
+    var INCOME_MILESTONES = [
+        { target: 100, label: '$100/mo', monthly: 100 },
+        { target: 250, label: '$250/mo', monthly: 250 },
+        { target: 500, label: '$500/mo', monthly: 500 },
+        { target: 1000, label: '$1,000/mo', monthly: 1000 },
+        { target: 2500, label: '$2,500/mo', monthly: 2500 },
+        { target: 5000, label: '$5,000/mo', monthly: 5000 },
+        { target: 10000, label: '$10,000/mo', monthly: 10000 }
+    ];
+
+    function updateMilestones(rows, taxRate) {
+        var list = document.getElementById('milestonesList');
+        if (!list) return;
+        list.innerHTML = '';
+        var finalMonthly = rows.length > 0 ? (rows[rows.length - 1].aDiv * (1 - taxRate)) / 12 : 0;
+
+        // Filter to show only relevant milestones (up to next 2 unreached)
+        var unreachedCount = 0;
+        INCOME_MILESTONES.forEach(function(m) {
+            if (unreachedCount >= 2 && finalMonthly < m.monthly) return;
+
+            var reached = finalMonthly >= m.monthly;
+            var yearReached = null;
+            if (reached) {
+                for (var i = 0; i < rows.length; i++) {
+                    if ((rows[i].aDiv * (1 - taxRate)) / 12 >= m.monthly) { yearReached = rows[i].y; break; }
+                }
+            } else {
+                unreachedCount++;
+            }
+
+            var div = document.createElement('div');
+            div.className = 'dc-milestone';
+            div.innerHTML = '<div class="dc-milestone-icon ' + (reached ? 'reached' : 'pending') + '">' + (reached ? '◆' : '○') + '</div>' +
+                '<div class="dc-milestone-info"><div class="dc-milestone-label">' + m.label + ' after-tax passive income</div>' +
+                '<div class="dc-milestone-detail">' + (reached ? 'Reached in Year ' + yearReached : 'Keep investing to reach this level') + '</div></div>' +
+                '<div class="dc-milestone-status ' + (reached ? 'reached' : 'pending') + '">' + (reached ? 'Reached' : 'Pending') + '</div>';
+            list.appendChild(div);
+        });
+    }
+
+    /* ===== DIVIDEND CALENDAR ===== */
+    var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    function updateCalendar(rows, taxRate) {
+        var grid = document.getElementById('calGrid');
+        var totalEl = document.getElementById('calTotal');
+        if (!grid || !rows.length) return;
+
+        var freq = parseInt(document.getElementById('fFreq').value);
+        var firstRow = rows[0];
+        var annualDiv = firstRow.aDiv;
+        var afterTaxAnnual = annualDiv * (1 - taxRate);
+        var perPayout = afterTaxAnnual / freq;
+
+        // Determine which months get payouts
+        var payoutMonths = [];
+        if (freq === 12) { payoutMonths = [0,1,2,3,4,5,6,7,8,9,10,11]; }
+        else if (freq === 4) { payoutMonths = [2, 5, 8, 11]; } // Mar, Jun, Sep, Dec
+        else if (freq === 2) { payoutMonths = [5, 11]; } // Jun, Dec
+        else { payoutMonths = [11]; } // Annual: Dec
+
+        grid.innerHTML = '';
+        var total = 0;
+        for (var i = 0; i < 12; i++) {
+            var isPayout = payoutMonths.indexOf(i) > -1;
+            var amount = isPayout ? perPayout : 0;
+            total += amount;
+            var div = document.createElement('div');
+            div.className = 'dc-cal-month' + (isPayout ? ' payout' : '');
+            div.innerHTML = '<div class="dc-cal-month-name">' + MONTHS[i] + '</div>' +
+                '<div class="dc-cal-month-val">' + (isPayout ? fmt(amount) : '—') + '</div>';
+            grid.appendChild(div);
+        }
+        if (totalEl) totalEl.textContent = fmt(total) + '/yr (after ' + (taxRate * 100).toFixed(0) + '% tax)';
+    }
+
+    /* ===== SCENARIO COMPARISON (DRIP vs NO DRIP) ===== */
+    function updateComparison(result) {
+        var grid = document.getElementById('compareGrid');
+        var winner = document.getElementById('compareWinner');
+        if (!grid || !result || !result.rows.length) return;
+
+        var rows = result.rows;
+        var last = rows[rows.length - 1];
+        var noDripFinal = result.nodrip[result.nodrip.length - 1];
+        var diff = last.bal - noDripFinal;
+        var diffPct = noDripFinal > 0 ? ((diff / noDripFinal) * 100).toFixed(1) : '0';
+
+        grid.innerHTML =
+            '<div class="dc-compare-col">' +
+                '<h4>With DRIP</h4>' +
+                '<div class="dc-compare-row"><span class="label">Final Portfolio</span><span class="val" style="color:var(--gold);">' + fmt(last.bal) + '</span></div>' +
+                '<div class="dc-compare-row"><span class="label">Total Dividends</span><span class="val">' + fmt(last.tDiv) + '</span></div>' +
+                '<div class="dc-compare-row"><span class="label">Final Yr Income</span><span class="val">' + fmt(last.aDiv) + '/yr</span></div>' +
+                '<div class="dc-compare-row"><span class="label">Total Shares</span><span class="val">' + Math.round(last.sh).toLocaleString() + '</span></div>' +
+            '</div>' +
+            '<div class="dc-compare-vs">VS</div>' +
+            '<div class="dc-compare-col">' +
+                '<h4>Without DRIP</h4>' +
+                '<div class="dc-compare-row"><span class="label">Final Portfolio</span><span class="val">' + fmt(noDripFinal) + '</span></div>' +
+                '<div class="dc-compare-row"><span class="label">Total Dividends</span><span class="val">Withdrawn</span></div>' +
+                '<div class="dc-compare-row"><span class="label">Final Yr Income</span><span class="val">—</span></div>' +
+                '<div class="dc-compare-row"><span class="label">Shares Growth</span><span class="val">Contributions only</span></div>' +
+            '</div>';
+
+        if (winner) {
+            winner.className = 'dc-compare-winner a';
+            winner.innerHTML = 'DRIP wins by <strong>' + fmt(diff) + '</strong> (+' + diffPct + '%) over ' + rows.length + ' years. Reinvesting dividends is the most powerful wealth-building habit.';
+        }
+    }
 
     /* ===== HOOK PRO INTO MAIN RUN ===== */
     var _origRun = window.run;

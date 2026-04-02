@@ -2501,3 +2501,18 @@ a.pro-hl-card,
     background: var(--green);
     color: #000;
 }
+
+/* Per-tool selection colors */
+[data-tool="portfolio"] ::selection { background: #42A5F5 !important; color: #000 !important; }
+[data-tool="portfolio"]::-moz-selection { background: #42A5F5 !important; color: #000 !important; }
+[data-tool="goals"] ::selection { background: #26C6DA !important; color: #000 !important; }
+[data-tool="goals"]::-moz-selection { background: #26C6DA !important; color: #000 !important; }
+[data-tool="tax"] ::selection { background: #AB8FD2 !important; color: #000 !important; }
+[data-tool="tax"]::-moz-selection { background: #AB8FD2 !important; color: #000 !important; }
+[data-tool="dividends"] ::selection { background: #D4A843 !important; color: #000 !important; }
+[data-tool="dividends"]::-moz-selection { background: #D4A843 !important; color: #000 !important; }
+
+[data-theme="light"] [data-tool="portfolio"] ::selection { background: #1976D2 !important; color: #fff !important; }
+[data-theme="light"] [data-tool="goals"] ::selection { background: #00838F !important; color: #fff !important; }
+[data-theme="light"] [data-tool="tax"] ::selection { background: #6A1B9A !important; color: #fff !important; }
+[data-theme="light"] [data-tool="dividends"] ::selection { background: #B8922D !important; color: #fff !important; }
