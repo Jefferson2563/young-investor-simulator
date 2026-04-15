@@ -263,7 +263,7 @@ function shareResults() {
 }
 
 // Stripe Payment Links (each button → direct to correct Stripe page)
-const STRIPE_MONTHLY = 'https://buy.stripe.com/9B6eVc9dw8yI5Ej11ofAc02';
+const STRIPE_MONTHLY = 'https://buy.stripe.com/aFa5kC9dw5mw9Uz39wfAc04';
 const STRIPE_ANNUAL = 'https://buy.stripe.com/14A14m61kdT27Mr5hEfAc03';
 
 function handleUpgradeMonthly() { _openStripe(STRIPE_MONTHLY); }
