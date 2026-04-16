@@ -1961,9 +1961,132 @@ a.pro-hl-card,
 .footer-bottom {
     padding: 24px 0;
     border-top: 1px solid var(--border);
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
     font-size: 12px;
     color: var(--text-muted);
+}
+
+.footer-bottom-links { display: flex; gap: 16px; }
+.footer-bottom-links a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+.footer-bottom-links a:hover { color: var(--text-secondary); }
+
+/* --- Footer Socials --- */
+.footer-socials {
+    display: flex;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: var(--accent-soft);
+    color: var(--text-secondary);
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.social-link:hover {
+    background: var(--accent);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.footer-install-hint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.footer-disclaimer-row {
+    padding: 16px 0;
+    border-top: 1px solid var(--border);
+}
+
+.footer-disclaimer-row .footer-disclaimer {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    max-width: 700px;
+}
+
+/* --- PWA Install Banner --- */
+.install-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: var(--bg-elevated);
+    border-top: 1px solid var(--border);
+    padding: 12px 20px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.install-banner-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.install-banner-icon { width: 40px; height: 40px; flex-shrink: 0; }
+
+.install-banner-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.install-banner-text strong { font-size: 14px; }
+.install-banner-text span { font-size: 12px; color: var(--text-secondary); }
+
+.install-banner-btn {
+    padding: 8px 20px;
+    background: var(--green);
+    color: #000;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+}
+
+.install-banner-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+
+.install-banner-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+}
+
+@media (max-width: 600px) {
+    .install-banner-inner { flex-wrap: wrap; }
+    .install-banner-text { min-width: 60%; }
+    .footer-bottom { text-align: center; justify-content: center; }
 }
 
 /* ========== PRO USER SYSTEM ========== */
@@ -2516,3 +2639,38 @@ a.pro-hl-card,
 [data-theme="light"] [data-tool="goals"] ::selection { background: #00838F !important; color: #fff !important; }
 [data-theme="light"] [data-tool="tax"] ::selection { background: #6A1B9A !important; color: #fff !important; }
 [data-theme="light"] [data-tool="dividends"] ::selection { background: #B8922D !important; color: #fff !important; }
+
+/* ===== WELCOME BACK TOAST ===== */
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+.welcome-back-toast .wb-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.welcome-back-toast .wb-inner strong {
+    font-size: 14px;
+    color: var(--green);
+}
+
+.welcome-back-toast .wb-inner span {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+.welcome-back-toast .wb-close {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    flex-shrink: 0;
+}

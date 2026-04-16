@@ -3,6 +3,35 @@
    With Authentication, Cloud Save, Fullscreen Chart
    ============================================ */
 
+// --- Welcome Back Engagement ---
+(function() {
+    var lastVisit = localStorage.getItem('yis-last-visit');
+    var visitCount = parseInt(localStorage.getItem('yis-visit-count') || '0') + 1;
+    localStorage.setItem('yis-visit-count', visitCount);
+    localStorage.setItem('yis-last-visit', Date.now());
+
+    if (lastVisit && visitCount > 1) {
+        var daysSince = Math.floor((Date.now() - parseInt(lastVisit)) / 86400000);
+        if (daysSince >= 1) {
+            var tips = [
+                'Every day you wait costs you compound interest. Let\'s simulate!',
+                'Warren Buffett started at 11. You\'re right on time.',
+                '$5/day = $1.8M over 40 years at 10%. Run the numbers!',
+                'The best time to invest was yesterday. The second best is now.',
+                'Consistency beats timing. See what monthly investing does.'
+            ];
+            var tip = tips[Math.floor(Math.random() * tips.length)];
+            var wb = document.createElement('div');
+            wb.className = 'welcome-back-toast';
+            wb.innerHTML = '<div class="wb-inner"><strong>Welcome back!</strong><span>' + tip + '</span></div><button class="wb-close" aria-label="Close">&times;</button>';
+            wb.style.cssText = 'position:fixed;top:80px;right:20px;z-index:9998;background:var(--bg-elevated);border:1px solid var(--border);border-radius:12px;padding:14px 18px;max-width:340px;box-shadow:0 8px 32px rgba(0,0,0,0.3);animation:slideIn 0.4s ease;display:flex;align-items:flex-start;gap:10px;';
+            document.body.appendChild(wb);
+            wb.querySelector('.wb-close').onclick = function() { wb.remove(); };
+            setTimeout(function() { if (wb.parentNode) wb.remove(); }, 8000);
+        }
+    }
+})();
+
 // --- Global auth/modal functions (called from HTML onclick) ---
 let currentUser = null;
 

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Young Investor | Admin Dashboard</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+    <!-- ===== AUTH GATE ===== -->
+    <div class="auth-gate" id="authGate">
+        <div class="auth-gate-inner">
+            <img src="../assets/logo.svg" alt="Logo" class="auth-gate-logo">
+            <h1>Admin Dashboard</h1>
+            <p>Sign in with an authorized admin account to continue.</p>
+            <button class="btn-primary" id="adminSignInBtn">Sign in with Google</button>
+            <div class="auth-gate-error" id="authError"></div>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="dashboard" id="dashboard" style="display:none;">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <img src="../assets/logo.svg" alt="" class="sidebar-logo">
+                <span class="sidebar-title">YIS Admin</span>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="sidebar-link active" data-section="overview">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    Overview
+                </a>
+                <a href="#" class="sidebar-link" data-section="ecosystem">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10"/><path d="M12 2a15.3 15.3 0 0 0-4 10 15.3 15.3 0 0 0 4 10"/></svg>
+                    Ecosystem
+                </a>
+                <a href="#" class="sidebar-link" data-section="users">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Users
+                </a>
+                <a href="#" class="sidebar-link" data-section="revenue">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Revenue
+                </a>
+                <a href="#" class="sidebar-link" data-section="analytics">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    Analytics
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="admin-user" id="adminUser">
+                    <div class="admin-avatar" id="adminAvatar">A</div>
+                    <div class="admin-info">
+                        <span class="admin-name" id="adminName">Admin</span>
+                        <span class="admin-role">Owner</span>
+                    </div>
+                </div>
+                <button class="btn-signout" id="adminSignOut">Sign Out</button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Top bar -->
+            <header class="topbar">
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <h1 class="topbar-title" id="pageTitle">Overview</h1>
+                <div class="topbar-right">
+                    <span class="live-dot"></span>
+                    <span class="topbar-status">Live</span>
+                    <button class="btn-refresh" id="refreshBtn" title="Refresh data">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Loading -->
+            <div class="loading-overlay" id="loadingOverlay">
+                <div class="spinner"></div>
+                <p>Loading dashboard data...</p>
+            </div>
+
+            <!-- ===== OVERVIEW SECTION ===== -->
+            <section class="section" id="sectionOverview">
+
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon kpi-users">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-value" id="kpiTotalUsers">--</span>
+                            <span class="kpi-label">Total Users</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon kpi-pro">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-value" id="kpiProUsers">--</span>
+                            <span class="kpi-label">Pro Subscribers</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon kpi-mrr">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-value" id="kpiMRR">--</span>
+                            <span class="kpi-label">Monthly Revenue</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon kpi-rate">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-value" id="kpiConversion">--</span>
+                            <span class="kpi-label">Conversion Rate</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="charts-row">
+                    <div class="chart-card chart-card-wide">
+                        <div class="chart-header">
+                            <h3>User Growth</h3>
+                            <div class="chart-legend">
+                                <span class="legend-dot legend-total"></span> Total
+                                <span class="legend-dot legend-pro"></span> Pro
+                            </div>
+                        </div>
+                        <canvas id="growthChart" height="260"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Plan Distribution</h3>
+                        </div>
+                        <canvas id="planChart" height="260"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Signups + Revenue -->
+                <div class="charts-row">
+                    <div class="chart-card chart-card-wide">
+                        <div class="chart-header">
+                            <h3>Recent Signups</h3>
+                            <span class="badge" id="signupCount">0</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Plan</th>
+                                        <th>Joined</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentSignups">
+                                    <tr><td colspan="4" class="table-empty">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Revenue Breakdown</h3>
+                        </div>
+                        <div class="revenue-stats">
+                            <div class="rev-stat">
+                                <span class="rev-label">Monthly Plans</span>
+                                <span class="rev-value" id="revMonthly">--</span>
+                                <span class="rev-sub" id="revMonthlyCount">0 subscribers</span>
+                            </div>
+                            <div class="rev-stat">
+                                <span class="rev-label">Annual Plans</span>
+                                <span class="rev-value" id="revAnnual">--</span>
+                                <span class="rev-sub" id="revAnnualCount">0 subscribers</span>
+                            </div>
+                            <div class="rev-divider"></div>
+                            <div class="rev-stat rev-total">
+                                <span class="rev-label">Est. ARR</span>
+                                <span class="rev-value" id="revARR">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ===== ECOSYSTEM SECTION (Security Camera Room) ===== -->
+            <section class="section" id="sectionEcosystem" style="display:none;">
+
+                <div class="ecosystem-header">
+                    <div>
+                        <h2 class="ecosystem-title">Ecosystem Control Room</h2>
+                        <p class="ecosystem-sub">Live view of every tool. Today's traffic, all-time usage, and active users per tool.</p>
+                    </div>
+                    <div class="ecosystem-period">
+                        <button class="period-btn active" data-period="today">Today</button>
+                        <button class="period-btn" data-period="week">7 days</button>
+                        <button class="period-btn" data-period="month">30 days</button>
+                        <button class="period-btn" data-period="all">All time</button>
+                    </div>
+                </div>
+
+                <!-- Tool Grid (the "security cameras") -->
+                <div class="tool-grid" id="toolGrid">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Comparison Charts -->
+                <div class="charts-row">
+                    <div class="chart-card chart-card-wide">
+                        <div class="chart-header">
+                            <h3>Tool Traffic Comparison</h3>
+                            <span class="chart-sub" id="ecoTotalLabel">Total visits</span>
+                        </div>
+                        <canvas id="toolTrafficChart" height="280"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Traffic Share</h3>
+                        </div>
+                        <canvas id="toolShareChart" height="280"></canvas>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-card chart-card-full">
+                        <div class="chart-header">
+                            <h3>Daily Activity (Last 14 Days)</h3>
+                        </div>
+                        <canvas id="dailyActivityChart" height="260"></canvas>
+                    </div>
+                </div>
+
+                <div class="charts-row">
+                    <div class="chart-card chart-card-full">
+                        <div class="chart-header">
+                            <h3>Top Power Users</h3>
+                            <span class="chart-sub">Users with the highest tool usage across the ecosystem</span>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Plan</th>
+                                        <th>Last tool</th>
+                                        <th>Total uses</th>
+                                        <th>Last seen</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="powerUsersTable">
+                                    <tr><td colspan="6" class="table-empty">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ===== USERS SECTION ===== -->
+            <section class="section" id="sectionUsers" style="display:none;">
+                <div class="section-toolbar">
+                    <div class="search-box">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="userSearch" placeholder="Search users by name or email...">
+                    </div>
+                    <div class="filter-group">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="pro">Pro</button>
+                        <button class="filter-btn" data-filter="free">Free</button>
+                    </div>
+                </div>
+                <div class="table-wrap">
+                    <table class="data-table data-table-full">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Plan</th>
+                                <th>Plan Type</th>
+                                <th>Expiry</th>
+                                <th>Joined</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allUsersTable">
+                            <tr><td colspan="6" class="table-empty">Loading...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-footer">
+                    <span id="userCountLabel">0 users</span>
+                </div>
+            </section>
+
+            <!-- ===== REVENUE SECTION ===== -->
+            <section class="section" id="sectionRevenue" style="display:none;">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon kpi-mrr">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-value" id="revMRR2">--</span>
+                            <span class="kpi-label">MRR</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon kpi-pro">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-value" id="revARR2">--</span>
+                            <span class="kpi-label">ARR</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon kpi-users">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-value" id="revAvgRev">--</span>
+                            <span class="kpi-label">Avg Revenue / User</span>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon kpi-rate">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                        </div>
+                        <div class="kpi-data">
+                            <span class="kpi-value" id="revLTV">--</span>
+                            <span class="kpi-label">Est. LTV (12mo)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-card chart-card-full">
+                        <div class="chart-header">
+                            <h3>Revenue Trend</h3>
+                        </div>
+                        <canvas id="revenueChart" height="300"></canvas>
+                    </div>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Plan Type Split</h3>
+                        </div>
+                        <canvas id="planTypeChart" height="260"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Pro Users</h3>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Type</th>
+                                        <th>Expiry</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="proUsersTable">
+                                    <tr><td colspan="3" class="table-empty">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ===== ANALYTICS SECTION ===== -->
+            <section class="section" id="sectionAnalytics" style="display:none;">
+                <div class="analytics-info">
+                    <div class="chart-card chart-card-full">
+                        <div class="chart-header">
+                            <h3>Google Analytics & Clarity</h3>
+                        </div>
+                        <div class="analytics-links">
+                            <a href="https://analytics.google.com/" target="_blank" rel="noopener" class="analytics-link-card">
+                                <div class="analytics-link-icon" style="background: rgba(66,133,244,0.1); color: #4285f4;">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M22.84 2.998v18.004A2.999 2.999 0 0 1 19.84 24h-3.998a1 1 0 0 1-1-1V1a1 1 0 0 1 1-1h3.998a3 3 0 0 1 3 2.998zM14.842 9h-4a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V10a1 1 0 0 0-1-1zM6.842 15h-4a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1z"/></svg>
+                                </div>
+                                <div>
+                                    <h4>Google Analytics 4</h4>
+                                    <p>Traffic, users, locations, sources, devices, real-time data</p>
+                                </div>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                            </a>
+                            <a href="https://clarity.microsoft.com/" target="_blank" rel="noopener" class="analytics-link-card">
+                                <div class="analytics-link-icon" style="background: rgba(0,120,212,0.1); color: #0078d4;">
+                                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                </div>
+                                <div>
+                                    <h4>Microsoft Clarity</h4>
+                                    <p>Heatmaps, session recordings, scroll depth, click maps</p>
+                                </div>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-card chart-card-full">
+                        <div class="chart-header">
+                            <h3>User Signup Timeline</h3>
+                        </div>
+                        <canvas id="signupTimeline" height="280"></canvas>
+                    </div>
+                </div>
+                <div class="charts-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Sign-in Providers</h3>
+                        </div>
+                        <canvas id="providerChart" height="260"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Quick Stats</h3>
+                        </div>
+                        <div class="revenue-stats">
+                            <div class="rev-stat">
+                                <span class="rev-label">Users Today</span>
+                                <span class="rev-value" id="statToday">--</span>
+                            </div>
+                            <div class="rev-stat">
+                                <span class="rev-label">Users This Week</span>
+                                <span class="rev-value" id="statWeek">--</span>
+                            </div>
+                            <div class="rev-stat">
+                                <span class="rev-label">Users This Month</span>
+                                <span class="rev-value" id="statMonth">--</span>
+                            </div>
+                            <div class="rev-divider"></div>
+                            <div class="rev-stat">
+                                <span class="rev-label">Email Signups</span>
+                                <span class="rev-value" id="statEmail">--</span>
+                            </div>
+                            <div class="rev-stat">
+                                <span class="rev-label">Google Signups</span>
+                                <span class="rev-value" id="statGoogle">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="../js/firebase-config.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
