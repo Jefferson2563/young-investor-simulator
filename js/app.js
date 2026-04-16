@@ -32,6 +32,99 @@
     }
 })();
 
+// --- Challenge System ---
+(function() {
+    var params = new URLSearchParams(window.location.search);
+    var challengeAmount = params.get('challenge');
+    if (challengeAmount) {
+        var amount = parseFloat(challengeAmount);
+        if (!isNaN(amount) && amount > 0) {
+            // Format nicely
+            var formatted;
+            if (amount >= 1000000) formatted = '$' + (amount / 1000000).toFixed(1) + 'M';
+            else if (amount >= 1000) formatted = '$' + (amount / 1000).toFixed(0) + 'K';
+            else formatted = '$' + amount.toFixed(0);
+
+            var banner = document.getElementById('challengeBanner');
+            var amountEl = document.getElementById('challengeAmount');
+            if (banner && amountEl) {
+                amountEl.textContent = formatted;
+
+                var taglines = [
+                    'Can you beat them? Try it now!',
+                    'Think you can do better? Prove it!',
+                    'Are you up for the challenge?',
+                    'Your move. Set your sliders and beat this!'
+                ];
+                var taglineEl = document.getElementById('challengeTagline');
+                if (taglineEl) taglineEl.textContent = taglines[Math.floor(Math.random() * taglines.length)];
+
+                banner.style.display = '';
+                document.body.classList.add('has-challenge');
+
+                document.getElementById('challengeDismiss').onclick = function() {
+                    banner.style.display = 'none';
+                    document.body.classList.remove('has-challenge');
+                };
+
+                // Auto-dismiss after 15s
+                setTimeout(function() {
+                    banner.style.display = 'none';
+                    document.body.classList.remove('has-challenge');
+                }, 15000);
+            }
+        }
+    }
+})();
+
+function sendChallenge() {
+    var data = window._yisGetData ? window._yisGetData() : null;
+    if (!data || !data.result) return;
+
+    var amount = Math.round(data.result.finalBalance);
+    var url = 'https://younginvestor.app/?challenge=' + amount;
+
+    var shareText = 'I just simulated my investment future and got ' +
+        (amount >= 1000000 ? '$' + (amount / 1000000).toFixed(1) + 'M' : '$' + amount.toLocaleString()) +
+        '! Can you beat me?';
+
+    if (navigator.share) {
+        navigator.share({
+            title: 'Young Investor Challenge',
+            text: shareText,
+            url: url
+        }).catch(function() {});
+    } else {
+        // Fallback: copy link
+        navigator.clipboard.writeText(url + '\n\n' + shareText).then(function() {
+            if (window._yisShowToast) window._yisShowToast('Challenge link copied!');
+        }).catch(function() {
+            // Final fallback
+            prompt('Copy this challenge link:', url);
+        });
+    }
+}
+
+// --- Social Proof Counter (live from Firestore) ---
+(function() {
+    function updateCounter() {
+        if (typeof db === 'undefined') return;
+        db.collection('users').get().then(function(snap) {
+            var count = snap.size;
+            var el = document.getElementById('spCount');
+            if (el && count > 0) {
+                el.textContent = '+' + count.toLocaleString();
+            }
+        }).catch(function() {});
+    }
+    // Wait for Firebase to init
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(updateCounter, 2000); });
+    } else {
+        setTimeout(updateCounter, 2000);
+    }
+})();
+
 // --- Global auth/modal functions (called from HTML onclick) ---
 let currentUser = null;
 

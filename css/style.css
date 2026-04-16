@@ -2640,6 +2640,131 @@ a.pro-hl-card,
 [data-theme="light"] [data-tool="tax"] ::selection { background: #6A1B9A !important; color: #fff !important; }
 [data-theme="light"] [data-tool="dividends"] ::selection { background: #B8922D !important; color: #fff !important; }
 
+/* ===== CHALLENGE BANNER ===== */
+.challenge-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10000;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-bottom: 2px solid var(--green);
+    animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+}
+
+.challenge-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+}
+
+.challenge-flag {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0,230,118,0.15);
+    color: var(--green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    animation: pulse 2s infinite;
+}
+
+.challenge-text {
+    flex: 1;
+    font-size: 14px;
+    color: #fff;
+}
+
+.challenge-text strong {
+    color: var(--green);
+    font-size: 16px;
+}
+
+.challenge-dismiss {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.4);
+    font-size: 22px;
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+/* Move navbar down when challenge banner is visible */
+body.has-challenge .navbar {
+    top: 56px;
+}
+
+body.has-challenge .hero {
+    padding-top: 160px;
+}
+
+/* ===== CHALLENGE BUTTON ===== */
+.challenge-btn {
+    background: linear-gradient(135deg, rgba(0,230,118,0.12) 0%, rgba(0,230,118,0.05) 100%) !important;
+    border-color: rgba(0,230,118,0.3) !important;
+    color: var(--green) !important;
+}
+
+.challenge-btn:hover {
+    background: rgba(0,230,118,0.2) !important;
+    border-color: var(--green) !important;
+}
+
+/* ===== SOCIAL PROOF ===== */
+.social-proof {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 28px;
+    opacity: 0.8;
+}
+
+.social-proof-avatars {
+    display: flex;
+}
+
+.sp-dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    border: 2px solid var(--bg);
+    margin-left: -6px;
+}
+
+.sp-dot:first-child { margin-left: 0; }
+
+.sp-plus {
+    background: var(--bg-elevated) !important;
+    color: var(--text-secondary) !important;
+    font-size: 10px;
+}
+
+.social-proof-text {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 600px) {
+    .social-proof { flex-direction: column; gap: 6px; }
+    .challenge-inner { padding: 10px 16px; }
+    .challenge-text { font-size: 13px; }
+}
+
 /* ===== WELCOME BACK TOAST ===== */
 @keyframes slideIn {
     from { transform: translateX(100%); opacity: 0; }

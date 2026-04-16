@@ -63,6 +63,19 @@
 </head>
 <body>
 
+    <!-- ========== CHALLENGE BANNER (shown for visitors from challenge links) ========== -->
+    <div class="challenge-banner" id="challengeBanner" style="display:none;">
+        <div class="container challenge-inner">
+            <div class="challenge-flag">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+            </div>
+            <p class="challenge-text">
+                Your friend says they'll have <strong id="challengeAmount">$0</strong> — <span id="challengeTagline">Can you beat them?</span>
+            </p>
+            <button class="challenge-dismiss" id="challengeDismiss" aria-label="Dismiss">&times;</button>
+        </div>
+    </div>
+
     <!-- ========== NAVBAR ========== -->
     <nav class="navbar" id="navbar">
         <div class="container nav-inner">
@@ -265,6 +278,16 @@
                 <span>Try the simulator</span>
                 <span class="cta-arrow">↓</span>
             </a>
+            <div class="social-proof" id="socialProof">
+                <div class="social-proof-avatars">
+                    <span class="sp-dot" style="background:#3b82f6;">J</span>
+                    <span class="sp-dot" style="background:#22c55e;">S</span>
+                    <span class="sp-dot" style="background:#eab308;">A</span>
+                    <span class="sp-dot" style="background:#a855f7;">M</span>
+                    <span class="sp-dot sp-plus" id="spCount">+0</span>
+                </div>
+                <span class="social-proof-text" data-i18n="socialProof">young investors already simulating their future</span>
+            </div>
         </div>
     </header>
 
@@ -458,6 +481,10 @@
                         <button class="share-btn" id="shareBtn" onclick="shareResults()">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                             <span data-i18n="share">Share my results</span>
+                        </button>
+                        <button class="share-btn challenge-btn" id="challengeBtn" onclick="sendChallenge()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                            <span data-i18n="challengeFriend">Challenge a friend</span>
                         </button>
                         <!-- PRO: PDF Export -->
                         <button class="share-btn pro-export-btn" id="pdfExportBtn" data-pro-only style="display:none;" onclick="exportPDF()">

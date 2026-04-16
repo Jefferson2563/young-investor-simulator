@@ -73,6 +73,12 @@
         document.getElementById('adminAvatar').textContent = (user.displayName || user.email || 'A').charAt(0).toUpperCase();
 
         loadDashboard();
+
+        // Safety-net: re-render charts every 30s (Firestore listeners handle the data,
+        // this just ensures charts stay fresh if a render was missed)
+        setInterval(function() {
+            try { renderAll(); } catch(e) {}
+        }, 30000);
     });
 
     /* ===== NAVIGATION ===== */
