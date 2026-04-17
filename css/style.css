@@ -790,6 +790,8 @@ a { color: inherit; text-decoration: none; }
     font-weight: 700;
     letter-spacing: -1px;
     margin-bottom: 8px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .section-desc {
@@ -1269,6 +1271,8 @@ input[type="range"]::-moz-range-thumb {
     letter-spacing: 1px;
     color: var(--text-muted);
     cursor: pointer;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
     list-style: none;
     display: flex;
     align-items: center;
@@ -2335,6 +2339,13 @@ a.pro-hl-card,
     flex-wrap: wrap;
 }
 
+.sim-actions .share-btn {
+    min-width: 0;
+    white-space: nowrap;
+    overflow: visible;
+    text-overflow: unset;
+}
+
 .pro-export-btn {
     background: var(--gold-soft) !important;
     border-color: var(--gold-border) !important;
@@ -2526,13 +2537,21 @@ a.pro-hl-card,
     .hero-cta { padding: 12px 24px; font-size: 14px; }
 
     /* Simulator mobile */
-    .section { padding: 48px 0; }
+    .section { padding: 48px 0; overflow: hidden; }
     .section-title { font-size: clamp(24px, 6vw, 36px); }
+    .section-header { padding: 0 16px; }
+    .controls-panel { padding: 20px 16px; }
+    .results-panel { max-width: 100%; overflow: hidden; }
 
     /* Slider labels — prevent overflow */
     .slider-label { font-size: 13px; }
     .slider-value { font-size: 13px; word-break: break-word; }
     .slider-group { margin-bottom: 20px; }
+
+    /* Action buttons — full width, no truncation */
+    .sim-actions .share-btn { font-size: 13px; padding: 12px; }
+    .returns-ref { margin: 0 -4px; }
+    .returns-ref-title { font-size: 10px; letter-spacing: 0.5px; }
 
     /* Goal card */
     .goal-top { padding: 24px 16px 12px; }
