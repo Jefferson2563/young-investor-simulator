@@ -301,6 +301,89 @@ a { color: inherit; text-decoration: none; }
     transform: translateY(0) scale(1);
 }
 
+/* ===== ANNUAL UPSELL MODAL ===== */
+.upsell-modal {
+    max-width: 400px;
+    text-align: center;
+    padding: 36px 32px 32px;
+}
+.upsell-badge {
+    display: inline-block;
+    background: rgba(234,179,8,0.15);
+    color: #fbbf24;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 14px;
+}
+.upsell-title {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0 0 10px;
+    color: var(--text-primary);
+}
+.upsell-sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0 0 24px;
+}
+.upsell-sub strong { color: var(--text-primary); }
+.upsell-plans {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.upsell-plan {
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s, background 0.2s;
+    position: relative;
+}
+.upsell-plan:hover { transform: translateY(-2px); }
+.upsell-plan-annual {
+    border-color: #D4A843;
+    background: rgba(212,168,67,0.06);
+}
+.upsell-plan-annual:hover { background: rgba(212,168,67,0.12); }
+.upsell-plan-monthly { border-color: var(--border); }
+.upsell-plan-monthly:hover { border-color: var(--text-secondary); }
+.upsell-plan-badge {
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #D4A843;
+    color: #000;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    padding: 2px 10px;
+    border-radius: 10px;
+    white-space: nowrap;
+}
+.upsell-plan-price {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+.upsell-plan-annual .upsell-plan-price { color: #D4A843; }
+.upsell-plan-price span {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+.upsell-plan-note {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+}
+
 .modal-close {
     position: absolute;
     top: 16px;

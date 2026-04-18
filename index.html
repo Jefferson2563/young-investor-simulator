@@ -155,6 +155,27 @@
         </div>
     </nav>
 
+    <!-- ========== ANNUAL UPSELL MODAL ========== -->
+    <div class="modal-overlay" id="upsellModal" onclick="if(event.target===this)closeUpsellModal()">
+        <div class="modal upsell-modal">
+            <button class="modal-close" onclick="closeUpsellModal()">&times;</button>
+            <div class="upsell-badge">💡 Before you go</div>
+            <h2 class="upsell-title">Save 17% with Annual</h2>
+            <p class="upsell-sub">You picked monthly — but annual works out to just <strong>$4.17/mo</strong>. That's 2 months free.</p>
+            <div class="upsell-plans">
+                <div class="upsell-plan upsell-plan-annual" onclick="closeUpsellModal(); handleUpgradeAnnual()">
+                    <div class="upsell-plan-badge">BEST VALUE</div>
+                    <div class="upsell-plan-price">$49.99<span>/year</span></div>
+                    <div class="upsell-plan-note">= $4.17/mo · Save $9.89</div>
+                </div>
+                <div class="upsell-plan upsell-plan-monthly" onclick="closeUpsellModal(); _goMonthly()">
+                    <div class="upsell-plan-price">$4.99<span>/month</span></div>
+                    <div class="upsell-plan-note">Continue monthly</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- ========== AUTH MODAL ========== -->
     <div class="modal-overlay" id="authModal">
         <div class="modal">
@@ -278,7 +299,7 @@
                 <span>Try the simulator</span>
                 <span class="cta-arrow">↓</span>
             </a>
-            <div class="social-proof" id="socialProof">
+            <div class="social-proof" id="socialProof" style="display:none;">
                 <div class="social-proof-avatars">
                     <span class="sp-dot" style="background:#3b82f6;">J</span>
                     <span class="sp-dot" style="background:#22c55e;">S</span>

@@ -106,18 +106,26 @@ function sendChallenge() {
 }
 
 // --- Social Proof Counter (live from Firestore) ---
+// Only shows when user count is impressive (50+). Below that, hides entirely.
 (function() {
+    var MIN_SOCIAL_PROOF = 50;
+
     function updateCounter() {
         if (typeof db === 'undefined') return;
         db.collection('users').get().then(function(snap) {
             var count = snap.size;
-            var el = document.getElementById('spCount');
-            if (el && count > 0) {
-                el.textContent = '+' + count.toLocaleString();
+            var proofEl = document.getElementById('socialProof');
+            var countEl = document.getElementById('spCount');
+            if (!proofEl) return;
+
+            if (count >= MIN_SOCIAL_PROOF) {
+                proofEl.style.display = '';
+                if (countEl) countEl.textContent = '+' + count.toLocaleString();
+            } else {
+                proofEl.style.display = 'none';
             }
         }).catch(function() {});
     }
-    // Wait for Firebase to init
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() { setTimeout(updateCounter, 2000); });
     } else {
@@ -388,10 +396,23 @@ function shareResults() {
 const STRIPE_MONTHLY = 'https://buy.stripe.com/aFa5kC9dw5mw9Uz39wfAc04';
 const STRIPE_ANNUAL = 'https://buy.stripe.com/14A14m61kdT27Mr5hEfAc03';
 
-function handleUpgradeMonthly() { _openStripe(STRIPE_MONTHLY); }
+function handleUpgradeMonthly() {
+    if (!currentUser) { openAuthModal(); return; }
+    // Show annual upsell before sending to monthly checkout
+    var modal = document.getElementById('upsellModal');
+    if (modal) { modal.classList.add('active'); document.body.style.overflow = 'hidden'; return; }
+    _openStripe(STRIPE_MONTHLY);
+}
 function handleUpgradeAnnual() { _openStripe(STRIPE_ANNUAL); }
 // Keep old name as fallback for tool pages
-function handleUpgradePro() { _openStripe(STRIPE_MONTHLY); }
+function handleUpgradePro() { handleUpgradeMonthly(); }
+
+function closeUpsellModal() {
+    var modal = document.getElementById('upsellModal');
+    if (modal) { modal.classList.remove('active'); document.body.style.overflow = ''; }
+}
+// Called when user explicitly confirms monthly after seeing upsell
+function _goMonthly() { _openStripe(STRIPE_MONTHLY); }
 
 function _openStripe(link) {
     if (!currentUser) { openAuthModal(); return; }
@@ -1780,11 +1801,28 @@ function closeFullscreen() {
                 loadFromCloud();
                 // Check premium status
                 if (window.YIS_PREMIUM) window.YIS_PREMIUM.checkStatus(user);
+
+                // Personalize hero for logged-in users
+                var heroSubtitle = document.querySelector('.hero-subtitle');
+                var heroCta = document.querySelector('.hero-cta');
+                var firstName = (user.displayName || '').split(' ')[0] || 'Investor';
+                if (heroSubtitle) heroSubtitle.textContent = 'Welcome back, ' + firstName + '. Your wealth is growing.';
+                if (heroCta) {
+                    heroCta.querySelector('span').textContent = 'My simulator';
+                }
             } else {
                 authBtn.style.display = '';
                 userMenu.style.display = 'none';
                 // Reset premium state
                 if (window.YIS_PREMIUM) window.YIS_PREMIUM.checkStatus(null);
+
+                // Reset hero to default
+                var heroSubtitle = document.querySelector('.hero-subtitle');
+                var heroCta = document.querySelector('.hero-cta');
+                if (heroSubtitle) heroSubtitle.innerHTML = 'Starting with just $500 and $100/month. No trust fund needed.<br>See for yourself below.';
+                if (heroCta) {
+                    heroCta.querySelector('span').textContent = 'Try the simulator';
+                }
             }
         });
     }

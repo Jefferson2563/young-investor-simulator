@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="28%" cy="22%" r="85%">
+      <stop offset="0%" stop-color="#1f1a0a"/>
+      <stop offset="40%" stop-color="#110e06"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </radialGradient>
+    <linearGradient id="goldBright" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="30%" stop-color="#fbbf24"/>
+      <stop offset="60%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    <radialGradient id="shine" cx="32%" cy="18%" r="55%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.12)"/>
+      <stop offset="60%" stop-color="rgba(255,255,255,0.03)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+    </radialGradient>
+    <filter id="outerGlow">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.917  0 0 0 0 0.702  0 0 0 0 0.031  0 0 0 0.35 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+  <rect x="3" y="3" width="506" height="506" rx="106" fill="none" stroke="rgba(234,179,8,0.1)" stroke-width="1.5"/>
+
+  <!-- Y letter (same layout as app icon) -->
+  <g filter="url(#outerGlow)" transform="translate(256, 260)">
+    <text x="0" y="25" text-anchor="middle" font-family="'Inter','SF Pro Display','Helvetica Neue',sans-serif" font-weight="900" font-size="280" fill="url(#goldBright)" letter-spacing="-12">Y</text>
+  </g>
+
+  <!-- Arrow going up-right (same as app) -->
+  <g filter="url(#outerGlow)">
+    <polyline points="310,135 370,80 370,115" fill="none" stroke="url(#goldBright)" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="370" y1="80" x2="340" y2="80" stroke="url(#goldBright)" stroke-width="18" stroke-linecap="round"/>
+  </g>
+
+  <!-- Glossy shine -->
+  <rect width="512" height="512" rx="108" fill="url(#shine)"/>
+</svg>

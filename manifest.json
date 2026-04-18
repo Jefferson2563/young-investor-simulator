@@ -1,6 +1,6 @@
 {
   "name": "Young Investor Simulator",
-  "short_name": "Young Investor",
+  "short_name": "YI Simulator",
   "description": "See how compound interest turns small monthly contributions into massive wealth. Start investing now.",
   "start_url": "/",
   "display": "standalone",
