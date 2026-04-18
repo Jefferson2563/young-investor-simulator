@@ -1,2 +1,9 @@
 node_modules/
 .claude/
+functions/node_modules/
+.env
+.env.*
+*.env
+functions/.env
+functions/.env.*
+.runtimeconfig.json
