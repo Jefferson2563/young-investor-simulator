@@ -14,7 +14,7 @@
 // Web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBn4T2jDsbYlr4ZgMmMkmXZAO8b400hJaw",
-  authDomain: "young-investor-simulator.firebaseapp.com",
+  authDomain: "younginvestor.app",
   projectId: "young-investor-simulator",
   storageBucket: "young-investor-simulator.firebasestorage.app",
   messagingSenderId: "194230791250",
