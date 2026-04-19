@@ -26,3 +26,6 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+// Remember the user permanently (like Telegram Web)
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
