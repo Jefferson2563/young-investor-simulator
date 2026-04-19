@@ -33,6 +33,7 @@ en: {
     navSimulator:'Simulator',navPortfolio:'Portfolio',navDividends:'Dividends',navGoals:'Goals',navTax:'Tax',navLegends:'Legends',
     saveText:'Save',toastWelcome:'Welcome back! Your last simulation was restored.',toastSavedCloud:'Saved to your account!',toastSavedLocal:'Saved locally. Sign in to sync across devices.',toastCopied:'Results copied to clipboard!',toastCloudLoaded:'Simulation loaded from the cloud.',
     shareTitle:'My Investment Simulation',shareISimulated:'I just simulated my investment future!',shareFinalValue:'Final value',shareIPutIn:'I put in',shareMarketGave:'Market gave me',shareMoneyMultiplied:'Money multiplied',shareTryIt:'Try it yourself',
+    socialProof:'young investors already simulating their future',challengeFriend:'Challenge a friend',installHint:'Add to your home screen for quick access!',
 },
 fr: {
     flag:'FR',
@@ -64,6 +65,7 @@ fr: {
     navSimulator:'Simulateur',navPortfolio:'Portfolio',navDividends:'Dividendes',navGoals:'Objectifs',navTax:'Imp\u00f4ts',navLegends:'L\u00e9gendes',
     saveText:'Sauvegarder',toastWelcome:'Bon retour ! Votre derni\u00e8re simulation a \u00e9t\u00e9 restaur\u00e9e.',toastSavedCloud:'Sauvegard\u00e9 dans votre compte !',toastSavedLocal:'Sauvegard\u00e9 localement. Connectez-vous pour synchroniser.',toastCopied:'R\u00e9sultats copi\u00e9s dans le presse-papier !',toastCloudLoaded:'Simulation charg\u00e9e depuis le cloud.',
     shareTitle:'Ma simulation d\u2019investissement',shareISimulated:'Je viens de simuler mon avenir financier !',shareFinalValue:'Valeur finale',shareIPutIn:'J\u2019ai investi',shareMarketGave:'Le march\u00e9 m\u2019a donn\u00e9',shareMoneyMultiplied:'Argent multipli\u00e9',shareTryIt:'Essayez vous-m\u00eame',
+    socialProof:'jeunes investisseurs simulent d\u00e9j\u00e0 leur avenir',challengeFriend:'D\u00e9fier un ami',installHint:'Ajoutez \u00e0 votre \u00e9cran d\u2019accueil pour un acc\u00e8s rapide\u00a0!',
 },
 es: {
     flag:'ES',
@@ -95,6 +97,7 @@ es: {
     navSimulator:'Simulador',navPortfolio:'Portafolio',navDividends:'Dividendos',navGoals:'Metas',navTax:'Impuestos',navLegends:'Leyendas',
     saveText:'Guardar',toastWelcome:'\u00a1Bienvenido de vuelta! Tu \u00faltima simulaci\u00f3n fue restaurada.',toastSavedCloud:'\u00a1Guardado en tu cuenta!',toastSavedLocal:'Guardado localmente. Inicia sesi\u00f3n para sincronizar.',toastCopied:'\u00a1Resultados copiados al portapapeles!',toastCloudLoaded:'Simulaci\u00f3n cargada desde la nube.',
     shareTitle:'Mi simulaci\u00f3n de inversi\u00f3n',shareISimulated:'\u00a1Acabo de simular mi futuro financiero!',shareFinalValue:'Valor final',shareIPutIn:'Invest\u00ed',shareMarketGave:'El mercado me dio',shareMoneyMultiplied:'Dinero multiplicado',shareTryIt:'Pru\u00e9balo t\u00fa mismo',
+    socialProof:'j\u00f3venes inversores ya simulando su futuro',challengeFriend:'Desafiar a un amigo',installHint:'\u00a1A\u00f1ade a tu pantalla de inicio para acceso r\u00e1pido!',
 },
 pt: {
     flag:'PT',
@@ -126,6 +129,7 @@ pt: {
     navSimulator:'Simulador',navPortfolio:'Portf\u00f3lio',navDividends:'Dividendos',navGoals:'Metas',navTax:'Impostos',navLegends:'Lendas',
     saveText:'Salvar',toastWelcome:'Bem-vindo de volta! Sua \u00faltima simula\u00e7\u00e3o foi restaurada.',toastSavedCloud:'Salvo na sua conta!',toastSavedLocal:'Salvo localmente. Entre para sincronizar.',toastCopied:'Resultados copiados!',toastCloudLoaded:'Simula\u00e7\u00e3o carregada da nuvem.',
     shareTitle:'Minha simula\u00e7\u00e3o de investimento',shareISimulated:'Acabei de simular meu futuro financeiro!',shareFinalValue:'Valor final',shareIPutIn:'Eu investi',shareMarketGave:'O mercado me deu',shareMoneyMultiplied:'Dinheiro multiplicado',shareTryIt:'Tente voc\u00ea mesmo',
+    socialProof:'jovens investidores j\u00e1 simulando seu futuro',challengeFriend:'Desafiar um amigo',installHint:'Adicione \u00e0 tela inicial para acesso r\u00e1pido!',
 },
 de: {
     flag:'DE',
@@ -157,6 +161,7 @@ de: {
     navSimulator:'Simulator',navPortfolio:'Portfolio',navDividends:'Dividenden',navGoals:'Ziele',navTax:'Steuern',navLegends:'Legenden',
     saveText:'Speichern',toastWelcome:'Willkommen zur\u00fcck! Deine letzte Simulation wurde wiederhergestellt.',toastSavedCloud:'In deinem Konto gespeichert!',toastSavedLocal:'Lokal gespeichert. Melde dich an zum Synchronisieren.',toastCopied:'Ergebnisse in die Zwischenablage kopiert!',toastCloudLoaded:'Simulation aus der Cloud geladen.',
     shareTitle:'Meine Investmentsimulation',shareISimulated:'Ich habe gerade meine finanzielle Zukunft simuliert!',shareFinalValue:'Endwert',shareIPutIn:'Ich habe eingezahlt',shareMarketGave:'Der Markt gab mir',shareMoneyMultiplied:'Geld multipliziert',shareTryIt:'Probiere es selbst',
+    socialProof:'junge Investoren simulieren bereits ihre Zukunft',challengeFriend:'Freund herausfordern',installHint:'Zum Startbildschirm hinzuf\u00fcgen f\u00fcr schnellen Zugriff!',
 },
 ar: {
     flag:'AR',
@@ -188,6 +193,7 @@ ar: {
     navSimulator:'\u0627\u0644\u0645\u062d\u0627\u0643\u064a',navPortfolio:'\u0627\u0644\u0645\u062d\u0641\u0638\u0629',navDividends:'\u0627\u0644\u0623\u0631\u0628\u0627\u062d',navGoals:'\u0627\u0644\u0623\u0647\u062f\u0627\u0641',navTax:'\u0627\u0644\u0636\u0631\u0627\u0626\u0628',navLegends:'\u0627\u0644\u0623\u0633\u0627\u0637\u064a\u0631',
     saveText:'\u062d\u0641\u0638',toastWelcome:'\u0645\u0631\u062d\u0628\u064b\u0627 \u0628\u0639\u0648\u062f\u062a\u0643! \u062a\u0645 \u0627\u0633\u062a\u0639\u0627\u062f\u0629 \u0645\u062d\u0627\u0643\u0627\u062a\u0643 \u0627\u0644\u0623\u062e\u064a\u0631\u0629.',toastSavedCloud:'\u062a\u0645 \u0627\u0644\u062d\u0641\u0638 \u0641\u064a \u062d\u0633\u0627\u0628\u0643!',toastSavedLocal:'\u062a\u0645 \u0627\u0644\u062d\u0641\u0638 \u0645\u062d\u0644\u064a\u064b\u0627. \u0633\u062c\u0644 \u0644\u0644\u0645\u0632\u0627\u0645\u0646\u0629.',toastCopied:'\u062a\u0645 \u0646\u0633\u062e \u0627\u0644\u0646\u062a\u0627\u0626\u062c!',toastCloudLoaded:'\u062a\u0645 \u062a\u062d\u0645\u064a\u0644 \u0627\u0644\u0645\u062d\u0627\u0643\u0627\u0629 \u0645\u0646 \u0627\u0644\u0633\u062d\u0627\u0628\u0629.',
     shareTitle:'\u0645\u062d\u0627\u0643\u0627\u062a\u064a \u0627\u0644\u0627\u0633\u062a\u062b\u0645\u0627\u0631\u064a\u0629',shareISimulated:'\u0644\u0642\u062f \u062d\u0627\u0643\u064a\u062a \u0645\u0633\u062a\u0642\u0628\u0644\u064a \u0627\u0644\u0645\u0627\u0644\u064a!',shareFinalValue:'\u0627\u0644\u0642\u064a\u0645\u0629 \u0627\u0644\u0646\u0647\u0627\u0626\u064a\u0629',shareIPutIn:'\u0648\u0636\u0639\u062a',shareMarketGave:'\u0627\u0644\u0633\u0648\u0642 \u0623\u0639\u0637\u0627\u0646\u064a',shareMoneyMultiplied:'\u0627\u0644\u0645\u0627\u0644 \u062a\u0636\u0627\u0639\u0641',shareTryIt:'\u062c\u0631\u0628\u0647 \u0628\u0646\u0641\u0633\u0643',
+    socialProof:'\u0634\u0627\u0628\u0627\u064b \u064a\u062d\u0627\u0643\u0648\u0646 \u0645\u0633\u062a\u0642\u0628\u0644\u0647\u0645 \u0628\u0627\u0644\u0641\u0639\u0644',challengeFriend:'\u062a\u062d\u062f\u064a \u0635\u062f\u064a\u0642',installHint:'\u0623\u0636\u0641 \u0625\u0644\u0649 \u0627\u0644\u0634\u0627\u0634\u0629 \u0627\u0644\u0631\u0626\u064a\u0633\u064a\u0629 \u0644\u0644\u0648\u0635\u0648\u0644 \u0627\u0644\u0633\u0631\u064a\u0639!',
 },
 zh: {
     flag:'ZH',
@@ -219,5 +225,6 @@ zh: {
     navSimulator:'\u6a21\u62df\u5668',navPortfolio:'\u6295\u8d44\u7ec4\u5408',navDividends:'\u80a1\u606f',navGoals:'\u76ee\u6807',navTax:'\u7a0e\u52a1',navLegends:'\u4f20\u5947',
     saveText:'\u4fdd\u5b58',toastWelcome:'\u6b22\u8fce\u56de\u6765\uff01\u4f60\u7684\u4e0a\u6b21\u6a21\u62df\u5df2\u6062\u590d\u3002',toastSavedCloud:'\u5df2\u4fdd\u5b58\u5230\u4f60\u7684\u8d26\u6237\uff01',toastSavedLocal:'\u5df2\u672c\u5730\u4fdd\u5b58\u3002\u767b\u5f55\u4ee5\u540c\u6b65\u3002',toastCopied:'\u7ed3\u679c\u5df2\u590d\u5236\u5230\u526a\u8d34\u677f\uff01',toastCloudLoaded:'\u4ece\u4e91\u7aef\u52a0\u8f7d\u6a21\u62df\u3002',
     shareTitle:'\u6211\u7684\u6295\u8d44\u6a21\u62df',shareISimulated:'\u6211\u521a\u6a21\u62df\u4e86\u6211\u7684\u8d22\u52a1\u672a\u6765\uff01',shareFinalValue:'\u6700\u7ec8\u4ef7\u503c',shareIPutIn:'\u6211\u6295\u5165\u4e86',shareMarketGave:'\u5e02\u573a\u7ed9\u6211',shareMoneyMultiplied:'\u94b1\u7ffb\u500d',shareTryIt:'\u81ea\u5df1\u8bd5\u8bd5',
+    socialProof:'\u4f4d\u5e74\u8f7b\u6295\u8d44\u8005\u6b63\u5728\u6a21\u62df\u672a\u6765',challengeFriend:'\u6311\u6218\u670b\u53cb',installHint:'\u6dfb\u52a0\u5230\u4e3b\u5c4f\u4ee5\u5feb\u901f\u8bbf\u95ee\uff01',
 },
 };

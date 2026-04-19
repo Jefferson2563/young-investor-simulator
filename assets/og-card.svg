@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#000000"/>
+      <stop offset="100%" style="stop-color:#0a0a0a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="45%" r="45%">
+      <stop offset="0%" style="stop-color:#00e676;stop-opacity:0.12"/>
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#D4A843"/>
+      <stop offset="100%" style="stop-color:#F0C85A"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Top accent line -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#goldGrad)"/>
+
+  <!-- Brand badge -->
+  <rect x="84" y="52" width="260" height="34" rx="17" fill="none" stroke="#D4A843" stroke-width="1.5" opacity="0.7"/>
+  <text x="214" y="74" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="700" fill="#D4A843" text-anchor="middle" letter-spacing="2" opacity="0.9">YOUNG INVESTOR</text>
+
+  <!-- Main headline -->
+  <text x="84" y="172" font-family="Inter, system-ui, sans-serif" font-size="52" font-weight="800" fill="#ffffff" opacity="0.9">See how your money grows</text>
+
+  <!-- Hero number -->
+  <text x="84" y="286" font-family="Inter, system-ui, sans-serif" font-size="110" font-weight="900" fill="#00e676">$736,000</text>
+
+  <!-- Subline under number -->
+  <text x="84" y="332" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="500" fill="rgba(255,255,255,0.55)">from $500 start + $100/month · 15% · 30 years</text>
+
+  <!-- Divider -->
+  <line x1="84" y1="375" x2="1116" y2="375" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+
+  <!-- Three stats -->
+  <!-- Stat 1 -->
+  <text x="84" y="428" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="800" fill="#ffffff">$36,500</text>
+  <text x="84" y="458" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="500" fill="rgba(255,255,255,0.45)">You put in</text>
+
+  <!-- Stat 2 -->
+  <text x="450" y="428" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="800" fill="#00e676">$699,500</text>
+  <text x="450" y="458" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="500" fill="rgba(255,255,255,0.45)">Market gave you</text>
+
+  <!-- Stat 3 -->
+  <text x="820" y="428" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="800" fill="#D4A843">20x</text>
+  <text x="820" y="458" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="500" fill="rgba(255,255,255,0.45)">Money multiplied</text>
+
+  <!-- Age comparison callout -->
+  <rect x="84" y="495" width="680" height="52" rx="10" fill="rgba(212,168,67,0.08)" stroke="rgba(212,168,67,0.25)" stroke-width="1"/>
+  <text x="104" y="526" font-family="Inter, system-ui, sans-serif" font-size="17" font-weight="600" fill="#D4A843">⚡ Start at 22 vs 32 → $387,000 more by retirement</text>
+
+  <!-- CTA pill -->
+  <rect x="84" y="566" width="340" height="48" rx="24" fill="#00e676"/>
+  <text x="254" y="596" font-family="Inter, system-ui, sans-serif" font-size="17" font-weight="700" fill="#000000" text-anchor="middle">Try it free → younginvestor.app</text>
+
+  <!-- Right side: chart bars illustration -->
+  <g opacity="0.15">
+    <rect x="860" y="440" width="40" height="80" rx="4" fill="#00e676"/>
+    <rect x="912" y="380" width="40" height="140" rx="4" fill="#00e676"/>
+    <rect x="964" y="320" width="40" height="200" rx="4" fill="#00e676"/>
+    <rect x="1016" y="240" width="40" height="280" rx="4" fill="#00e676"/>
+    <rect x="1068" y="150" width="40" height="370" rx="4" fill="#00e676"/>
+  </g>
+
+  <!-- Watermark -->
+  <text x="1116" y="612" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.2)" text-anchor="end">younginvestor.app</text>
+</svg>

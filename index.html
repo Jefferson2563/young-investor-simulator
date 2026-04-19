@@ -15,7 +15,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://younginvestor.app/">
     <meta property="og:site_name" content="Young Investor">
-    <meta property="og:image" content="https://younginvestor.app/assets/og-card.png">
+    <meta property="og:image" content="https://younginvestor.app/assets/og-card.svg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
 
@@ -23,7 +23,8 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Young Investor Simulator — See How Much Wealth You Can Build">
     <meta name="twitter:description" content="Free investment simulator. See how $100/month becomes $1M+ with compound interest. Try it now.">
-    <meta name="twitter:image" content="https://younginvestor.app/assets/og-card.png">
+    <meta name="twitter:image" content="https://younginvestor.app/assets/og-card.svg">
+    <meta name="twitter:site" content="@younginvestapp">
 
     <link rel="canonical" href="https://younginvestor.app/">
 
@@ -53,12 +54,39 @@
       gtag('config', 'G-97RRNZ9LGW');
     </script>
 
-    <!-- Microsoft Clarity -->
-    <script>
-      (function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-      })(window,document,"clarity","script","CLARITY_ID");
+    <!-- Microsoft Clarity: replace YOUR_CLARITY_ID with your real project ID from clarity.microsoft.com -->
+    <!-- <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","YOUR_CLARITY_ID");</script> -->
+
+    <!-- Organization + WebApplication structured data for Google Knowledge Panel -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Young Investor Simulator",
+      "alternateName": "younginvestor.app",
+      "url": "https://younginvestor.app",
+      "description": "Free interactive investment simulator for young people. See how compound interest turns small monthly contributions into massive wealth. Start with $100/month and watch it grow.",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "isAccessibleForFree": true,
+      "offers": [
+        {"@type": "Offer", "price": "0", "priceCurrency": "USD", "name": "Free Plan"},
+        {"@type": "Offer", "price": "4.99", "priceCurrency": "USD", "name": "Pro Monthly", "priceSpecification": {"@type": "UnitPriceSpecification", "price": "4.99", "priceCurrency": "USD", "billingDuration": "P1M"}},
+        {"@type": "Offer", "price": "49.99", "priceCurrency": "USD", "name": "Pro Annual", "priceSpecification": {"@type": "UnitPriceSpecification", "price": "49.99", "priceCurrency": "USD", "billingDuration": "P1Y"}}
+      ],
+      "publisher": {
+        "@type": "Organization",
+        "name": "Young Investor Simulator",
+        "url": "https://younginvestor.app",
+        "logo": {"@type": "ImageObject", "url": "https://younginvestor.app/assets/logo.svg"},
+        "sameAs": [
+          "https://www.tiktok.com/@younginvestor.app",
+          "https://www.instagram.com/younginvestor.app",
+          "https://twitter.com/younginvestapp",
+          "https://www.youtube.com/@younginvestor"
+        ]
+      }
+    }
     </script>
 </head>
 <body>
@@ -477,6 +505,7 @@
                             <div class="stat-label" id="goalLabel">To hit $100K</div>
                         </div>
                     </div>
+                    <p class="sim-disclaimer">* Illustrative projections only — not financial advice. Assumes constant annual return. Actual results will vary.</p>
                     <!-- ===== PRO ADVANCED STATS ===== -->
                     <div class="pro-stats-grid" data-pro-only style="display:none;">
                         <div class="stat-card pro-stat">
@@ -664,25 +693,27 @@
                     <h2 class="cta-title">Ready to start for real?</h2>
                     <p class="cta-desc">The simulator showed you the math. Now here are platforms where you can actually begin investing, even with small amounts.</p>
                 </div>
+                <p class="cta-affiliate-note">* Some links below are affiliate links — we may earn a small commission at no cost to you.</p>
                 <div class="brokers-grid">
-                    <a href="https://www.trade-republic.com" target="_blank" rel="noopener" class="broker-card">
+                    <a href="https://www.trade-republic.com" target="_blank" rel="noopener sponsored" class="broker-card">
                         <div class="broker-name">Trade Republic</div>
                         <div class="broker-detail">From 1&euro;/month &middot; Europe</div>
+                        <div class="broker-caveat">Note: EU PFOF policy changing Jun 2026</div>
                     </a>
-                    <a href="https://www.interactivebrokers.com" target="_blank" rel="noopener" class="broker-card">
+                    <a href="https://www.interactivebrokers.com" target="_blank" rel="noopener sponsored" class="broker-card">
                         <div class="broker-name">Interactive Brokers</div>
                         <div class="broker-detail">Pro trading &middot; Global</div>
                     </a>
-                    <a href="https://www.degiro.com" target="_blank" rel="noopener" class="broker-card">
+                    <a href="https://www.degiro.com" target="_blank" rel="noopener sponsored" class="broker-card">
                         <div class="broker-name">DEGIRO</div>
                         <div class="broker-detail">Low fees &middot; Europe</div>
                     </a>
-                    <a href="https://www.fidelity.com" target="_blank" rel="noopener" class="broker-card">
+                    <a href="https://www.fidelity.com" target="_blank" rel="noopener sponsored" class="broker-card">
                         <div class="broker-name">Fidelity</div>
                         <div class="broker-detail">Zero commissions &middot; USA</div>
                     </a>
                 </div>
-                <p class="cta-disclaimer">These are suggestions, not financial advice. We may earn a commission from some links.</p>
+                <p class="cta-disclaimer">These are suggestions, not financial advice. Always do your own research before choosing a broker.</p>
             </div>
         </div>
     </section>
