@@ -88,6 +88,7 @@
         ecosystem: document.getElementById('sectionEcosystem'),
         users: document.getElementById('sectionUsers'),
         revenue: document.getElementById('sectionRevenue'),
+        traffic: document.getElementById('sectionTraffic'),
         analytics: document.getElementById('sectionAnalytics')
     };
 
@@ -149,6 +150,7 @@
         updateUsersTable(currentFilter, document.getElementById('userSearch').value);
         updateAnalyticsSection();
         updateEcosystemSection();
+        updateTrafficSection();
     }
 
     function loadDashboard() {
@@ -424,13 +426,25 @@
         }).join('');
     }
 
-    // Period buttons
-    document.querySelectorAll('.period-btn').forEach(function(btn) {
+    // Ecosystem period buttons
+    document.querySelectorAll('[data-period]').forEach(function(btn) {
         btn.addEventListener('click', function() {
-            document.querySelectorAll('.period-btn').forEach(function(b) { b.classList.remove('active'); });
+            var group = this.closest('.period-tabs') || this.parentNode;
+            group.querySelectorAll('.period-btn').forEach(function(b) { b.classList.remove('active'); });
             this.classList.add('active');
             currentEcoPeriod = this.getAttribute('data-period');
             updateEcosystemSection();
+        });
+    });
+
+    // Traffic period buttons
+    var currentTrafficPeriod = 'week';
+    document.querySelectorAll('[data-traffic-period]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            document.querySelectorAll('[data-traffic-period]').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            currentTrafficPeriod = this.getAttribute('data-traffic-period');
+            renderTrafficToolCards(currentTrafficPeriod);
         });
     });
 
@@ -863,6 +877,109 @@
                     }
                 }
             }
+        });
+    }
+
+    /* ===== TRAFFIC SECTION ===== */
+    function getTrafficForPeriod(period) {
+        var now = new Date();
+        var cutoff = null;
+        var todayStr = todayKey();
+
+        if (period === 'today') {
+            cutoff = todayStr;
+        } else if (period === 'week') {
+            var w = new Date(now); w.setUTCDate(w.getUTCDate() - 6);
+            cutoff = w.getUTCFullYear() + '-' + String(w.getUTCMonth()+1).padStart(2,'0') + '-' + String(w.getUTCDate()).padStart(2,'0');
+        } else if (period === 'month') {
+            var m = new Date(now); m.setUTCDate(m.getUTCDate() - 29);
+            cutoff = m.getUTCFullYear() + '-' + String(m.getUTCMonth()+1).padStart(2,'0') + '-' + String(m.getUTCDate()).padStart(2,'0');
+        }
+
+        var result = { tools: {}, total: 0 };
+        TOOLS.forEach(function(t) { result.tools[t.id] = 0; });
+
+        dailyStats.forEach(function(d) {
+            if (period === 'today' && d.date !== todayStr) return;
+            if (cutoff && d.date < cutoff) return;
+            result.total += d.total || 0;
+            if (d.tools) {
+                Object.keys(d.tools).forEach(function(k) {
+                    if (result.tools[k] !== undefined) result.tools[k] += d.tools[k] || 0;
+                });
+            }
+        });
+        return result;
+    }
+
+    function renderTrafficToolCards(period) {
+        var data = getTrafficForPeriod(period);
+        var container = document.getElementById('trafficToolCards');
+        if (!container) return;
+        var max = Math.max(1, Math.max.apply(null, TOOLS.map(function(t) { return data.tools[t.id] || 0; })));
+        container.innerHTML = TOOLS.map(function(t) {
+            var count = data.tools[t.id] || 0;
+            var pct = Math.round((count / max) * 100);
+            return '<div class="traffic-tool-card">' +
+                '<div class="traffic-tool-header">' +
+                    '<span class="traffic-tool-name">' + t.name + '</span>' +
+                    '<span class="traffic-tool-count" style="color:' + t.color + '">' + count.toLocaleString() + '</span>' +
+                '</div>' +
+                '<div class="traffic-bar-bg"><div class="traffic-bar-fill" style="width:' + pct + '%;background:' + t.color + '"></div></div>' +
+            '</div>';
+        }).join('');
+    }
+
+    function updateTrafficSection() {
+        // KPI figures
+        var allTime = getTrafficForPeriod('all');
+        var todayData = getTrafficForPeriod('today');
+        var weekData = getTrafficForPeriod('week');
+        var monthData = getTrafficForPeriod('month');
+
+        var setEl = function(id, val) { var el = document.getElementById(id); if (el) el.textContent = val; };
+        setEl('trafficTotal', allTime.total.toLocaleString());
+        setEl('trafficToday', todayData.total.toLocaleString());
+        setEl('trafficWeek', weekData.total.toLocaleString());
+        setEl('trafficMonth', monthData.total.toLocaleString());
+
+        // Overview KPI cards
+        setEl('kpiTotalVisits', allTime.total.toLocaleString());
+        setEl('kpiVisitsToday', todayData.total.toLocaleString());
+
+        // Tool cards
+        renderTrafficToolCards(currentTrafficPeriod || 'week');
+
+        // Daily visits chart (last 30 days)
+        var days = [];
+        var now = new Date();
+        for (var i = 29; i >= 0; i--) {
+            var d = new Date(now); d.setUTCDate(d.getUTCDate() - i);
+            days.push(d.getUTCFullYear() + '-' + String(d.getUTCMonth()+1).padStart(2,'0') + '-' + String(d.getUTCDate()).padStart(2,'0'));
+        }
+        var labels = days.map(function(d) { return d.slice(5); });
+        var data = days.map(function(day) {
+            var entry = dailyStats.find(function(s) { return s.date === day; });
+            return (entry && entry.total) || 0;
+        });
+
+        var canvas = document.getElementById('trafficDailyChart');
+        if (!canvas) return;
+        if (charts.trafficDaily) charts.trafficDaily.destroy();
+        charts.trafficDaily = new Chart(canvas, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Visits',
+                    data: data,
+                    backgroundColor: 'rgba(6,182,212,0.4)',
+                    borderColor: '#06b6d4',
+                    borderWidth: 1.5,
+                    borderRadius: 4
+                }]
+            },
+            options: chartOptions()
         });
     }
 

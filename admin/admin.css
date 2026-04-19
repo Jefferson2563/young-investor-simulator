@@ -427,6 +427,46 @@ body {
     font-weight: 500;
 }
 
+/* ===== TRAFFIC TOOL CARDS ===== */
+.traffic-tool-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+}
+.traffic-tool-card {
+    background: var(--bg-hover);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+}
+.traffic-tool-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.traffic-tool-name {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+.traffic-tool-count {
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+.traffic-bar-bg {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+.traffic-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
 /* ===== CHART CARDS ===== */
 .charts-row {
     display: grid;
