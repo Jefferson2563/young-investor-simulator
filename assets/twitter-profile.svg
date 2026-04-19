@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400">
+  <defs>
+    <radialGradient id="bgGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#0d0d0d"/>
+      <stop offset="100%" style="stop-color:#000000"/>
+    </radialGradient>
+    <radialGradient id="faceGlow" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" style="stop-color:#D4A843;stop-opacity:0.08"/>
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0"/>
+    </radialGradient>
+    <linearGradient id="goldRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#D4A843"/>
+      <stop offset="50%" style="stop-color:#F0C85A"/>
+      <stop offset="100%" style="stop-color:#D4A843"/>
+    </linearGradient>
+    <clipPath id="circle">
+      <circle cx="200" cy="200" r="200"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <circle cx="200" cy="200" r="200" fill="url(#bgGlow)"/>
+  <circle cx="200" cy="200" r="200" fill="url(#faceGlow)"/>
+
+  <!-- Outer gold ring -->
+  <circle cx="200" cy="200" r="192" fill="none" stroke="url(#goldRing)" stroke-width="3" opacity="0.6"/>
+
+  <!-- Inner subtle ring -->
+  <circle cx="200" cy="200" r="176" fill="none" stroke="#D4A843" stroke-width="0.5" opacity="0.2"/>
+
+  <!-- Anonymous face — geometric/minimal silhouette -->
+  <!-- Head -->
+  <ellipse cx="200" cy="155" rx="62" ry="66" fill="#111111" stroke="#D4A843" stroke-width="1.5" opacity="0.95"/>
+
+  <!-- Face interior — dark glass effect -->
+  <ellipse cx="200" cy="155" rx="58" ry="62" fill="#0a0a0a"/>
+
+  <!-- Eyes — abstract, glowing slits -->
+  <rect x="165" y="138" width="24" height="7" rx="3.5" fill="#D4A843" opacity="0.9"/>
+  <rect x="211" y="138" width="24" height="7" rx="3.5" fill="#D4A843" opacity="0.9"/>
+
+  <!-- Eye glow -->
+  <rect x="165" y="138" width="24" height="7" rx="3.5" fill="#F0C85A" opacity="0.3" filter="url(#eyeBlur)"/>
+  <rect x="211" y="138" width="24" height="7" rx="3.5" fill="#F0C85A" opacity="0.3"/>
+
+  <!-- Nose bridge — minimal line -->
+  <line x1="200" y1="148" x2="200" y2="165" stroke="#D4A843" stroke-width="1" opacity="0.25"/>
+
+  <!-- Mouth — subtle line suggesting calm/neutral -->
+  <line x1="184" y1="172" x2="216" y2="172" stroke="#D4A843" stroke-width="1.5" stroke-linecap="round" opacity="0.35"/>
+
+  <!-- Face mask lower edge / chin shadow -->
+  <ellipse cx="200" cy="210" rx="50" ry="8" fill="#D4A843" opacity="0.04"/>
+
+  <!-- Neck -->
+  <rect x="185" y="218" width="30" height="28" rx="6" fill="#111111"/>
+
+  <!-- Shoulders / body base -->
+  <path d="M 90 320 Q 100 268 140 258 Q 170 248 200 246 Q 230 248 260 258 Q 300 268 310 320 Z" fill="#111111" stroke="#D4A843" stroke-width="1" opacity="0.9"/>
+
+  <!-- Suit collar detail -->
+  <path d="M 175 252 L 200 280 L 225 252" fill="none" stroke="#D4A843" stroke-width="1.5" stroke-linejoin="round" opacity="0.5"/>
+
+  <!-- Tie / center line -->
+  <path d="M 200 280 L 196 310 L 200 318 L 204 310 Z" fill="#D4A843" opacity="0.4"/>
+
+  <!-- Small chart line at bottom — brand signature -->
+  <polyline points="100,370 130,362 160,368 190,348 220,352 250,335 280,340 310,322" fill="none" stroke="#00e676" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>
+
+  <!-- Bottom brand text -->
+  <text x="200" y="394" font-family="Inter, system-ui, sans-serif" font-size="11" font-weight="700" fill="#D4A843" text-anchor="middle" letter-spacing="3" opacity="0.6">YOUNG INVESTOR</text>
+</svg>

@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="500" viewBox="0 0 1500 500">
+  <defs>
+    <linearGradient id="bgMain" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#000000"/>
+      <stop offset="100%" style="stop-color:#060606"/>
+    </linearGradient>
+    <radialGradient id="heroGlow" cx="30%" cy="50%" r="55%">
+      <stop offset="0%" style="stop-color:#D4A843;stop-opacity:0.07"/>
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0"/>
+    </radialGradient>
+    <radialGradient id="chartGlow" cx="80%" cy="70%" r="40%">
+      <stop offset="0%" style="stop-color:#00e676;stop-opacity:0.08"/>
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0"/>
+    </radialGradient>
+    <linearGradient id="goldLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#D4A843;stop-opacity:0"/>
+      <stop offset="30%" style="stop-color:#D4A843;stop-opacity:1"/>
+      <stop offset="70%" style="stop-color:#F0C85A;stop-opacity:1"/>
+      <stop offset="100%" style="stop-color:#D4A843;stop-opacity:0"/>
+    </linearGradient>
+    <linearGradient id="chartFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#00e676;stop-opacity:0.18"/>
+      <stop offset="100%" style="stop-color:#00e676;stop-opacity:0"/>
+    </linearGradient>
+    <mask id="fadeRight">
+      <rect x="0" y="0" width="1500" height="500" fill="white"/>
+      <rect x="1300" y="0" width="200" height="500" fill="url(#fadeEdge)"/>
+    </mask>
+    <linearGradient id="fadeEdge" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:white"/>
+      <stop offset="100%" style="stop-color:black"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1500" height="500" fill="url(#bgMain)"/>
+  <rect width="1500" height="500" fill="url(#heroGlow)"/>
+  <rect width="1500" height="500" fill="url(#chartGlow)"/>
+
+  <!-- Top gold accent line -->
+  <rect x="0" y="0" width="1500" height="2.5" fill="url(#goldLine)"/>
+
+  <!-- Bottom accent line -->
+  <rect x="0" y="497" width="1500" height="2.5" fill="url(#goldLine)" opacity="0.4"/>
+
+  <!-- Subtle grid / graph paper texture -->
+  <g opacity="0.03" stroke="#D4A843" stroke-width="0.5">
+    <line x1="0" y1="100" x2="1500" y2="100"/>
+    <line x1="0" y1="200" x2="1500" y2="200"/>
+    <line x1="0" y1="300" x2="1500" y2="300"/>
+    <line x1="0" y1="400" x2="1500" y2="400"/>
+    <line x1="150" y1="0" x2="150" y2="500"/>
+    <line x1="300" y1="0" x2="300" y2="500"/>
+    <line x1="450" y1="0" x2="450" y2="500"/>
+    <line x1="600" y1="0" x2="600" y2="500"/>
+    <line x1="750" y1="0" x2="750" y2="500"/>
+    <line x1="900" y1="0" x2="900" y2="500"/>
+    <line x1="1050" y1="0" x2="1050" y2="500"/>
+    <line x1="1200" y1="0" x2="1200" y2="500"/>
+    <line x1="1350" y1="0" x2="1350" y2="500"/>
+  </g>
+
+  <!-- === CHART (right side) === -->
+  <!-- Chart area fill -->
+  <path d="M 820,420 L 860,400 L 910,385 L 970,360 L 1030,330 L 1100,290 L 1170,245 L 1240,195 L 1310,148 L 1380,105 L 1420,82 L 1420,460 L 820,460 Z"
+        fill="url(#chartFill)"/>
+
+  <!-- Chart line — compound growth curve -->
+  <polyline
+    points="820,420 860,400 910,385 970,360 1030,330 1100,290 1170,245 1240,195 1310,148 1380,105 1420,82"
+    fill="none" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Chart data dots -->
+  <circle cx="820" cy="420" r="4" fill="#00e676" opacity="0.7"/>
+  <circle cx="910" cy="385" r="4" fill="#00e676" opacity="0.7"/>
+  <circle cx="1030" cy="330" r="5" fill="#00e676" opacity="0.8"/>
+  <circle cx="1170" cy="245" r="5" fill="#00e676" opacity="0.9"/>
+  <circle cx="1310" cy="148" r="6" fill="#00e676"/>
+  <circle cx="1420" cy="82" r="8" fill="#00e676"/>
+
+  <!-- Top dot label -->
+  <text x="1390" y="72" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="800" fill="#00e676">$736K</text>
+
+  <!-- Year labels on chart axis -->
+  <text x="818" y="448" font-family="Inter, system-ui, sans-serif" font-size="11" fill="rgba(255,255,255,0.25)" text-anchor="middle">Y1</text>
+  <text x="1030" y="448" font-family="Inter, system-ui, sans-serif" font-size="11" fill="rgba(255,255,255,0.25)" text-anchor="middle">Y10</text>
+  <text x="1240" y="448" font-family="Inter, system-ui, sans-serif" font-size="11" fill="rgba(255,255,255,0.25)" text-anchor="middle">Y20</text>
+  <text x="1420" y="448" font-family="Inter, system-ui, sans-serif" font-size="11" fill="rgba(255,255,255,0.25)" text-anchor="middle">Y30</text>
+
+  <!-- === LEFT: MAIN TEXT BLOCK === -->
+
+  <!-- Brand name -->
+  <text x="90" y="118" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" letter-spacing="4" fill="#D4A843" opacity="0.8">YOUNG INVESTOR</text>
+
+  <!-- Gold underline under brand name -->
+  <rect x="90" y="126" width="180" height="1.5" fill="#D4A843" opacity="0.4"/>
+
+  <!-- Main headline -->
+  <text x="90" y="210" font-family="Inter, system-ui, sans-serif" font-size="62" font-weight="900" fill="#ffffff" letter-spacing="-2">Your money.</text>
+  <text x="90" y="282" font-family="Inter, system-ui, sans-serif" font-size="62" font-weight="900" fill="#ffffff" letter-spacing="-2">Your time.</text>
+
+  <!-- Gold accent word -->
+  <text x="90" y="354" font-family="Inter, system-ui, sans-serif" font-size="62" font-weight="900" fill="#D4A843" letter-spacing="-2">Your future.</text>
+
+  <!-- Tagline -->
+  <text x="92" y="406" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="400" fill="rgba(255,255,255,0.45)" letter-spacing="0.5">Start early. Stay consistent. Let compound interest do the rest.</text>
+
+  <!-- CTA / URL -->
+  <rect x="90" y="430" width="248" height="42" rx="21" fill="none" stroke="#D4A843" stroke-width="1.5" opacity="0.6"/>
+  <text x="214" y="456" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" fill="#D4A843" text-anchor="middle" letter-spacing="1" opacity="0.9">younginvestor.app</text>
+
+  <!-- Anonymous face — small, right of text, left of chart -->
+  <!-- Head silhouette -->
+  <ellipse cx="720" cy="210" rx="52" ry="56" fill="#0d0d0d" stroke="#D4A843" stroke-width="1.2" opacity="0.7"/>
+  <!-- Eyes -->
+  <rect x="694" y="194" width="19" height="6" rx="3" fill="#D4A843" opacity="0.85"/>
+  <rect x="727" y="194" width="19" height="6" rx="3" fill="#D4A843" opacity="0.85"/>
+  <!-- Mouth -->
+  <line x1="706" y1="224" x2="734" y2="224" stroke="#D4A843" stroke-width="1.5" stroke-linecap="round" opacity="0.3"/>
+  <!-- Neck -->
+  <rect x="710" y="263" width="20" height="20" rx="4" fill="#0d0d0d"/>
+  <!-- Shoulders -->
+  <path d="M 640,340 Q 648,285 672,275 Q 695,267 720,265 Q 745,267 768,275 Q 792,285 800,340 Z"
+        fill="#0d0d0d" stroke="#D4A843" stroke-width="1" opacity="0.6"/>
+  <!-- Suit V -->
+  <path d="M 706,270 L 720,294 L 734,270" fill="none" stroke="#D4A843" stroke-width="1.2" stroke-linejoin="round" opacity="0.4"/>
+
+  <!-- Vertical separator line between face and chart -->
+  <line x1="808" y1="80" x2="808" y2="440" stroke="#D4A843" stroke-width="0.5" opacity="0.12"/>
+
+</svg>
