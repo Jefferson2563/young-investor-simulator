@@ -449,6 +449,17 @@ body {
     grid-column: 1 / -1;
 }
 
+.chart-card canvas {
+    max-height: 300px;
+    width: 100% !important;
+}
+
+@media (max-width: 768px) {
+    .chart-card canvas {
+        max-height: 220px;
+    }
+}
+
 .chart-header {
     display: flex;
     align-items: center;
