@@ -743,6 +743,74 @@ a { color: inherit; text-decoration: none; }
     letter-spacing: 0.5px;
 }
 
+/* ===== HERO AGE COMPARISON HOOK ===== */
+.hero-age-hook {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.hero-age-card {
+    text-align: center;
+    padding: 20px 32px;
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    min-width: 160px;
+}
+
+.hero-age-card.hero-age-winner {
+    border-color: var(--green-border);
+}
+
+.hero-age-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.hero-age-amount {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -2px;
+    color: var(--green);
+}
+
+.hero-age-dim {
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+.hero-age-vs {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.hero-age-gap {
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 36px;
+    text-align: center;
+}
+
+.hero-age-gap strong {
+    color: var(--green);
+    font-weight: 800;
+}
+
+@media (max-width: 480px) {
+    .hero-age-card { padding: 14px 20px; min-width: 130px; }
+    .hero-age-amount { font-size: 24px; }
+}
+
 .hero-title {
     font-family: var(--font-display);
     font-size: clamp(36px, 7vw, 72px);

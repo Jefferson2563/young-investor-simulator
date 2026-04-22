@@ -857,6 +857,14 @@ function closeFullscreen() {
         const pct = res30.finalBalance > 0 ? ((diff / res30.finalBalance) * 100).toFixed(0) : '0';
         const ct = translations[currentLang] || translations.en;
         els.compDiff.innerHTML = ct.compDiffStart + `<strong>${formatMoney(diff, diff >= 1_000_000)}</strong>` + ` (${pct}%)` + ct.compDiffEnd;
+
+        // Update hero age-comparison hook
+        var heroAt20 = document.getElementById('heroAt20');
+        var heroAt30 = document.getElementById('heroAt30');
+        var heroGap  = document.getElementById('heroGap');
+        if (heroAt20) heroAt20.textContent = formatMoney(res20.finalBalance, res20.finalBalance >= 1_000_000);
+        if (heroAt30) heroAt30.textContent = formatMoney(res30.finalBalance, res30.finalBalance >= 1_000_000);
+        if (heroGap)  heroGap.textContent  = formatMoney(diff, diff >= 1_000_000);
     }
 
     // --- Slider Fills ---
