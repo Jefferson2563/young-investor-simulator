@@ -1,72 +1,112 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
   <defs>
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#000000"/>
-      <stop offset="100%" style="stop-color:#0a0a0a"/>
+      <stop offset="0%" stop-color="#000000"/>
+      <stop offset="100%" stop-color="#080808"/>
     </linearGradient>
-    <radialGradient id="glow" cx="50%" cy="45%" r="45%">
-      <stop offset="0%" style="stop-color:#00e676;stop-opacity:0.12"/>
-      <stop offset="100%" style="stop-color:#000000;stop-opacity:0"/>
+    <radialGradient id="glow" cx="35%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#00e676" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#D4A843"/>
-      <stop offset="100%" style="stop-color:#F0C85A"/>
+    <radialGradient id="glowR" cx="85%" cy="70%" r="40%">
+      <stop offset="0%" stop-color="#00e676" stop-opacity="0.06"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="greenLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#00e676" stop-opacity="0"/>
+      <stop offset="20%"  stop-color="#00e676" stop-opacity="1"/>
+      <stop offset="80%"  stop-color="#00e676" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#00e676" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="chartFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#00e676" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#00e676" stop-opacity="0"/>
     </linearGradient>
   </defs>
 
   <!-- Background -->
   <rect width="1200" height="630" fill="url(#bg)"/>
   <rect width="1200" height="630" fill="url(#glow)"/>
+  <rect width="1200" height="630" fill="url(#glowR)"/>
 
-  <!-- Top accent line -->
-  <rect x="0" y="0" width="1200" height="3" fill="url(#goldGrad)"/>
+  <!-- Top green accent line -->
+  <rect x="0" y="0" width="1200" height="3" fill="url(#greenLine)"/>
 
-  <!-- Brand badge -->
-  <rect x="84" y="52" width="260" height="34" rx="17" fill="none" stroke="#D4A843" stroke-width="1.5" opacity="0.7"/>
-  <text x="214" y="74" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="700" fill="#D4A843" text-anchor="middle" letter-spacing="2" opacity="0.9">YOUNG INVESTOR</text>
-
-  <!-- Main headline -->
-  <text x="84" y="172" font-family="Inter, system-ui, sans-serif" font-size="52" font-weight="800" fill="#ffffff" opacity="0.9">See how your money grows</text>
-
-  <!-- Hero number -->
-  <text x="84" y="286" font-family="Inter, system-ui, sans-serif" font-size="110" font-weight="900" fill="#00e676">$736,000</text>
-
-  <!-- Subline under number -->
-  <text x="84" y="332" font-family="Inter, system-ui, sans-serif" font-size="22" font-weight="500" fill="rgba(255,255,255,0.55)">from $500 start + $100/month · 15% · 30 years</text>
-
-  <!-- Divider -->
-  <line x1="84" y1="375" x2="1116" y2="375" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-
-  <!-- Three stats -->
-  <!-- Stat 1 -->
-  <text x="84" y="428" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="800" fill="#ffffff">$36,500</text>
-  <text x="84" y="458" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="500" fill="rgba(255,255,255,0.45)">You put in</text>
-
-  <!-- Stat 2 -->
-  <text x="450" y="428" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="800" fill="#00e676">$699,500</text>
-  <text x="450" y="458" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="500" fill="rgba(255,255,255,0.45)">Market gave you</text>
-
-  <!-- Stat 3 -->
-  <text x="820" y="428" font-family="Inter, system-ui, sans-serif" font-size="36" font-weight="800" fill="#D4A843">20x</text>
-  <text x="820" y="458" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="500" fill="rgba(255,255,255,0.45)">Money multiplied</text>
-
-  <!-- Age comparison callout -->
-  <rect x="84" y="495" width="680" height="52" rx="10" fill="rgba(212,168,67,0.08)" stroke="rgba(212,168,67,0.25)" stroke-width="1"/>
-  <text x="104" y="526" font-family="Inter, system-ui, sans-serif" font-size="17" font-weight="600" fill="#D4A843">⚡ Start at 22 vs 32 → $387,000 more by retirement</text>
-
-  <!-- CTA pill -->
-  <rect x="84" y="566" width="340" height="48" rx="24" fill="#00e676"/>
-  <text x="254" y="596" font-family="Inter, system-ui, sans-serif" font-size="17" font-weight="700" fill="#000000" text-anchor="middle">Try it free → younginvestor.app</text>
-
-  <!-- Right side: chart bars illustration -->
-  <g opacity="0.15">
-    <rect x="860" y="440" width="40" height="80" rx="4" fill="#00e676"/>
-    <rect x="912" y="380" width="40" height="140" rx="4" fill="#00e676"/>
-    <rect x="964" y="320" width="40" height="200" rx="4" fill="#00e676"/>
-    <rect x="1016" y="240" width="40" height="280" rx="4" fill="#00e676"/>
-    <rect x="1068" y="150" width="40" height="370" rx="4" fill="#00e676"/>
+  <!-- Subtle grid -->
+  <g opacity="0.02" stroke="#00e676" stroke-width="0.8">
+    <line x1="0" y1="157" x2="1200" y2="157"/>
+    <line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="472" x2="1200" y2="472"/>
+    <line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/>
+    <line x1="900" y1="0" x2="900" y2="630"/>
   </g>
 
+  <!-- Brand badge -->
+  <rect x="80" y="52" width="220" height="34" rx="17" fill="none" stroke="#00e676" stroke-width="1.5" opacity="0.5"/>
+  <text x="190" y="74" font-family="Inter,system-ui,sans-serif" font-size="12" font-weight="700" fill="#00e676" text-anchor="middle" letter-spacing="3" opacity="0.85">YOUNG INVESTOR</text>
+
+  <!-- 20 vs 30 hero concept - two columns -->
+  <!-- Left: start at 20 -->
+  <text x="80" y="160" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="700" fill="#00e676" letter-spacing="3" opacity="0.7">START AT 20</text>
+  <text x="80" y="260" font-family="Inter,system-ui,sans-serif" font-size="96" font-weight="900" fill="#00e676" letter-spacing="-4">$736K</text>
+  <text x="80" y="298" font-family="Inter,system-ui,sans-serif" font-size="18" fill="rgba(255,255,255,0.4)">by age 55</text>
+
+  <!-- VS divider -->
+  <line x1="80" y1="330" x2="560" y2="330" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+  <text x="80" y="370" font-family="Inter,system-ui,sans-serif" font-size="14" font-weight="700" fill="rgba(255,255,255,0.25)" letter-spacing="3">START AT 30</text>
+  <text x="80" y="450" font-family="Inter,system-ui,sans-serif" font-size="72" font-weight="900" fill="rgba(255,255,255,0.2)" letter-spacing="-3">$380K</text>
+
+  <!-- Gap callout -->
+  <rect x="80" y="480" width="500" height="56" rx="12" fill="rgba(0,230,118,0.08)" stroke="rgba(0,230,118,0.25)" stroke-width="1"/>
+  <text x="104" y="514" font-family="Inter,system-ui,sans-serif" font-size="19" font-weight="700" fill="#00e676">⚡  $356,000 lost by waiting 10 years</text>
+
+  <!-- CTA pill -->
+  <rect x="80" y="558" width="320" height="52" rx="26" fill="#00e676"/>
+  <text x="240" y="590" font-family="Inter,system-ui,sans-serif" font-size="17" font-weight="700" fill="#000000" text-anchor="middle">Try free → younginvestor.app</text>
+
+  <!-- Right side: growth curve chart -->
+  <!-- Vertical separator -->
+  <line x1="620" y1="50" x2="620" y2="580" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+  <!-- Chart area fill: age-20 curve -->
+  <polygon
+    points="660,560 720,548 790,530 870,503 950,462 1030,405 1110,325 1170,250 1170,575 660,575"
+    fill="url(#chartFill)"/>
+
+  <!-- Chart area fill: age-30 curve (dimmer) -->
+  <polygon
+    points="790,560 860,552 930,538 1010,515 1090,478 1170,425 1170,575 790,575"
+    fill="rgba(0,230,118,0.04)"/>
+
+  <!-- Age-20 curve (bright solid) -->
+  <polyline
+    points="660,560 720,548 790,530 870,503 950,462 1030,405 1110,325 1170,250"
+    fill="none" stroke="#00e676" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Age-30 curve (dashed dim) -->
+  <polyline
+    points="790,560 860,552 930,538 1010,515 1090,478 1170,425"
+    fill="none" stroke="#00e676" stroke-width="2" stroke-dasharray="8,5"
+    stroke-linecap="round" stroke-linejoin="round" opacity="0.35"/>
+
+  <!-- Endpoint age-20 -->
+  <circle cx="1170" cy="250" r="10" fill="#00e676" opacity="0.2"/>
+  <circle cx="1170" cy="250" r="5"  fill="#00e676"/>
+
+  <!-- Endpoint age-30 -->
+  <circle cx="1170" cy="425" r="6" fill="#00e676" opacity="0.3"/>
+
+  <!-- Gap bracket -->
+  <line x1="1185" y1="250" x2="1185" y2="425" stroke="#00e676" stroke-width="1.5" opacity="0.3"/>
+  <line x1="1179" y1="250" x2="1192" y2="250" stroke="#00e676" stroke-width="1.5" opacity="0.3"/>
+  <line x1="1179" y1="425" x2="1192" y2="425" stroke="#00e676" stroke-width="1.5" opacity="0.3"/>
+
+  <!-- X axis labels -->
+  <text x="660"  y="597" font-family="Inter,system-ui,sans-serif" font-size="12" fill="rgba(255,255,255,0.2)" text-anchor="middle">Age 20</text>
+  <text x="790"  y="597" font-family="Inter,system-ui,sans-serif" font-size="12" fill="rgba(255,255,255,0.15)" text-anchor="middle">Age 30</text>
+  <text x="1170" y="597" font-family="Inter,system-ui,sans-serif" font-size="12" fill="rgba(255,255,255,0.2)" text-anchor="middle">Age 55</text>
+
   <!-- Watermark -->
-  <text x="1116" y="612" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="500" fill="rgba(255,255,255,0.2)" text-anchor="end">younginvestor.app</text>
+  <text x="1170" y="620" font-family="Inter,system-ui,sans-serif" font-size="13" fill="rgba(255,255,255,0.15)" text-anchor="end">younginvestor.app</text>
 </svg>
