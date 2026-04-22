@@ -861,10 +861,13 @@ function closeFullscreen() {
         // Update hero age-comparison hook
         var heroAt20 = document.getElementById('heroAt20');
         var heroAt30 = document.getElementById('heroAt30');
-        var heroGap  = document.getElementById('heroGap');
+        var heroGapLine = document.getElementById('heroGapLine');
         if (heroAt20) heroAt20.textContent = formatMoney(res20.finalBalance, res20.finalBalance >= 1_000_000);
         if (heroAt30) heroAt30.textContent = formatMoney(res30.finalBalance, res30.finalBalance >= 1_000_000);
-        if (heroGap)  heroGap.textContent  = formatMoney(diff, diff >= 1_000_000);
+        if (heroGapLine) {
+            var gapAmt = formatMoney(Math.abs(diff), Math.abs(diff) >= 1_000_000);
+            heroGapLine.innerHTML = (ct.heroGapStart || "That's ") + '<strong>' + gapAmt + '</strong>' + (ct.heroGapEnd || ' lost by waiting 10 years.');
+        }
     }
 
     // --- Slider Fills ---
@@ -1440,6 +1443,13 @@ function closeFullscreen() {
         if (heroSub) heroSub.innerHTML = t.heroSub + '<br>' + t.heroSub2;
         const heroCta = document.querySelector('.hero-cta span:first-child');
         if (heroCta) heroCta.textContent = t.heroCta;
+
+        // --- Hero age hook labels ---
+        const heroLabel20 = document.getElementById('heroLabel20');
+        const heroLabel30 = document.getElementById('heroLabel30');
+        if (heroLabel20) heroLabel20.textContent = t.compStartAt20;
+        if (heroLabel30) heroLabel30.textContent = t.compStartAt30;
+        // Gap line text is rebuilt in updateComparison() using heroGapStart/heroGapEnd
 
         // --- Goal Banner ---
         const goalLabel = document.querySelector('.goal-label');
