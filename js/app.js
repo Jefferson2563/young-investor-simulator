@@ -105,33 +105,8 @@ function sendChallenge() {
     }
 }
 
-// --- Social Proof Counter (live from Firestore) ---
-// Only shows when user count is impressive (50+). Below that, hides entirely.
-(function() {
-    var MIN_SOCIAL_PROOF = 50;
-
-    function updateCounter() {
-        if (typeof db === 'undefined') return;
-        db.collection('users').get().then(function(snap) {
-            var count = snap.size;
-            var proofEl = document.getElementById('socialProof');
-            var countEl = document.getElementById('spCount');
-            if (!proofEl) return;
-
-            if (count >= MIN_SOCIAL_PROOF) {
-                proofEl.style.display = '';
-                if (countEl) countEl.textContent = '+' + count.toLocaleString();
-            } else {
-                proofEl.style.display = 'none';
-            }
-        }).catch(function() {});
-    }
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', function() { setTimeout(updateCounter, 2000); });
-    } else {
-        setTimeout(updateCounter, 2000);
-    }
-})();
+// --- Social Proof: static testimonials, always visible ---
+// (Firestore counter removed — replaced with curated testimonials in HTML)
 
 // --- Global auth/modal functions (called from HTML onclick) ---
 let currentUser = null;
@@ -1849,6 +1824,19 @@ function closeFullscreen() {
         [els.initial, els.monthly, els.rate, els.years].forEach(s => {
             s.addEventListener('input', update);
         });
+
+        // Defer pro-teaser: hide on load, reveal after first slider interaction
+        // This ensures users see their chart results before any upgrade prompt
+        var proTeaser = document.querySelector('.pro-teaser');
+        if (proTeaser) {
+            proTeaser.style.display = 'none';
+            var teaserShown = false;
+            [els.initial, els.monthly, els.rate, els.years].forEach(function(s) {
+                s.addEventListener('input', function() {
+                    if (!teaserShown) { proTeaser.style.display = ''; teaserShown = true; }
+                });
+            });
+        }
 
         $('themeToggle').addEventListener('click', toggleTheme);
 
