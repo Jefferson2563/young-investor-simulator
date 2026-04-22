@@ -160,9 +160,11 @@ a { color: inherit; text-decoration: none; }
 
 /* Per-tool "SOON" badge colors */
 .nav-links a[data-tool-color="portfolio"]::after { background: #42A5F5 !important; }
+.nav-links a[data-tool-color="dividends"]::after { background: #D4A843 !important; }
 .nav-links a[data-tool-color="goals"]::after { background: #26C6DA !important; }
 .nav-links a[data-tool-color="tax"]::after { background: #AB8FD2 !important; }
 [data-theme="light"] .nav-links a[data-tool-color="portfolio"]::after { background: #1976D2 !important; color: #fff !important; }
+[data-theme="light"] .nav-links a[data-tool-color="dividends"]::after { background: #B8922D !important; color: #fff !important; }
 [data-theme="light"] .nav-links a[data-tool-color="goals"]::after { background: #00838F !important; color: #fff !important; }
 [data-theme="light"] .nav-links a[data-tool-color="tax"]::after { background: #6A1B9A !important; color: #fff !important; }
 
