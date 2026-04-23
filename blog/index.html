@@ -185,14 +185,13 @@ firebase.auth().onAuthStateChanged(function(user) {
 // Load posts from Firestore
 function loadPosts() {
     db.collection('posts')
-        .where('published', '==', true)
         .get()
         .then(function(snap) {
             allPosts = [];
             snap.forEach(function(doc) {
-                allPosts.push(Object.assign({ id: doc.id }, doc.data()));
+                var d = Object.assign({ id: doc.id }, doc.data());
+                if (d.published) allPosts.push(d);
             });
-            // Sort by publishedAt descending in JS — no composite index needed
             allPosts.sort(function(a, b) {
                 var ta = a.publishedAt ? a.publishedAt.seconds : 0;
                 var tb = b.publishedAt ? b.publishedAt.seconds : 0;
