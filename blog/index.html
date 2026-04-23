@@ -186,12 +186,17 @@ firebase.auth().onAuthStateChanged(function(user) {
 function loadPosts() {
     db.collection('posts')
         .where('published', '==', true)
-        .orderBy('publishedAt', 'desc')
         .get()
         .then(function(snap) {
             allPosts = [];
             snap.forEach(function(doc) {
                 allPosts.push(Object.assign({ id: doc.id }, doc.data()));
+            });
+            // Sort by publishedAt descending in JS — no composite index needed
+            allPosts.sort(function(a, b) {
+                var ta = a.publishedAt ? a.publishedAt.seconds : 0;
+                var tb = b.publishedAt ? b.publishedAt.seconds : 0;
+                return tb - ta;
             });
             renderPosts();
             document.getElementById('blogSkeleton').style.display = 'none';

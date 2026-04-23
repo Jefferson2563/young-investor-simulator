@@ -236,9 +236,14 @@ function signInWithGoogle() {
 
 // ===== LOAD POSTS =====
 function loadAllPosts() {
-    db.collection('posts').orderBy('publishedAt', 'desc').get().then(function(snap) {
+    db.collection('posts').get().then(function(snap) {
         var posts = [];
         snap.forEach(function(doc) { posts.push(Object.assign({ id: doc.id }, doc.data())); });
+        posts.sort(function(a, b) {
+            var ta = a.publishedAt ? a.publishedAt.seconds : 0;
+            var tb = b.publishedAt ? b.publishedAt.seconds : 0;
+            return tb - ta;
+        });
         document.getElementById('postCountLabel').textContent = '(' + posts.length + ')';
         if (posts.length === 0) {
             document.getElementById('adminPostList').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">No posts yet. Create your first one!</div>';
