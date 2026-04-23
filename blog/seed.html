@@ -42,6 +42,7 @@
 
     <button class="btn" id="seedBtn" onclick="seedAll()">🚀 Publish all 5 posts now</button>
     <div class="result" id="result"></div>
+    <div id="log" style="margin-top:16px;font-size:12px;color:#888;font-family:monospace;line-height:1.8;"></div>
 </div>
 
 <!-- Firebase (Firestore only — no auth needed for seeding) -->
@@ -98,46 +99,71 @@ var POSTS = [
 }
 ];
 
+function log(msg) {
+    var el = document.getElementById('log');
+    el.innerHTML += '› ' + msg + '<br>';
+}
+
 function seedAll() {
     var btn = document.getElementById('seedBtn');
     btn.disabled = true;
     btn.textContent = 'Publishing...';
+    log('Button clicked — starting...');
+
+    // Test Firebase is alive
+    try {
+        var testDB = firebase.firestore();
+        log('✅ Firestore instance OK');
+    } catch(e) {
+        log('❌ Firestore init failed: ' + e.message);
+        showResult('error', 'Firestore failed: ' + e.message);
+        btn.disabled = false; btn.textContent = 'Try again';
+        return;
+    }
 
     var done = 0;
+    var total = POSTS.length;
+    log('Writing ' + total + ' posts...');
+
     POSTS.forEach(function(post, i) {
+        log('Checking slug: ' + post.slug);
         db.collection('posts').where('slug','==',post.slug).get()
         .then(function(snap) {
             if (!snap.empty) {
+                log('⏭ Skipped (exists): ' + post.slug);
                 document.getElementById('s'+i).innerHTML = '<span style="color:#666">Skipped</span>';
-                checkDone();
+                finish();
                 return;
             }
+            log('Writing: ' + post.slug);
             var data = Object.assign({}, post, {
                 publishedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 views: 0
             });
             return db.collection('posts').add(data).then(function() {
+                log('✅ Published: ' + post.slug);
                 document.getElementById('s'+i).innerHTML = '<span style="color:#00e676">✅ Done</span>';
-                checkDone();
+                finish();
             });
         })
         .catch(function(err) {
+            log('❌ Error on ' + post.slug + ': ' + err.code + ' — ' + err.message);
             document.getElementById('s'+i).innerHTML = '<span style="color:#ff5252">❌ Error</span>';
-            console.error(post.slug, err);
             if (err.code === 'permission-denied') {
-                showResult('error', '⚠️ Firestore permission denied. You need to update your Firestore security rules in the Firebase Console to allow writes. See admin.html comments for the rules to paste.');
+                showResult('error', '⚠️ Permission denied — go to Firebase Console → Firestore → Rules and set: allow read, write: if true; then Publish.');
             } else {
                 showResult('error', 'Error: ' + err.message);
             }
-            checkDone();
+            finish();
         });
     });
 
-    function checkDone() {
+    function finish() {
         done++;
-        if (done === POSTS.length) {
-            btn.textContent = '✅ Done!';
+        log('Done ' + done + '/' + total);
+        if (done === total) {
+            btn.textContent = '✅ All done!';
             showResult('success', '5 posts published! <a href="index.html" style="color:#00e676;font-weight:700;">View your blog →</a>');
         }
     }
