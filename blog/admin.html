@@ -198,7 +198,21 @@ var db = firebase.firestore();
 var currentEditId = null;
 
 // ===== AUTH =====
+var authResolved = false;
+
+// Safety timeout — if Firebase Auth never calls back within 6 seconds, show sign-in
+var authTimer = setTimeout(function() {
+    if (!authResolved) {
+        authResolved = true;
+        document.getElementById('authLoading').style.display = 'none';
+        document.getElementById('signInGate').style.display = 'flex';
+    }
+}, 6000);
+
 firebase.auth().onAuthStateChanged(function(user) {
+    if (authResolved) return; // timeout already fired
+    authResolved = true;
+    clearTimeout(authTimer);
     document.getElementById('authLoading').style.display = 'none';
     if (!user) {
         document.getElementById('signInGate').style.display = 'flex';

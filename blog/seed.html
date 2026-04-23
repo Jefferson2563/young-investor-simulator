@@ -1,476 +1,109 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seed Blog Posts — Admin</title>
+    <title>Seed Blog Posts</title>
     <meta name="robots" content="noindex, nofollow">
-    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/blog.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #0a0a0a; color: #fff; font-family: Inter, system-ui, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+        .box { max-width: 660px; width: 100%; }
+        h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+        h1 span { color: #00e676; }
+        .sub { color: #888; font-size: 15px; margin-bottom: 32px; line-height: 1.5; }
+        .post-row { background: #141414; border: 1px solid #222; border-radius: 12px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+        .post-row .name { flex: 1; }
+        .post-row .title { font-weight: 600; font-size: 14px; }
+        .post-row .meta { font-size: 12px; color: #666; margin-top: 3px; }
+        .post-status { font-size: 13px; color: #666; flex-shrink: 0; min-width: 100px; text-align: right; }
+        .btn { width: 100%; padding: 16px; background: #00e676; color: #000; font-weight: 800; font-size: 16px; border: none; border-radius: 12px; cursor: pointer; margin-top: 24px; transition: background 0.2s; }
+        .btn:hover { background: #00ff87; }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .result { margin-top: 16px; padding: 14px 18px; border-radius: 10px; font-size: 14px; display: none; }
+        .result.success { background: rgba(0,230,118,0.1); border: 1px solid rgba(0,230,118,0.2); color: #00e676; }
+        .result.error { background: rgba(255,82,82,0.1); border: 1px solid rgba(255,82,82,0.2); color: #ff5252; }
+        .icon { font-size: 18px; flex-shrink: 0; }
+        a { color: #00e676; }
+    </style>
 </head>
 <body>
-<nav class="blog-nav">
-    <a href="../" class="blog-nav-logo">
-        <img src="../assets/logo.svg" class="logo-icon">
-        <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
-    </a>
-    <div class="blog-nav-links"><a href="admin.html">← Admin</a><a href="index.html">Blog</a></div>
-</nav>
+<div class="box">
+    <h1>Seed <span>5 Blog Posts</span></h1>
+    <p class="sub">One click publishes all 5 SEO-optimized articles to Firestore. Posts with duplicate slugs are skipped automatically.</p>
 
-<div class="container" style="max-width:700px;padding:60px 24px;">
-    <div id="authLoading" style="text-align:center;padding:80px 0;">
-        <div style="width:40px;height:40px;border:2px solid #333;border-top-color:#00e676;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
-        <p style="color:#666;margin-bottom:24px;">Checking authentication...</p>
-        <button class="post-cta-btn" onclick="signIn()" style="opacity:0;" id="fallbackBtn">Sign in with Google</button>
+    <div id="postList">
+        <div class="post-row"><span class="icon">📈</span><div class="name"><div class="title">Investing at 20 vs 30: The $356,000 Gap Nobody Talks About</div><div class="meta">compound-interest · 6 min · investing-at-20-vs-30</div></div><div class="post-status" id="s0">Pending</div></div>
+        <div class="post-row"><span class="icon">💰</span><div class="name"><div class="title">What is DRIP Investing? How the Dividend Snowball Quietly Builds a Fortune</div><div class="meta">dividends · 5 min · what-is-drip-dividend-reinvestment</div></div><div class="post-status" id="s1">Pending</div></div>
+        <div class="post-row"><span class="icon">📈</span><div class="name"><div class="title">$100/Month at 18: What Your Money Actually Looks Like at 65</div><div class="meta">compound-interest · 4 min · 100-dollars-month-starting-at-18</div></div><div class="post-status" id="s2">Pending</div></div>
+        <div class="post-row"><span class="icon">🧠</span><div class="name"><div class="title">The 3 Numbers Every Beginner Investor Needs to Know</div><div class="meta">mindset · 5 min · 3-numbers-every-beginner-investor-needs</div></div><div class="post-status" id="s3">Pending</div></div>
+        <div class="post-row"><span class="icon">📊</span><div class="name"><div class="title">Net Worth at 25: What's Normal, What's Great, and How to Track It</div><div class="meta">portfolio · 5 min · net-worth-at-25-guide</div></div><div class="post-status" id="s4">Pending</div></div>
     </div>
-    <div id="signInGate" style="display:none;text-align:center;padding:80px 0;">
-        <div style="font-size:48px;margin-bottom:20px;">🔐</div>
-        <h2 style="margin-bottom:10px;">Admin only</h2>
-        <button class="post-cta-btn" onclick="signIn()">Sign in with Google</button>
-    </div>
-    <div id="denied" style="display:none;text-align:center;padding:80px 0;">
-        <div style="font-size:48px;margin-bottom:20px;">🚫</div>
-        <h2>Access denied</h2>
-    </div>
-    <div id="seedPanel" style="display:none;">
-        <h1 style="font-size:28px;font-weight:800;margin-bottom:8px;">Seed <span style="color:var(--accent);">5 Blog Posts</span></h1>
-        <p style="color:var(--text-secondary);margin-bottom:32px;">This will publish all 5 articles to Firestore. Existing posts with the same slug will be skipped.</p>
-        <div id="postList" style="margin-bottom:32px;display:flex;flex-direction:column;gap:10px;"></div>
-        <button id="seedBtn" class="post-cta-btn" style="width:100%;justify-content:center;font-size:16px;padding:16px;" onclick="seedAll()">
-            🚀 Publish all 5 posts now
-        </button>
-        <div id="seedStatus" style="margin-top:16px;"></div>
-    </div>
+
+    <button class="btn" id="seedBtn" onclick="seedAll()">🚀 Publish all 5 posts now</button>
+    <div class="result" id="result"></div>
 </div>
 
-<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
-
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 <script src="../js/firebase-config.js"></script>
 <script>
-var ADMIN_EMAIL = 'jeffmbogne@gmail.com';
-var db;
 
-// Fallback: if Firebase Auth doesn't respond in 3s, show sign-in button
-var authTimeout = setTimeout(function() {
-    document.getElementById('authLoading').style.display = 'none';
-    document.getElementById('signInGate').style.display = 'block';
-}, 3000);
-
-/* ============================================================
-   5 BLOG POSTS — Full SEO-optimized content
-   ============================================================ */
 var POSTS = [
-
-/* ── POST 1 ── */
 {
-  title: 'Investing at 20 vs 30: The $356,000 Gap Nobody Talks About',
-  slug: 'investing-at-20-vs-30',
-  category: 'compound-interest',
-  excerpt: 'Same person. Same income. Same $200/month. Just 10 years apart. The difference? $356,000. Here\'s the math behind the most expensive decision you\'re probably making right now.',
-  readTime: 6,
-  author: 'Young Investor Team',
-  published: true,
-  content: `
-<p>Most people find out too late. They're 35, doing the math for the first time, realizing what a decade of waiting actually cost them. Not in potential. Not in theory. In real, hard dollars.</p>
-
-<p>We ran the numbers. Starting with $200/month at a 10% annual return — a conservative S&amp;P 500 historical average — the difference between starting at 20 and starting at 30 is <strong>$356,000</strong>.</p>
-
-<div class="data-compare">
-  <div class="data-col winner">
-    <div class="dc-label">Start investing at 20</div>
-    <div class="dc-amount">$736K</div>
-  </div>
-  <div class="data-col loser">
-    <div class="dc-label">Start investing at 30</div>
-    <div class="dc-amount">$380K</div>
-  </div>
-</div>
-
-<p>Same person. Same income. Same $200/month. Just 10 years apart. That gap is compound interest doing exactly what it's supposed to do — and punishing you for every month you wait.</p>
-
-<h2>Why the gap is so enormous</h2>
-
-<p>Most people think investing is about saving money. It's not. It's about <strong>time</strong>. The earlier you start, the more your money works for you instead of you working for it.</p>
-
-<p>Here's the thing about compound interest: you don't just earn returns on your original investment. You earn returns on your returns. And then returns on those returns. Every single year, for decades. The math is exponential — which means the final years are worth far more than the early ones.</p>
-
-<div class="highlight-box">
-  <span class="hb-number">The last 10 years</span>
-  <p>If you start at 20 and retire at 55, your final 10 years of compounding (ages 45–55) generate more wealth than the first 25 years combined. That's why the person who starts at 30 doesn't just lose 10 years of contributions — they lose the most powerful decade of the entire curve.</p>
-</div>
-
-<h2>What about people who can't afford $200/month?</h2>
-
-<p>The amount matters far less than you think. $50/month starting at 20 often beats $200/month starting at 30. Because the one variable that can never be recovered is time.</p>
-
-<p>You can earn more money. You can cut expenses. You can't go back to being 20.</p>
-
-<p>The lesson isn't "invest $200/month or you've failed." The lesson is: start now, with whatever you have. Increase it when you can. Let time do the rest.</p>
-
-<h2>The psychological trap that costs people hundreds of thousands</h2>
-
-<p>The single most expensive financial decision most young people make isn't a bad investment. It's no investment. It's the phrase: "I'll start when I have more money."</p>
-
-<p>At 22, investing $100/month feels like throwing money away. At 50, you'd give anything to go back. The person who starts at 20 doesn't feel wealthy at 25 — they feel disciplined. And quiet discipline, over 30 years, creates the loudest results.</p>
-
-<h2>Three things you can do today</h2>
-
-<ul>
-  <li><strong>Pick a number</strong> — even $20/month. Seriously. The habit matters more than the amount at the start.</li>
-  <li><strong>Open an account</strong> — any brokerage (Interactive Brokers, Trade Republic, Degiro, Fidelity). Buy an S&amp;P 500 index fund or ETF. Done.</li>
-  <li><strong>Automate it</strong> — set up a monthly automatic transfer so you never have to think about it again.</li>
-</ul>
-
-<p>Every month you wait is a month you can never recover. The $356,000 gap isn't fixed — it grows every year you don't start. Run your own numbers below and see exactly what yours looks like.</p>
-`
+  slug:'investing-at-20-vs-30', category:'compound-interest', readTime:6, published:true,
+  author:'Young Investor Team',
+  title:'Investing at 20 vs 30: The $356,000 Gap Nobody Talks About',
+  excerpt:"Same person. Same income. Same $200/month. Just 10 years apart. The difference? $356,000. Here's the math behind the most expensive decision you're probably making right now.",
+  content:'<p>Most people find out too late. They\'re 35, doing the math for the first time, realizing what a decade of waiting actually cost them. Not in potential. Not in theory. In real, hard dollars.</p><p>We ran the numbers. Starting with $200/month at a 10% annual return — a conservative S&amp;P 500 historical average — the difference between starting at 20 and starting at 30 is <strong>$356,000</strong>.</p><div class="data-compare"><div class="data-col winner"><div class="dc-label">Start investing at 20</div><div class="dc-amount">$736K</div></div><div class="data-col loser"><div class="dc-label">Start investing at 30</div><div class="dc-amount">$380K</div></div></div><p>Same person. Same income. Same $200/month. Just 10 years apart. That gap is compound interest doing exactly what it\'s supposed to do — and punishing you for every month you wait.</p><h2>Why the gap is so enormous</h2><p>Most people think investing is about saving money. It\'s not. It\'s about <strong>time</strong>. The earlier you start, the more your money works for you instead of you working for it.</p><p>Here\'s the thing about compound interest: you don\'t just earn returns on your original investment. You earn returns on your returns. And then returns on those returns. Every single year, for decades. The math is exponential — which means the final years are worth far more than the early ones.</p><div class="highlight-box"><span class="hb-number">The last 10 years</span><p>If you start at 20 and retire at 55, your final 10 years of compounding (ages 45–55) generate more wealth than the first 25 years combined. That\'s why the person who starts at 30 doesn\'t just lose 10 years of contributions — they lose the most powerful decade of the entire curve.</p></div><h2>What about people who cannot afford $200/month?</h2><p>The amount matters far less than you think. $50/month starting at 20 often beats $200/month starting at 30. Because the one variable that can never be recovered is time.</p><p>You can earn more money. You can cut expenses. You cannot go back to being 20.</p><p>The lesson is not "invest $200/month or you have failed." The lesson is: start now, with whatever you have. Increase it when you can. Let time do the rest.</p><h2>The psychological trap that costs people hundreds of thousands</h2><p>The single most expensive financial decision most young people make is not a bad investment. It\'s the phrase: "I\'ll start when I have more money."</p><p>At 22, investing $100/month feels like throwing money away. At 50, you\'d give anything to go back. The person who starts at 20 does not feel wealthy at 25 — they feel disciplined. And quiet discipline, over 30 years, creates the loudest results.</p><h2>Three things you can do today</h2><ul><li><strong>Pick a number</strong> — even $20/month. The habit matters more than the amount at the start.</li><li><strong>Open an account</strong> — any brokerage. Buy an S&amp;P 500 index fund or ETF. Done.</li><li><strong>Automate it</strong> — set up a monthly automatic transfer so you never have to think about it again.</li></ul><p>Every month you wait is a month you can never recover. The $356,000 gap is not fixed — it grows every year you do not start. Run your own numbers and see exactly what yours looks like.</p>'
 },
-
-/* ── POST 2 ── */
 {
-  title: 'What is DRIP Investing? How the Dividend Snowball Quietly Builds a Fortune',
-  slug: 'what-is-drip-dividend-reinvestment',
-  category: 'dividends',
-  excerpt: 'DRIP stands for Dividend Reinvestment Plan. It\'s the simplest wealth-building strategy most beginners ignore — and it turns the same investment into 64% more money over 30 years.',
-  readTime: 5,
-  author: 'Young Investor Team',
-  published: true,
-  content: `
-<p>Most young investors focus on stock prices. Buy low, sell high. Watch the number go up. But the investors who quietly build real, lasting wealth understand something different: <strong>dividends reinvested over decades are the closest thing to a legal money machine that exists.</strong></p>
-
-<p>It's called DRIP. And it's deceptively simple.</p>
-
-<h2>What exactly is DRIP?</h2>
-
-<p>When a company pays a dividend — a portion of its profits distributed to shareholders — you have two choices: take the cash payout, or reinvest it automatically into more shares of the same stock.</p>
-
-<p>DRIP means reinvest. Every dividend payment buys you more shares. More shares generate more dividends. More dividends buy more shares. This cycle, running continuously for decades, is what investors call the "dividend snowball."</p>
-
-<div class="highlight-box">
-  <span class="hb-number">Year 1 → Year 30</span>
-  <p>In year 1, your $10,000 at a 4% yield earns $400 in dividends. Reinvested, you now own fractionally more shares. In year 2, those extra shares generate extra dividends. By year 30, the snowball has become an avalanche — not because you added more money, but because the compounding never stopped.</p>
-</div>
-
-<h2>The real numbers: DRIP vs taking dividends as cash</h2>
-
-<p>Let's use a concrete scenario: $5,000 upfront, $100/month added, 4% dividend yield, 6% annual price growth over 30 years.</p>
-
-<div class="data-compare">
-  <div class="data-col winner">
-    <div class="dc-label">With DRIP (reinvested)</div>
-    <div class="dc-amount">$138K+</div>
-  </div>
-  <div class="data-col loser">
-    <div class="dc-label">Dividends taken as cash</div>
-    <div class="dc-amount">$84K</div>
-  </div>
-</div>
-
-<p>Same investment. Same yield. The only difference is one checkbox. Reinvesting turns $84K into $138K — <strong>a 64% bonus purely from letting dividends do their job</strong>.</p>
-
-<h2>How to actually set up DRIP</h2>
-
-<p>This is where most guides overcomplicate it. Here's the reality:</p>
-
-<ol>
-  <li>Open any brokerage account (Interactive Brokers, Trade Republic, Fidelity, Schwab, etc.)</li>
-  <li>Buy a dividend ETF (more on this below)</li>
-  <li>Find the DRIP or "dividend reinvestment" setting — usually one toggle</li>
-  <li>Turn it on</li>
-  <li>Never turn it off</li>
-</ol>
-
-<p>Most platforms handle fractional reinvestment automatically, so even if your dividend is $7.43, it buys 0.031 shares. Nothing goes to waste.</p>
-
-<h2>The best dividend ETFs for beginners</h2>
-
-<p>You don't need to pick individual stocks. Start with a diversified dividend ETF:</p>
-
-<ul>
-  <li><strong>SCHD</strong> — Schwab US Dividend Equity. Quality companies, solid yield + growth. The gold standard for most DRIP investors.</li>
-  <li><strong>VYM</strong> — Vanguard High Dividend Yield. Broad diversification, lower cost, 3%+ yield.</li>
-  <li><strong>VIG</strong> — Vanguard Dividend Appreciation. Focuses on companies that consistently raise dividends. Lower yield, but faster growth.</li>
-</ul>
-
-<h2>The one thing that makes DRIP fail</h2>
-
-<p>Discipline. Specifically: resisting the urge to turn off DRIP when dividends start adding up to real money.</p>
-
-<p>At $47/quarter, it's easy to reinvest. At $300/quarter, it starts looking like spending money. At $800/quarter, people turn off DRIP and "just this once" spend it.</p>
-
-<p>Don't. The entire strategy depends on compounding never being interrupted. One decade of discipline creates financial results that look impossible to anyone who didn't start.</p>
-`
+  slug:'what-is-drip-dividend-reinvestment', category:'dividends', readTime:5, published:true,
+  author:'Young Investor Team',
+  title:'What is DRIP Investing? How the Dividend Snowball Quietly Builds a Fortune',
+  excerpt:"DRIP stands for Dividend Reinvestment Plan. It's the simplest wealth-building strategy most beginners ignore — and it turns the same investment into 64% more money over 30 years.",
+  content:'<p>Most young investors focus on stock prices. Buy low, sell high. Watch the number go up. But the investors who quietly build real, lasting wealth understand something different: <strong>dividends reinvested over decades are the closest thing to a legal money machine that exists.</strong></p><p>It\'s called DRIP. And it\'s deceptively simple.</p><h2>What exactly is DRIP?</h2><p>When a company pays a dividend — a portion of its profits distributed to shareholders — you have two choices: take the cash payout, or reinvest it automatically into more shares of the same stock.</p><p>DRIP means reinvest. Every dividend payment buys you more shares. More shares generate more dividends. More dividends buy more shares. This cycle, running continuously for decades, is what investors call the "dividend snowball."</p><div class="highlight-box"><span class="hb-number">Year 1 to Year 30</span><p>In year 1, your $10,000 at a 4% yield earns $400 in dividends. Reinvested, you now own fractionally more shares. In year 2, those extra shares generate extra dividends. By year 30, the snowball has become an avalanche — not because you added more money, but because the compounding never stopped.</p></div><h2>The real numbers: DRIP vs taking dividends as cash</h2><p>Scenario: $5,000 upfront, $100/month added, 4% dividend yield, 6% annual price growth over 30 years.</p><div class="data-compare"><div class="data-col winner"><div class="dc-label">With DRIP (reinvested)</div><div class="dc-amount">$138K+</div></div><div class="data-col loser"><div class="dc-label">Dividends taken as cash</div><div class="dc-amount">$84K</div></div></div><p>Same investment. Same yield. The only difference is one checkbox. Reinvesting turns $84K into $138K — <strong>a 64% bonus purely from letting dividends do their job</strong>.</p><h2>How to actually set up DRIP</h2><ol><li>Open any brokerage account</li><li>Buy a dividend ETF</li><li>Find the DRIP or "dividend reinvestment" setting — usually one toggle</li><li>Turn it on. Never turn it off.</li></ol><h2>The best dividend ETFs for beginners</h2><ul><li><strong>SCHD</strong> — Schwab US Dividend Equity. Quality companies, solid yield and growth. The gold standard for most DRIP investors.</li><li><strong>VYM</strong> — Vanguard High Dividend Yield. Broad diversification, lower cost, 3%+ yield.</li><li><strong>VIG</strong> — Vanguard Dividend Appreciation. Focuses on companies that consistently raise dividends.</li></ul><h2>The one thing that makes DRIP fail</h2><p>Discipline. Specifically: resisting the urge to turn off DRIP when dividends start adding up to real money. At $47/quarter, it is easy to reinvest. At $300/quarter, it starts looking like spending money. Do not touch it. The entire strategy depends on compounding never being interrupted.</p>'
 },
-
-/* ── POST 3 ── */
 {
-  title: '$100/Month at 18: What Your Money Actually Looks Like at 65',
-  slug: '100-dollars-month-starting-at-18',
-  category: 'compound-interest',
-  excerpt: 'You don\'t need a high salary to retire wealthy. $100/month starting at 18 — the price of a few dinners out — can grow to over $1.1 million by retirement. Here\'s exactly how.',
-  readTime: 4,
-  author: 'Young Investor Team',
-  published: true,
-  content: `
-<p>Everyone tells you to "start investing early." Nobody shows you what that actually means in dollars.</p>
-
-<p>Let's fix that. One number, one scenario, completely transparent math.</p>
-
-<h2>The setup: $100/month, starting at 18</h2>
-
-<p>$100/month. That's roughly $3.33 a day — the price of a coffee, a bus ride, a few songs on iTunes. Invested in a simple S&amp;P 500 index fund from age 18 onward at an assumed 10% annual return (the historical S&amp;P 500 average):</p>
-
-<div class="highlight-box">
-  <span class="hb-number">$1,176,477</span>
-  <p>That's what $100/month from age 18 to 65 becomes, assuming 10% annual returns. You contributed a total of $56,400. The other $1,120,000+ came entirely from compound interest.</p>
-</div>
-
-<p>Read that again. You put in $56,400. You get back $1.1 million. The difference — over $1 million — is money you never worked for. Your money worked for it.</p>
-
-<h2>What changes if you wait</h2>
-
-<div class="data-compare">
-  <div class="data-col winner">
-    <div class="dc-label">Start at 18</div>
-    <div class="dc-amount">$1.17M</div>
-  </div>
-  <div class="data-col loser">
-    <div class="dc-label">Start at 28</div>
-    <div class="dc-amount">$440K</div>
-  </div>
-</div>
-
-<p>Waiting 10 years — from 18 to 28 — costs you $737,000. Not $12,000 in missed contributions. $737,000 in missed compounding.</p>
-
-<p>That's the cost of 10 years at a restaurant. Literally.</p>
-
-<h2>The psychology of $100/month</h2>
-
-<p>The hardest part isn't finding the $100. It's the feeling that $100 is "not enough to matter." It doesn't feel like investing. It feels like playing.</p>
-
-<p>That feeling is mathematically wrong.</p>
-
-<p>$100/month at 18 is not a small investment — it's a million-dollar decision disguised as a small one. The size of the outcome has nothing to do with the size of the contribution. It has everything to do with time.</p>
-
-<h2>The practical setup (takes 15 minutes)</h2>
-
-<ol>
-  <li><strong>Open a brokerage account</strong> — Trade Republic, Interactive Brokers, Fidelity, or Robinhood if you're in the US.</li>
-  <li><strong>Set up a monthly $100 automatic investment</strong> into an S&amp;P 500 ETF (SPY, VOO, or VWCE if you're in Europe).</li>
-  <li><strong>Enable dividend reinvestment</strong> (DRIP) if your broker offers it.</li>
-  <li><strong>Don't look at it for 5 years</strong>. Seriously. The biggest mistake young investors make is checking daily and panic-selling during dips.</li>
-</ol>
-
-<h2>What if you can only do $50?</h2>
-
-<p>$50/month starting at 18 still becomes $588,000 by 65. That's a life-changing number from half the price of a gym membership.</p>
-
-<p>The point isn't $100. The point is <em>something</em>, starting <em>now</em>. Increase it when your income grows. The compounding clock is already running — the question is whether your money is on it or not.</p>
-`
+  slug:'100-dollars-month-starting-at-18', category:'compound-interest', readTime:4, published:true,
+  author:'Young Investor Team',
+  title:'$100/Month at 18: What Your Money Actually Looks Like at 65',
+  excerpt:"You don't need a high salary to retire wealthy. $100/month starting at 18 — the price of a few dinners out — can grow to over $1.1 million by retirement. Here's exactly how.",
+  content:'<p>Everyone tells you to "start investing early." Nobody shows you what that actually means in dollars.</p><p>Let\'s fix that. One number, one scenario, completely transparent math.</p><h2>The setup: $100/month, starting at 18</h2><p>$100/month. That\'s roughly $3.33 a day — the price of a coffee. Invested in a simple S&amp;P 500 index fund from age 18 onward at a 10% annual return (the historical S&amp;P 500 average):</p><div class="highlight-box"><span class="hb-number">$1,176,477</span><p>That\'s what $100/month from age 18 to 65 becomes, assuming 10% annual returns. You contributed a total of $56,400. The other $1,120,000+ came entirely from compound interest.</p></div><p>Read that again. You put in $56,400. You get back $1.1 million. The difference — over $1 million — is money you never worked for. Your money worked for it.</p><h2>What changes if you wait</h2><div class="data-compare"><div class="data-col winner"><div class="dc-label">Start at 18</div><div class="dc-amount">$1.17M</div></div><div class="data-col loser"><div class="dc-label">Start at 28</div><div class="dc-amount">$440K</div></div></div><p>Waiting 10 years — from 18 to 28 — costs you $737,000. Not $12,000 in missed contributions. $737,000 in missed compounding.</p><h2>The psychology of $100/month</h2><p>The hardest part is not finding the $100. It\'s the feeling that $100 is "not enough to matter." That feeling is mathematically wrong. $100/month at 18 is not a small investment — it\'s a million-dollar decision disguised as a small one.</p><h2>The practical setup — 15 minutes</h2><ol><li><strong>Open a brokerage account</strong> — Trade Republic, Interactive Brokers, Fidelity, or Robinhood.</li><li><strong>Set up a monthly $100 automatic investment</strong> into an S&amp;P 500 ETF (SPY, VOO, or VWCE in Europe).</li><li><strong>Enable dividend reinvestment (DRIP)</strong> if your broker offers it.</li><li><strong>Do not look at it for 5 years.</strong> The biggest mistake young investors make is panic-selling during dips.</li></ol><p>$50/month starting at 18 still becomes $588,000 by 65. The point is not $100. The point is something, starting now.</p>'
 },
-
-/* ── POST 4 ── */
 {
-  title: 'The 3 Numbers Every Beginner Investor Needs to Know (And Nothing Else)',
-  slug: '3-numbers-every-beginner-investor-needs',
-  category: 'mindset',
-  excerpt: 'Investing feels complicated because finance wants it to feel complicated. The truth is, three numbers determine 90% of your long-term outcome. Master these before anything else.',
-  readTime: 5,
-  author: 'Young Investor Team',
-  published: true,
-  content: `
-<p>The financial industry makes investing feel complicated on purpose. Complexity sells advice. Complexity justifies fees. Complexity keeps you dependent.</p>
-
-<p>Here's the reality: 90% of your long-term investment outcome is determined by three numbers. Everything else is noise.</p>
-
-<h2>Number 1: Your monthly contribution</h2>
-
-<p>Not your lump sum. Not your total savings. Your <strong>monthly contribution</strong> — the amount that automatically goes into your investments every single month, no matter what.</p>
-
-<p>This number matters more than your starting amount, more than your investment picks, and more than market timing. A person who contributes $200/month consistently for 30 years will almost always outperform someone who invests $5,000 once and never adds to it.</p>
-
-<div class="highlight-box">
-  <span class="hb-number">$200/mo</span>
-  <p>$200/month starting at 22, invested in an index fund, becomes approximately $650,000 by age 55 at 10% returns. The consistency matters far more than the amount. Even $50/month consistently beats $500 invested once and forgotten.</p>
-</div>
-
-<p><strong>Your goal:</strong> Lock in a monthly contribution amount you can actually sustain. Not impressive. Sustainable.</p>
-
-<h2>Number 2: Your return rate</h2>
-
-<p>This is the annual percentage your investments grow. For most beginner investors, the right benchmark is the S&amp;P 500 historical average: <strong>approximately 10% per year</strong> (or 7% adjusted for inflation).</p>
-
-<p>You don't need to beat the market. You don't need an active fund manager. You don't need to pick stocks. You need to match the market — which a simple index ETF does automatically, at almost zero cost.</p>
-
-<div class="data-compare">
-  <div class="data-col winner">
-    <div class="dc-label">Index fund (matches market)</div>
-    <div class="dc-amount">~10%/yr</div>
-  </div>
-  <div class="data-col loser">
-    <div class="dc-label">Average active fund manager</div>
-    <div class="dc-amount">~7-8%/yr after fees</div>
-  </div>
-</div>
-
-<p>The professional who picks stocks for a living underperforms a simple index fund 80-90% of the time over 20 years. This isn't controversial — it's documented in decades of data.</p>
-
-<p><strong>Your goal:</strong> Use 7–10% as your planning assumption. Don't chase higher returns. Every percentage point of extra risk you take is a percentage point of sleep you lose.</p>
-
-<h2>Number 3: Time</h2>
-
-<p>The most powerful variable in all of investing. More powerful than your salary. More powerful than the stock you pick. More powerful than the economy.</p>
-
-<p>Time is the only variable you cannot buy back. Every other number in investing can be improved later — you can earn more, save more, pick better funds. You cannot become younger.</p>
-
-<div class="highlight-box">
-  <span class="hb-number">Every year costs you</span>
-  <p>If you're 22 and waiting to "get serious about investing," every year you wait costs you roughly $14,000–$25,000 in final wealth (depending on your contribution). Not potential. Not projection. That's the compounded cost of one year of inaction at typical contribution levels.</p>
-</div>
-
-<p><strong>Your goal:</strong> Start today. The return rate you use matters. The amount you contribute matters. But time is the multiplier that makes everything else exponential — and it only works in one direction.</p>
-
-<h2>Ignore everything else (for now)</h2>
-
-<p>Options trading, crypto, individual stocks, technical analysis, dividend growth vs. capital appreciation — these are all real topics that become relevant later. As a beginner, engaging with them before mastering the three numbers is like learning car stunts before you know how to drive.</p>
-
-<p>Monthly contribution. Return rate. Time. Get those three locked in, automate them, and then you can learn everything else from a position of strength.</p>
-`
+  slug:'3-numbers-every-beginner-investor-needs', category:'mindset', readTime:5, published:true,
+  author:'Young Investor Team',
+  title:'The 3 Numbers Every Beginner Investor Needs to Know (And Nothing Else)',
+  excerpt:"Investing feels complicated because finance wants it to feel complicated. The truth is, three numbers determine 90% of your long-term outcome. Master these before anything else.",
+  content:'<p>The financial industry makes investing feel complicated on purpose. Complexity sells advice. Complexity justifies fees. Complexity keeps you dependent.</p><p>Here\'s the reality: 90% of your long-term investment outcome is determined by three numbers. Everything else is noise.</p><h2>Number 1: Your monthly contribution</h2><p>Not your lump sum. Not your total savings. Your <strong>monthly contribution</strong> — the amount that automatically goes into your investments every single month, no matter what.</p><p>This number matters more than your starting amount, more than your investment picks, and more than market timing. A person who contributes $200/month consistently for 30 years will almost always outperform someone who invests $5,000 once and never adds to it.</p><div class="highlight-box"><span class="hb-number">$200/mo</span><p>$200/month starting at 22, invested in an index fund, becomes approximately $650,000 by age 55 at 10% returns. Consistency matters far more than the amount. Even $50/month consistently beats $500 invested once and forgotten.</p></div><p><strong>Your goal:</strong> Lock in a monthly contribution you can actually sustain. Not impressive. Sustainable.</p><h2>Number 2: Your return rate</h2><p>This is the annual percentage your investments grow. For most beginner investors, the right benchmark is the S&amp;P 500 historical average: <strong>approximately 10% per year</strong> (7% adjusted for inflation).</p><p>You do not need to beat the market. You do not need an active fund manager. You do not need to pick stocks. You need to match the market — which a simple index ETF does automatically, at almost zero cost.</p><div class="data-compare"><div class="data-col winner"><div class="dc-label">Index fund (matches market)</div><div class="dc-amount">~10%/yr</div></div><div class="data-col loser"><div class="dc-label">Average active fund (after fees)</div><div class="dc-amount">~7-8%/yr</div></div></div><p>The professional who picks stocks for a living underperforms a simple index fund 80–90% of the time over 20 years. This is not controversial — it is documented in decades of data.</p><h2>Number 3: Time</h2><p>The most powerful variable in all of investing. More powerful than your salary, your stock picks, and the economy. Time is the only variable you cannot buy back. Every other number can be improved later. You cannot become younger.</p><div class="highlight-box"><span class="hb-number">Every year costs you</span><p>If you are 22 and waiting to "get serious," every year you wait costs you roughly $14,000–$25,000 in final wealth depending on your contribution. Not potential. That is the compounded cost of one year of inaction.</p></div><h2>Ignore everything else for now</h2><p>Options trading, crypto, individual stocks, technical analysis — these all become relevant later. As a beginner, engaging with them before mastering the three numbers is like learning car stunts before you know how to drive.</p><p>Monthly contribution. Return rate. Time. Get those locked in, automate them, and then learn everything else from a position of strength.</p>'
 },
-
-/* ── POST 5 ── */
 {
-  title: 'Net Worth at 25: What\'s Normal, What\'s Great, and How to Track It',
-  slug: 'net-worth-at-25-guide',
-  category: 'portfolio',
-  excerpt: 'Most 25-year-olds have no idea what their net worth actually is. Here\'s what\'s normal, what\'s exceptional, why the number matters less than the trajectory, and how to track it properly.',
-  readTime: 5,
-  author: 'Young Investor Team',
-  published: true,
-  content: `
-<p>Most people in their mid-20s have a vague sense of their financial situation. They know roughly what's in their checking account. They know they have some student debt. They know they have "not enough" invested.</p>
-
-<p>But almost nobody knows their actual net worth. And that's the number that tells the real story.</p>
-
-<h2>What is net worth, exactly?</h2>
-
-<p>Net worth is simple math: <strong>everything you own, minus everything you owe.</strong></p>
-
-<p>Assets (what you own): bank accounts, investment accounts, retirement accounts, any real estate equity, vehicles, valuable personal property.</p>
-
-<p>Liabilities (what you owe): student loans, credit card debt, car loans, mortgage balance.</p>
-
-<p>Net Worth = Assets − Liabilities</p>
-
-<p>If you have $8,000 in savings, $4,000 invested, and $15,000 in student loans: your net worth is −$3,000. That's not a crisis — that's completely normal at 25.</p>
-
-<h2>What's actually normal net worth at 25?</h2>
-
-<p>Median net worth for Americans aged 25–34 is approximately $39,000. But median is heavily skewed by inheritance and home equity. For people actively building wealth from scratch, here's a more useful benchmark:</p>
-
-<div class="data-compare">
-  <div class="data-col loser">
-    <div class="dc-label">Average (includes debt)</div>
-    <div class="dc-amount">−$5K to +$20K</div>
-  </div>
-  <div class="data-col winner">
-    <div class="dc-label">On track to financial freedom</div>
-    <div class="dc-amount">$20K–$50K+</div>
-  </div>
-</div>
-
-<p>If your net worth at 25 is negative because of student loans but you're investing monthly and building the habit — you're not behind. You're building the foundation.</p>
-
-<h2>Why the trajectory matters more than the number</h2>
-
-<p>A 25-year-old with $50,000 in net worth who stopped investing is in worse shape than a 25-year-old at $0 who invests $300/month consistently.</p>
-
-<p>Net worth at 25 is almost irrelevant as a standalone number. What matters:</p>
-<ul>
-  <li>Is it growing month over month?</li>
-  <li>Are you investing consistently?</li>
-  <li>Is your debt decreasing or increasing?</li>
-  <li>Is your savings rate going up as your income grows?</li>
-</ul>
-
-<div class="highlight-box">
-  <span class="hb-number">The trajectory rule</span>
-  <p>If your net worth grows by an average of $1,000/month from age 25 to 35, you'll have $120,000+ plus investment returns — likely putting you at $150,000–$200,000 by 35. That's the compounding foundation that makes everything after easier.</p>
-</div>
-
-<h2>How to calculate and track your net worth properly</h2>
-
-<p>Most people guess their net worth. The ones who build real wealth measure it — monthly, precisely.</p>
-
-<p>The process:</p>
-<ol>
-  <li><strong>List every asset with current value</strong> — checking, savings, investment accounts (use current balance, not what you paid), retirement accounts.</li>
-  <li><strong>List every liability with current balance</strong> — student loans, credit cards, any debt.</li>
-  <li><strong>Subtract liabilities from assets</strong> — that's your net worth today.</li>
-  <li><strong>Track it monthly</strong> — not to obsess, but to see the trajectory. A growing net worth is one of the most motivating things you'll ever watch.</li>
-</ol>
-
-<h2>The mindset shift that changes everything</h2>
-
-<p>When you stop thinking about your bank balance and start thinking about your net worth, your relationship with money fundamentally changes. Every debt repayment is a net worth increase. Every investment contribution is a net worth increase. Even a $20 investment feels different when you see your total number go up.</p>
-
-<p>At 25, you're not trying to be rich. You're trying to build a number that will make 45-year-old you deeply grateful. Start tracking it. Today.</p>
-`
+  slug:'net-worth-at-25-guide', category:'portfolio', readTime:5, published:true,
+  author:'Young Investor Team',
+  title:"Net Worth at 25: What's Normal, What's Great, and How to Track It",
+  excerpt:"Most 25-year-olds have no idea what their net worth actually is. Here's what's normal, what's exceptional, why the number matters less than the trajectory, and how to track it properly.",
+  content:"<p>Most people in their mid-20s have a vague sense of their financial situation. They know roughly what's in their checking account. They know they have some student debt. They know they have 'not enough' invested.</p><p>But almost nobody knows their actual net worth. And that's the number that tells the real story.</p><h2>What is net worth, exactly?</h2><p>Net worth is simple math: <strong>everything you own, minus everything you owe.</strong></p><p>Assets (what you own): bank accounts, investment accounts, retirement accounts, any real estate equity, vehicles.</p><p>Liabilities (what you owe): student loans, credit card debt, car loans, mortgage balance.</p><p>Net Worth = Assets minus Liabilities.</p><p>If you have $8,000 in savings, $4,000 invested, and $15,000 in student loans: your net worth is minus $3,000. That is completely normal at 25.</p><h2>What is actually normal net worth at 25?</h2><div class="data-compare"><div class="data-col loser"><div class="dc-label">Average (includes debt)</div><div class='dc-amount'>-$5K to +$20K</div></div><div class='data-col winner'><div class='dc-label'>On track to financial freedom</div><div class='dc-amount'>$20K to $50K+</div></div></div><p>If your net worth at 25 is negative because of student loans but you are investing monthly and building the habit — you are not behind. You are building the foundation.</p><h2>Why trajectory matters more than the number</h2><p>A 25-year-old with $50,000 net worth who stopped investing is in worse shape than a 25-year-old at $0 who invests $300/month consistently.</p><ul><li>Is it growing month over month?</li><li>Are you investing consistently?</li><li>Is your debt decreasing or increasing?</li><li>Is your savings rate going up as your income grows?</li></ul><div class='highlight-box'><span class='hb-number'>The trajectory rule</span><p>If your net worth grows by an average of $1,000/month from age 25 to 35, you will have $120,000 plus investment returns — likely $150,000 to $200,000 by 35. That is the compounding foundation that makes everything after much easier.</p></div><h2>How to calculate your net worth properly</h2><ol><li><strong>List every asset with current value</strong> — checking, savings, investment accounts, retirement accounts.</li><li><strong>List every liability with current balance</strong> — student loans, credit cards, any debt.</li><li><strong>Subtract liabilities from assets</strong> — that is your net worth today.</li><li><strong>Track it monthly</strong> — a growing net worth is one of the most motivating things you will ever watch.</li></ol><p>When you stop thinking about your bank balance and start thinking about your net worth, your relationship with money fundamentally changes. Every debt repayment is a net worth increase. Every investment contribution is a net worth increase. Start tracking it today.</p>"
 }
-
-]; // end POSTS array
-
-/* ============================================================
-   AUTH + SEED LOGIC
-   ============================================================ */
-try {
-    db = firebase.firestore();
-    firebase.auth().onAuthStateChanged(function(user) {
-        clearTimeout(authTimeout);
-        document.getElementById('authLoading').style.display = 'none';
-        if (!user) { document.getElementById('signInGate').style.display = 'block'; return; }
-        if (user.email !== ADMIN_EMAIL) { document.getElementById('denied').style.display = 'block'; return; }
-        showPanel();
-    });
-} catch(e) {
-    clearTimeout(authTimeout);
-    document.getElementById('authLoading').style.display = 'none';
-    document.getElementById('signInGate').style.display = 'block';
-    console.error('Firebase init error:', e);
-}
-
-function signIn() {
-    firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(function(e) { alert(e.message); });
-}
-
-function showPanel() {
-    document.getElementById('seedPanel').style.display = 'block';
-    var list = document.getElementById('postList');
-    list.innerHTML = POSTS.map(function(p, i) {
-        return '<div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;display:flex;align-items:center;gap:14px;">' +
-            '<span style="font-size:20px;">' + ['📈','💰','📈','🧠','📊'][i] + '</span>' +
-            '<div><div style="font-weight:600;font-size:15px;">' + p.title + '</div>' +
-            '<div style="font-size:12px;color:var(--text-muted);margin-top:3px;">' + p.category + ' · ' + p.readTime + ' min read · ' + p.slug + '</div></div>' +
-            '<div id="status-' + i + '" style="margin-left:auto;font-size:13px;color:var(--text-muted);">Pending</div>' +
-            '</div>';
-    }).join('');
-}
+];
 
 function seedAll() {
-    if (!db) { try { db = firebase.firestore(); } catch(e) { alert('Firestore not available: ' + e.message); return; } }
     var btn = document.getElementById('seedBtn');
+    btn.disabled = true;
     btn.textContent = 'Publishing...';
-    btn.style.pointerEvents = 'none';
-    btn.style.opacity = '0.7';
 
-    var promises = POSTS.map(function(post, i) {
-        return db.collection('posts').where('slug', '==', post.slug).get().then(function(snap) {
+    var db;
+    try { db = firebase.firestore(); }
+    catch(e) { showResult('error', 'Firestore failed to initialize: ' + e.message); btn.disabled = false; btn.textContent = 'Try again'; return; }
+
+    var done = 0;
+    POSTS.forEach(function(post, i) {
+        db.collection('posts').where('slug','==',post.slug).get()
+        .then(function(snap) {
             if (!snap.empty) {
-                document.getElementById('status-' + i).innerHTML = '<span style="color:var(--text-muted);">⏭ Skipped (exists)</span>';
+                document.getElementById('s'+i).innerHTML = '<span style="color:#666">Skipped</span>';
+                checkDone();
                 return;
             }
             var data = Object.assign({}, post, {
@@ -479,21 +112,48 @@ function seedAll() {
                 views: 0
             });
             return db.collection('posts').add(data).then(function() {
-                document.getElementById('status-' + i).innerHTML = '<span style="color:var(--accent);">✅ Published</span>';
+                document.getElementById('s'+i).innerHTML = '<span style="color:#00e676">✅ Done</span>';
+                checkDone();
             });
-        }).catch(function(err) {
-            document.getElementById('status-' + i).innerHTML = '<span style="color:#ff5252;">❌ Error</span>';
+        })
+        .catch(function(err) {
+            document.getElementById('s'+i).innerHTML = '<span style="color:#ff5252">❌ Error</span>';
             console.error(post.slug, err);
+            if (err.code === 'permission-denied') {
+                showResult('error', '⚠️ Firestore permission denied. You need to update your Firestore security rules in the Firebase Console to allow writes. See admin.html comments for the rules to paste.');
+            } else {
+                showResult('error', 'Error: ' + err.message);
+            }
+            checkDone();
         });
     });
 
-    Promise.all(promises).then(function() {
-        btn.innerHTML = '✅ Done! <a href="index.html" style="color:#000;margin-left:8px;">View Blog →</a>';
-        btn.style.pointerEvents = 'auto';
-        btn.style.opacity = '1';
-        document.getElementById('seedStatus').innerHTML = '<p style="color:var(--accent);margin-top:8px;text-align:center;">All posts seeded. You can now delete this file or keep it for future use.</p>';
-    });
+    function checkDone() {
+        done++;
+        if (done === POSTS.length) {
+            btn.textContent = '✅ Done!';
+            showResult('success', '5 posts published! <a href="index.html" style="color:#00e676;font-weight:700;">View your blog →</a>');
+        }
+    }
 }
+
+function showResult(type, msg) {
+    var el = document.getElementById('result');
+    el.style.display = 'block';
+    el.className = 'result ' + type;
+    el.innerHTML = msg;
+}
+
+// Load Firebase Firestore SDK if not loaded yet
+window.addEventListener('load', function() {
+    // Just verify Firebase loaded
+    try {
+        var test = firebase.app();
+        document.getElementById('seedBtn').style.display = 'block';
+    } catch(e) {
+        showResult('error', 'Firebase failed to load. Check your internet connection and try again.');
+    }
+});
 </script>
 </body>
 </html>
