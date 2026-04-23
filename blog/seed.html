@@ -44,10 +44,20 @@
     <div class="result" id="result"></div>
 </div>
 
-<!-- Firebase -->
+<!-- Firebase (Firestore only — no auth needed for seeding) -->
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="../js/firebase-config.js"></script>
+<script>
+// Initialize Firebase directly — do NOT import firebase-config.js (it requires auth SDK)
+if (!firebase.apps.length) {
+    firebase.initializeApp({
+        apiKey: "AIzaSyBn4T2jDsbYlr4ZgMmMkmXZAO8b400hJaw",
+        authDomain: "young-investor-simulator.firebaseapp.com",
+        projectId: "young-investor-simulator"
+    });
+}
+var db = firebase.firestore();
+</script>
 <script>
 
 var POSTS = [
@@ -92,10 +102,6 @@ function seedAll() {
     var btn = document.getElementById('seedBtn');
     btn.disabled = true;
     btn.textContent = 'Publishing...';
-
-    var db;
-    try { db = firebase.firestore(); }
-    catch(e) { showResult('error', 'Firestore failed to initialize: ' + e.message); btn.disabled = false; btn.textContent = 'Try again'; return; }
 
     var done = 0;
     POSTS.forEach(function(post, i) {
@@ -144,16 +150,6 @@ function showResult(type, msg) {
     el.innerHTML = msg;
 }
 
-// Load Firebase Firestore SDK if not loaded yet
-window.addEventListener('load', function() {
-    // Just verify Firebase loaded
-    try {
-        var test = firebase.app();
-        document.getElementById('seedBtn').style.display = 'block';
-    } catch(e) {
-        showResult('error', 'Firebase failed to load. Check your internet connection and try again.');
-    }
-});
 </script>
 </body>
 </html>
