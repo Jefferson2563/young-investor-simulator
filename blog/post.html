@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">Article — Young Investor Blog</title>
+    <meta name="description" id="pageDesc" content="Young Investor Blog — Investing explained simply for Gen Z.">
+    <link rel="canonical" id="pageCanonical" href="https://younginvestor.app/blog/post.html">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Young Investor">
+    <meta id="ogTitle" property="og:title" content="Young Investor Blog">
+    <meta id="ogDesc" property="og:description" content="">
+    <meta property="og:image" content="https://younginvestor.app/assets/og-card.svg">
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/blog.css">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-97RRNZ9LGW"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-97RRNZ9LGW');</script>
+    <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","wftsywiatk");</script>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="blog-nav">
+    <a href="../" class="blog-nav-logo">
+        <img src="../assets/logo.svg" alt="" class="logo-icon">
+        <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
+    </a>
+    <div class="blog-nav-links">
+        <a href="../">Simulator</a>
+        <a href="../dividends/">Dividends</a>
+        <a href="../portfolio/">Portfolio</a>
+        <a href="../tax/">Tax</a>
+        <a href="index.html" class="active">Blog</a>
+        <a id="adminLink" href="admin.html" style="display:none;">✏️ Admin</a>
+    </div>
+    <a href="../" class="blog-nav-cta">Try the calculator →</a>
+</nav>
+
+<!-- ===== POST HERO ===== -->
+<div id="postHero" style="display:none;">
+    <section class="post-hero">
+        <div class="container">
+            <div class="post-breadcrumb">
+                <a href="index.html">Blog</a>
+                <span>›</span>
+                <span id="breadcrumbCat">Article</span>
+            </div>
+            <span class="post-hero-tag" id="postTag">Category</span>
+            <h1 id="postTitle">Loading...</h1>
+            <div class="post-hero-meta">
+                <span><strong id="postAuthor">Young Investor</strong></span>
+                <span class="sep">·</span>
+                <span id="postDate"></span>
+                <span class="sep">·</span>
+                <span id="postReadTime"></span>
+                <span class="sep">·</span>
+                <span id="postViews" style="color:var(--accent);"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== POST BODY ===== -->
+    <div class="container">
+        <div class="post-layout">
+            <!-- Main content -->
+            <article class="post-content" id="postContent"></article>
+
+            <!-- Sidebar -->
+            <aside class="post-sidebar">
+                <div class="post-sidebar-card">
+                    <h4>In this article</h4>
+                    <ul class="post-toc-list" id="postToc"></ul>
+                </div>
+                <div class="post-sidebar-card" style="background:linear-gradient(135deg,rgba(0,230,118,0.07),rgba(0,230,118,0.02));border-color:rgba(0,230,118,0.15);">
+                    <h4>Free calculator</h4>
+                    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6;">See the numbers in real-time — no signup required.</p>
+                    <a href="../" class="post-cta-btn" style="width:100%;justify-content:center;box-sizing:border-box;">
+                        Try it now →
+                    </a>
+                </div>
+            </aside>
+        </div>
+    </div>
+</div>
+
+<!-- ===== LOADING STATE ===== -->
+<div id="postLoading" style="padding:120px 0;text-align:center;color:var(--text-muted);">
+    <div style="width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+    <p>Loading article...</p>
+</div>
+
+<!-- ===== NOT FOUND ===== -->
+<div id="postNotFound" style="display:none;padding:120px 0;text-align:center;">
+    <div style="font-size:48px;margin-bottom:20px;">📭</div>
+    <h2 style="font-size:24px;margin-bottom:10px;">Article not found</h2>
+    <p style="color:var(--text-secondary);margin-bottom:24px;">This post may have been moved or deleted.</p>
+    <a href="index.html" class="post-cta-btn" style="display:inline-flex;">← Back to Blog</a>
+</div>
+
+<!-- ===== RELATED POSTS ===== -->
+<section id="relatedSection" style="display:none;padding:56px 0;border-top:1px solid var(--border);">
+    <div class="container">
+        <h2 style="font-size:22px;font-weight:800;margin-bottom:24px;">More articles</h2>
+        <div class="blog-grid" id="relatedGrid"></div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="footer-logo">
+                    <img src="../assets/logo.svg" alt="" class="logo-icon">
+                    <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
+                </div>
+                <p class="footer-about">A free tool built to show young people the power of starting early.</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Tools</h4>
+                <a href="../">Compound Interest Simulator</a>
+                <a href="../dividends/">Dividend Calculator</a>
+                <a href="../portfolio/">Portfolio Tracker</a>
+                <a href="../tax/">Tax Calculator</a>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Blog</h4>
+                <a href="index.html">All Articles</a>
+                <a href="index.html?filter=compound-interest">Compound Interest</a>
+                <a href="index.html?filter=dividends">Dividends</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Young Investor Simulator. Built for the next generation.</span>
+        </div>
+    </div>
+</footer>
+
+<style>
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+
+<script>
+var ADMIN_EMAIL = 'jeffmbogne@gmail.com';
+var db = firebase.firestore();
+var CATEGORY_ICONS = { 'compound-interest':'📈','dividends':'💰','portfolio':'📊','tax':'🛡️','mindset':'🧠','general':'✨' };
+var CATEGORY_TOOL_LINKS = {
+    'compound-interest': { url: '../', label: 'Try the compound interest simulator', sub: 'See how your $100/month grows to $736K starting at 20.' },
+    'dividends': { url: '../dividends/', label: 'Try the DRIP calculator', sub: 'See how dividend reinvestment compounds your passive income.' },
+    'portfolio': { url: '../portfolio/', label: 'Track your net worth', sub: 'See all your investments in one free dashboard.' },
+    'tax': { url: '../tax/', label: 'Calculate your tax liability', sub: 'Know what you owe before you sell.' },
+    'mindset': { url: '../', label: 'Start your investment simulation', sub: 'See how much your money can grow starting today.' },
+    'general': { url: '../', label: 'Try the free calculator', sub: 'No signup required. See your results instantly.' }
+};
+
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user && user.email === ADMIN_EMAIL) {
+        document.getElementById('adminLink').style.display = 'flex';
+    }
+});
+
+var slug = new URLSearchParams(window.location.search).get('slug');
+if (!slug) {
+    showNotFound();
+} else {
+    loadPost(slug);
+}
+
+function loadPost(slug) {
+    db.collection('posts')
+        .where('slug', '==', slug)
+        .where('published', '==', true)
+        .limit(1)
+        .get()
+        .then(function(snap) {
+            if (snap.empty) { showNotFound(); return; }
+            var post = Object.assign({ id: snap.docs[0].id }, snap.docs[0].data());
+            renderPost(post);
+            loadRelated(post);
+            // Increment view count
+            db.collection('posts').doc(post.id).update({ views: firebase.firestore.FieldValue.increment(1) }).catch(function(){});
+        })
+        .catch(function(err) { console.error(err); showNotFound(); });
+}
+
+function renderPost(post) {
+    document.getElementById('postLoading').style.display = 'none';
+    document.getElementById('postHero').style.display = 'block';
+
+    var cat = post.category || 'general';
+    var catLabel = cat.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+    var icon = CATEGORY_ICONS[cat] || '✨';
+    var date = post.publishedAt ? new Date(post.publishedAt.seconds * 1000).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
+
+    // Update page meta
+    document.title = post.title + ' — Young Investor Blog';
+    document.getElementById('pageDesc').content = post.excerpt || '';
+    document.getElementById('ogTitle').content = post.title;
+    document.getElementById('ogDesc').content = post.excerpt || '';
+    document.getElementById('pageCanonical').href = 'https://younginvestor.app/blog/post.html?slug=' + encodeURIComponent(post.slug);
+
+    // Hero
+    document.getElementById('breadcrumbCat').textContent = catLabel;
+    document.getElementById('postTag').textContent = icon + ' ' + catLabel;
+    document.getElementById('postTitle').textContent = post.title;
+    document.getElementById('postAuthor').textContent = post.author || 'Young Investor Team';
+    document.getElementById('postDate').textContent = date;
+    document.getElementById('postReadTime').textContent = (post.readTime || 5) + ' min read';
+    if (post.views) document.getElementById('postViews').textContent = (post.views + 1) + ' views';
+
+    // Content
+    var contentEl = document.getElementById('postContent');
+    contentEl.innerHTML = post.content || '<p>Content coming soon.</p>';
+
+    // Add tool CTA after content
+    var toolLink = CATEGORY_TOOL_LINKS[cat] || CATEGORY_TOOL_LINKS.general;
+    var ctaBox = document.createElement('div');
+    ctaBox.className = 'post-cta-box';
+    ctaBox.innerHTML = '<h3>' + toolLink.label + '</h3>' +
+        '<p>' + toolLink.sub + ' Free, no signup required.</p>' +
+        '<a href="' + toolLink.url + '" class="post-cta-btn">Try it free →</a>';
+    contentEl.appendChild(ctaBox);
+
+    // Share buttons
+    var shareDiv = document.createElement('div');
+    shareDiv.className = 'post-share';
+    var postUrl = encodeURIComponent(window.location.href);
+    var postTitle = encodeURIComponent(post.title);
+    shareDiv.innerHTML = '<span>Share:</span>' +
+        '<a href="https://twitter.com/intent/tweet?text=' + postTitle + '&url=' + postUrl + '" target="_blank" class="share-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> Tweet</a>' +
+        '<a href="https://www.reddit.com/submit?url=' + postUrl + '&title=' + postTitle + '" target="_blank" class="share-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/></svg> Reddit</a>' +
+        '<button class="share-btn" onclick="copyLink()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy link</button>';
+    contentEl.appendChild(shareDiv);
+
+    // Build TOC from h2/h3 in content
+    buildTOC();
+}
+
+function buildTOC() {
+    var toc = document.getElementById('postToc');
+    var headings = document.getElementById('postContent').querySelectorAll('h2, h3');
+    if (headings.length < 2) { document.querySelector('.post-sidebar-card:first-child').style.display = 'none'; return; }
+    headings.forEach(function(h, i) {
+        var id = 'section-' + i;
+        h.id = id;
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '#' + id;
+        a.textContent = h.textContent;
+        if (h.tagName === 'H3') a.style.paddingLeft = '24px';
+        li.appendChild(a);
+        toc.appendChild(li);
+    });
+    // Active TOC on scroll
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(e) {
+            if (e.isIntersecting) {
+                toc.querySelectorAll('a').forEach(function(a) { a.classList.remove('active'); });
+                var link = toc.querySelector('a[href="#' + e.target.id + '"]');
+                if (link) link.classList.add('active');
+            }
+        });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    headings.forEach(function(h) { observer.observe(h); });
+}
+
+function loadRelated(post) {
+    db.collection('posts')
+        .where('published', '==', true)
+        .where('category', '==', post.category)
+        .limit(4)
+        .get()
+        .then(function(snap) {
+            var related = [];
+            snap.forEach(function(doc) {
+                if (doc.id !== post.id) related.push(Object.assign({ id: doc.id }, doc.data()));
+            });
+            if (related.length === 0) return;
+            var grid = document.getElementById('relatedGrid');
+            document.getElementById('relatedSection').style.display = 'block';
+            grid.innerHTML = related.slice(0, 3).map(function(p) {
+                var cat = p.category || 'general';
+                var icon = CATEGORY_ICONS[cat] || '✨';
+                var catLabel = cat.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+                return '<a href="post.html?slug=' + encodeURIComponent(p.slug) + '" class="blog-card" data-cat="' + cat + '">' +
+                    '<div class="blog-card-header"><div class="blog-card-header-icon">' + icon + '</div><span class="blog-card-tag">' + catLabel + '</span></div>' +
+                    '<div class="blog-card-body"><div class="blog-card-title">' + escapeHtml(p.title) + '</div>' +
+                    '<div class="blog-card-excerpt">' + escapeHtml(p.excerpt) + '</div>' +
+                    '<div class="blog-card-meta"><span class="blog-card-date"></span><span class="blog-card-arrow">→</span></div>' +
+                    '</div></a>';
+            }).join('');
+        });
+}
+
+function showNotFound() {
+    document.getElementById('postLoading').style.display = 'none';
+    document.getElementById('postNotFound').style.display = 'block';
+}
+
+function escapeHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function copyLink() {
+    navigator.clipboard.writeText(window.location.href).then(function() {
+        var btn = document.querySelector('.share-btn:last-child');
+        if (btn) { btn.textContent = '✓ Copied!'; setTimeout(function() { btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy link'; }, 2000); }
+    });
+}
+</script>
+</body>
+</html>

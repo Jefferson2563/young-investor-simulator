@@ -1,5 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
-  <rect width="40" height="40" rx="10" fill="currentColor" opacity="0.08"/>
-  <path d="M8 28 L16 20 L22 24 L32 12" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M26 12 L32 12 L32 18" stroke="#00e676" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#162b1f"/>
+      <stop offset="100%" stop-color="#050f0a"/>
+    </linearGradient>
+    <linearGradient id="bd" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#00e676"/>
+      <stop offset="40%" stop-color="#00ff88" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#003d1a"/>
+    </linearGradient>
+    <linearGradient id="tx" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0%" stop-color="#7dffbe"/>
+      <stop offset="100%" stop-color="#00c853"/>
+    </linearGradient>
+    <linearGradient id="sh" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="white" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <!-- Dark glass background -->
+  <rect width="40" height="40" rx="9" fill="url(#bg)"/>
+  <!-- Green gradient border -->
+  <rect x="0.6" y="0.6" width="38.8" height="38.8" rx="8.5" fill="none" stroke="url(#bd)" stroke-width="1.2"/>
+  <!-- Top glass sheen -->
+  <rect width="40" height="20" rx="9" fill="url(#sh)"/>
+  <!-- Subtle bottom glow -->
+  <rect y="30" width="40" height="10" rx="9" fill="#00e676" opacity="0.05"/>
+  <!-- Y — left arm, right arm, stem -->
+  <path d="M8 10.5 L16.5 21.5 L25 10.5 M16.5 21.5 L16.5 31" stroke="url(#tx)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- i — stem -->
+  <line x1="30" y1="18.5" x2="30" y2="31" stroke="url(#tx)" stroke-width="3" stroke-linecap="round"/>
+  <!-- i — dot (LinkedIn-style: filled circle, distinct) -->
+  <circle cx="30" cy="12" r="2.6" fill="#00e676"/>
+  <circle cx="29.2" cy="11.2" r="0.8" fill="white" opacity="0.55"/>
 </svg>

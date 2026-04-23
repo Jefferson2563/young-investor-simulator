@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Young Investor Blog — Investing Tips for Gen Z & Millennials</title>
+    <meta name="description" content="Compound interest, dividends, tax strategies — explained simply for young investors. Practical guides with real numbers. No fluff.">
+    <meta name="keywords" content="young investor blog, investing for beginners, compound interest tips, dividend investing, personal finance Gen Z">
+    <link rel="canonical" href="https://younginvestor.app/blog/">
+    <meta property="og:title" content="Young Investor Blog — Investing Explained Simply">
+    <meta property="og:description" content="Compound interest, dividends, tax strategies — practical guides with real numbers for young investors.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://younginvestor.app/blog/">
+    <meta property="og:image" content="https://younginvestor.app/assets/og-card.svg">
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/blog.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-97RRNZ9LGW"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-97RRNZ9LGW');</script>
+    <!-- Clarity -->
+    <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","wftsywiatk");</script>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="blog-nav">
+    <a href="../" class="blog-nav-logo">
+        <img src="../assets/logo.svg" alt="" class="logo-icon">
+        <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
+    </a>
+    <div class="blog-nav-links">
+        <a href="../">Simulator</a>
+        <a href="../dividends/">Dividends</a>
+        <a href="../portfolio/">Portfolio</a>
+        <a href="../tax/">Tax</a>
+        <a href="index.html" class="active">Blog</a>
+        <a id="adminLink" href="admin.html" style="display:none;">✏️ Admin</a>
+    </div>
+    <a href="../" class="blog-nav-cta">Try the calculator →</a>
+</nav>
+
+<!-- ===== BLOG HERO ===== -->
+<section class="blog-hero">
+    <div class="container">
+        <div class="blog-hero-eyebrow">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            Young Investor Blog
+        </div>
+        <h1>Investing explained.<br><span>Simply.</span></h1>
+        <p class="blog-hero-sub">Real numbers. No jargon. Guides for people starting now — not in 10 years.</p>
+        <div class="blog-hero-stats">
+            <div class="blog-hero-stat" id="postCount">
+                <strong>—</strong>
+                <span>Articles</span>
+            </div>
+            <div class="blog-hero-stat">
+                <strong>7</strong>
+                <span>Languages</span>
+            </div>
+            <div class="blog-hero-stat">
+                <strong>Free</strong>
+                <span>Always</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== CATEGORY FILTER ===== -->
+<div class="blog-filters">
+    <div class="blog-filter-pills">
+        <button class="filter-pill active" data-filter="all">All</button>
+        <button class="filter-pill" data-filter="compound-interest">📈 Compound Interest</button>
+        <button class="filter-pill" data-filter="dividends">💰 Dividends</button>
+        <button class="filter-pill" data-filter="portfolio">📊 Portfolio</button>
+        <button class="filter-pill" data-filter="tax">🛡️ Tax</button>
+        <button class="filter-pill" data-filter="mindset">🧠 Mindset</button>
+    </div>
+</div>
+
+<!-- ===== BLOG GRID ===== -->
+<section class="blog-section">
+    <div class="container">
+        <!-- Loading skeleton -->
+        <div class="blog-skeleton" id="blogSkeleton">
+            <div class="skeleton-card"><div class="skeleton-header"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line medium"></div></div></div>
+            <div class="skeleton-card"><div class="skeleton-header"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line medium"></div></div></div>
+            <div class="skeleton-card"><div class="skeleton-header"></div><div class="skeleton-body"><div class="skeleton-line medium"></div><div class="skeleton-line short"></div><div class="skeleton-line medium"></div></div></div>
+        </div>
+        <!-- Posts grid -->
+        <div class="blog-grid" id="blogGrid" style="display:none;"></div>
+    </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <div class="footer-logo">
+                    <img src="../assets/logo.svg" alt="" class="logo-icon">
+                    <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
+                </div>
+                <p class="footer-about">A free tool built to show young people the power of starting early.</p>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Tools</h4>
+                <a href="../">Compound Interest Simulator</a>
+                <a href="../dividends/">Dividend Calculator</a>
+                <a href="../portfolio/">Portfolio Tracker</a>
+                <a href="../tax/">Tax Calculator</a>
+                <a href="../goals/">Goals Tracker</a>
+            </div>
+            <div class="footer-col">
+                <h4 class="footer-heading">Blog</h4>
+                <a href="index.html">All Articles</a>
+                <a href="index.html?filter=compound-interest">Compound Interest</a>
+                <a href="index.html?filter=dividends">Dividends</a>
+                <a href="index.html?filter=mindset">Mindset</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; 2026 Young Investor Simulator. Built for the next generation.</span>
+        </div>
+    </div>
+</footer>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+
+<script>
+/* ===== BLOG INDEX ===== */
+var ADMIN_EMAIL = 'jeffmbogne@gmail.com';
+var db = firebase.firestore();
+var allPosts = [];
+var activeFilter = 'all';
+
+var CATEGORY_ICONS = {
+    'compound-interest': '📈',
+    'dividends': '💰',
+    'portfolio': '📊',
+    'tax': '🛡️',
+    'mindset': '🧠',
+    'general': '✨'
+};
+
+// Check URL filter param
+var urlParams = new URLSearchParams(window.location.search);
+if (urlParams.get('filter')) {
+    activeFilter = urlParams.get('filter');
+    document.querySelectorAll('.filter-pill').forEach(function(p) {
+        p.classList.toggle('active', p.dataset.filter === activeFilter);
+    });
+}
+
+// Auth check — show admin link if owner
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user && user.email === ADMIN_EMAIL) {
+        document.getElementById('adminLink').style.display = 'flex';
+    }
+});
+
+// Load posts from Firestore
+function loadPosts() {
+    db.collection('posts')
+        .where('published', '==', true)
+        .orderBy('publishedAt', 'desc')
+        .get()
+        .then(function(snap) {
+            allPosts = [];
+            snap.forEach(function(doc) {
+                allPosts.push(Object.assign({ id: doc.id }, doc.data()));
+            });
+            renderPosts();
+            document.getElementById('blogSkeleton').style.display = 'none';
+            document.getElementById('blogGrid').style.display = 'grid';
+            var countEl = document.querySelector('#postCount strong');
+            if (countEl) countEl.textContent = allPosts.length;
+        })
+        .catch(function(err) {
+            console.error('Error loading posts:', err);
+            document.getElementById('blogSkeleton').style.display = 'none';
+            document.getElementById('blogGrid').style.display = 'grid';
+            document.getElementById('blogGrid').innerHTML = '<div class="blog-empty"><p>Could not load posts. Please try again.</p></div>';
+        });
+}
+
+function renderPosts() {
+    var grid = document.getElementById('blogGrid');
+    var filtered = activeFilter === 'all' ? allPosts : allPosts.filter(function(p) { return p.category === activeFilter; });
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '<div class="blog-empty">' +
+            '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
+            '<p>No posts in this category yet. Check back soon.</p></div>';
+        return;
+    }
+
+    grid.innerHTML = filtered.map(function(post, i) {
+        return buildCard(post, i === 0 && activeFilter === 'all');
+    }).join('');
+}
+
+function buildCard(post, featured) {
+    var cat = post.category || 'general';
+    var icon = CATEGORY_ICONS[cat] || '✨';
+    var date = post.publishedAt ? new Date(post.publishedAt.seconds * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+    var readTime = post.readTime || 5;
+    var catLabel = cat.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+
+    return '<a href="post.html?slug=' + encodeURIComponent(post.slug) + '" class="blog-card' + (featured ? ' featured' : '') + '" data-cat="' + cat + '">' +
+        '<div class="blog-card-header">' +
+        '<div class="blog-card-header-icon">' + icon + '</div>' +
+        '<span class="blog-card-tag">' + catLabel + '</span>' +
+        '</div>' +
+        '<div class="blog-card-body">' +
+        '<div class="blog-card-title">' + escapeHtml(post.title) + '</div>' +
+        '<div class="blog-card-excerpt">' + escapeHtml(post.excerpt) + '</div>' +
+        '<div class="blog-card-meta">' +
+        '<span class="blog-card-date">' + date + '</span>' +
+        '<span class="blog-card-read"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' + readTime + ' min read</span>' +
+        '<span class="blog-card-arrow">→</span>' +
+        '</div></div></a>';
+}
+
+function escapeHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Filter pills
+document.querySelectorAll('.filter-pill').forEach(function(pill) {
+    pill.addEventListener('click', function() {
+        activeFilter = this.dataset.filter;
+        document.querySelectorAll('.filter-pill').forEach(function(p) { p.classList.remove('active'); });
+        this.classList.add('active');
+        renderPosts();
+    });
+});
+
+loadPosts();
+</script>
+</body>
+</html>

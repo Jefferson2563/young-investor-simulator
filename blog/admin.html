@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Admin — Young Investor</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/blog.css">
+    <!--
+    FIRESTORE SECURITY RULES to set in Firebase Console:
+    =====================================================
+    rules_version = '2';
+    service cloud.firestore {
+      match /databases/{database}/documents {
+        match /users/{userId} {
+          allow read, write: if request.auth.uid == userId;
+        }
+        match /posts/{postId} {
+          allow read: if resource.data.published == true;
+          allow read, write: if request.auth != null
+            && request.auth.token.email == 'jeffmbogne@gmail.com';
+        }
+      }
+    }
+    =====================================================
+    -->
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="blog-nav">
+    <a href="../" class="blog-nav-logo">
+        <img src="../assets/logo.svg" alt="" class="logo-icon">
+        <span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span>
+    </a>
+    <div class="blog-nav-links">
+        <a href="index.html">Blog</a>
+        <a href="admin.html" class="active">Admin</a>
+    </div>
+    <button id="signOutBtn" class="admin-btn" onclick="firebase.auth().signOut()" style="display:none;">Sign out</button>
+</nav>
+
+<!-- ===== SIGN IN GATE ===== -->
+<div class="container">
+    <div class="admin-gate" id="signInGate" style="display:none;">
+        <div class="admin-gate-icon">🔐</div>
+        <h2>Admin Access</h2>
+        <p>Sign in with your Google account to manage blog posts.</p>
+        <button class="post-cta-btn" onclick="signInWithGoogle()">
+            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+            Sign in with Google
+        </button>
+    </div>
+
+    <!-- ===== ACCESS DENIED ===== -->
+    <div class="admin-gate" id="accessDenied" style="display:none;">
+        <div class="admin-gate-icon">🚫</div>
+        <h2>Access Denied</h2>
+        <p>This area is restricted to the site admin only.</p>
+        <a href="index.html" class="post-cta-btn">← Back to Blog</a>
+    </div>
+
+    <!-- ===== LOADING ===== -->
+    <div class="admin-gate" id="authLoading">
+        <div style="width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto;"></div>
+    </div>
+
+    <!-- ===== ADMIN DASHBOARD ===== -->
+    <div id="adminDashboard" style="display:none;">
+        <div class="admin-page">
+            <div class="admin-header">
+                <div>
+                    <h1>Blog <span>Admin</span></h1>
+                    <p style="color:var(--text-muted);font-size:14px;margin-top:4px;" id="adminWelcome"></p>
+                </div>
+                <span class="admin-badge">ADMIN</span>
+            </div>
+
+            <div class="admin-layout">
+                <!-- LEFT: Post list -->
+                <div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                        <h2 style="font-size:18px;font-weight:700;">All Posts <span style="color:var(--text-muted);font-size:14px;" id="postCountLabel"></span></h2>
+                        <button class="admin-btn primary" onclick="newPost()">+ New Post</button>
+                    </div>
+                    <div class="admin-posts-list" id="adminPostList">
+                        <div style="text-align:center;padding:40px;color:var(--text-muted);">Loading posts...</div>
+                    </div>
+                </div>
+
+                <!-- RIGHT: Create/Edit form -->
+                <div class="admin-form-card" id="adminForm" style="display:none;">
+                    <h3 id="formTitle">New Post</h3>
+
+                    <div class="admin-form-group">
+                        <label>Title *</label>
+                        <input type="text" id="fTitle" placeholder="Investing at 20 vs 30: The $356,000 Gap">
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Slug * (URL path)</label>
+                        <input type="text" id="fSlug" placeholder="investing-at-20-vs-30">
+                        <small style="color:var(--text-muted);font-size:11px;margin-top:4px;display:block;">Auto-generated from title. Edit manually if needed.</small>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Category *</label>
+                        <select id="fCategory">
+                            <option value="compound-interest">📈 Compound Interest</option>
+                            <option value="dividends">💰 Dividends</option>
+                            <option value="portfolio">📊 Portfolio</option>
+                            <option value="tax">🛡️ Tax</option>
+                            <option value="mindset">🧠 Mindset</option>
+                            <option value="general">✨ General</option>
+                        </select>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Excerpt * (shown on blog cards)</label>
+                        <textarea id="fExcerpt" rows="3" placeholder="A short summary of the article (2-3 sentences)..." style="min-height:80px;font-family:inherit;font-size:14px;"></textarea>
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Read time (minutes)</label>
+                        <input type="number" id="fReadTime" value="5" min="1" max="60">
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Author</label>
+                        <input type="text" id="fAuthor" value="Young Investor Team" placeholder="Young Investor Team">
+                    </div>
+
+                    <div class="admin-form-group">
+                        <label>Content (HTML) *</label>
+                        <div class="admin-toolbar">
+                            <button class="admin-toolbar-btn" onclick="wrap('<h2>','</h2>')">H2</button>
+                            <button class="admin-toolbar-btn" onclick="wrap('<h3>','</h3>')">H3</button>
+                            <button class="admin-toolbar-btn" onclick="wrap('<p>','</p>')">¶</button>
+                            <button class="admin-toolbar-btn" onclick="wrap('<strong>','</strong>')"><b>B</b></button>
+                            <button class="admin-toolbar-btn" onclick="wrap('<em>','</em>')"><i>I</i></button>
+                            <button class="admin-toolbar-btn" onclick="wrap('<blockquote>','</blockquote>')">"</button>
+                            <button class="admin-toolbar-btn" onclick="wrap('<ul>\n<li>','</li>\n</ul>')">UL</button>
+                            <button class="admin-toolbar-btn" onclick="insertHighlightBox()">📦 Box</button>
+                            <button class="admin-toolbar-btn" onclick="insertCompare()">📊 Compare</button>
+                            <button class="admin-toolbar-btn" onclick="togglePreview()">👁 Preview</button>
+                        </div>
+                        <textarea id="fContent" placeholder="<h2>Section Title</h2>\n<p>Your content here...</p>"></textarea>
+                    </div>
+
+                    <!-- Live preview -->
+                    <div id="contentPreview" style="display:none;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:18px;max-height:300px;overflow-y:auto;">
+                        <p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">PREVIEW</p>
+                        <div class="post-content" id="previewContent"></div>
+                    </div>
+
+                    <div class="admin-publish-row">
+                        <label class="admin-toggle">
+                            <input type="checkbox" id="fPublished">
+                            <span class="admin-toggle-slider"></span>
+                        </label>
+                        <span class="admin-publish-label">Publish immediately</span>
+                    </div>
+
+                    <div style="display:flex;gap:10px;margin-top:20px;">
+                        <button class="admin-btn primary" style="flex:1;padding:12px;" onclick="savePost()">
+                            <span id="saveLabel">Save Draft</span>
+                        </button>
+                        <button class="admin-btn" onclick="cancelEdit()">Cancel</button>
+                    </div>
+
+                    <div id="adminStatus" class="admin-status"></div>
+
+                    <!-- Danger zone (edit mode only) -->
+                    <div id="dangerZone" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid rgba(255,82,82,0.2);">
+                        <button class="admin-btn danger" style="width:100%;" onclick="deletePost()">🗑 Delete this post</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="../js/firebase-config.js"></script>
+
+<script>
+var ADMIN_EMAIL = 'jeffmbogne@gmail.com';
+var db = firebase.firestore();
+var currentEditId = null;
+
+// ===== AUTH =====
+firebase.auth().onAuthStateChanged(function(user) {
+    document.getElementById('authLoading').style.display = 'none';
+    if (!user) {
+        document.getElementById('signInGate').style.display = 'flex';
+        return;
+    }
+    if (user.email !== ADMIN_EMAIL) {
+        document.getElementById('accessDenied').style.display = 'flex';
+        return;
+    }
+    // Admin confirmed
+    document.getElementById('signOutBtn').style.display = 'block';
+    document.getElementById('adminDashboard').style.display = 'block';
+    document.getElementById('adminWelcome').textContent = 'Signed in as ' + user.email;
+    loadAllPosts();
+});
+
+function signInWithGoogle() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider).catch(function(err) { alert(err.message); });
+}
+
+// ===== LOAD POSTS =====
+function loadAllPosts() {
+    db.collection('posts').orderBy('publishedAt', 'desc').get().then(function(snap) {
+        var posts = [];
+        snap.forEach(function(doc) { posts.push(Object.assign({ id: doc.id }, doc.data())); });
+        document.getElementById('postCountLabel').textContent = '(' + posts.length + ')';
+        if (posts.length === 0) {
+            document.getElementById('adminPostList').innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted);">No posts yet. Create your first one!</div>';
+            return;
+        }
+        document.getElementById('adminPostList').innerHTML = posts.map(function(p) {
+            var date = p.publishedAt ? new Date(p.publishedAt.seconds * 1000).toLocaleDateString() : 'Draft';
+            return '<div class="admin-post-row">' +
+                '<div class="admin-post-dot ' + (p.published ? 'published' : 'draft') + '"></div>' +
+                '<div class="admin-post-info">' +
+                '<div class="admin-post-title">' + escapeHtml(p.title) + '</div>' +
+                '<div class="admin-post-meta">' + date + ' · ' + (p.category || 'general') + ' · ' + (p.published ? '✅ Published' : '📝 Draft') + '</div>' +
+                '</div>' +
+                '<div class="admin-post-actions">' +
+                '<a href="post.html?slug=' + encodeURIComponent(p.slug) + '" target="_blank" class="admin-btn">View</a>' +
+                '<button class="admin-btn" onclick="editPost(' + JSON.stringify(p.id) + ')">Edit</button>' +
+                '</div></div>';
+        }).join('');
+    });
+}
+
+// ===== NEW / EDIT POST =====
+function newPost() {
+    currentEditId = null;
+    document.getElementById('formTitle').textContent = 'New Post';
+    document.getElementById('fTitle').value = '';
+    document.getElementById('fSlug').value = '';
+    document.getElementById('fCategory').value = 'compound-interest';
+    document.getElementById('fExcerpt').value = '';
+    document.getElementById('fContent').value = '';
+    document.getElementById('fReadTime').value = '5';
+    document.getElementById('fAuthor').value = 'Young Investor Team';
+    document.getElementById('fPublished').checked = false;
+    document.getElementById('dangerZone').style.display = 'none';
+    document.getElementById('adminStatus').className = 'admin-status';
+    document.getElementById('adminForm').style.display = 'block';
+    document.getElementById('adminForm').scrollIntoView({ behavior: 'smooth' });
+}
+
+function editPost(id) {
+    db.collection('posts').doc(id).get().then(function(doc) {
+        if (!doc.exists) { alert('Post not found'); return; }
+        var p = doc.data();
+        currentEditId = id;
+        document.getElementById('formTitle').textContent = 'Edit Post';
+        document.getElementById('fTitle').value = p.title || '';
+        document.getElementById('fSlug').value = p.slug || '';
+        document.getElementById('fCategory').value = p.category || 'general';
+        document.getElementById('fExcerpt').value = p.excerpt || '';
+        document.getElementById('fContent').value = p.content || '';
+        document.getElementById('fReadTime').value = p.readTime || 5;
+        document.getElementById('fAuthor').value = p.author || 'Young Investor Team';
+        document.getElementById('fPublished').checked = !!p.published;
+        document.getElementById('dangerZone').style.display = 'block';
+        document.getElementById('adminStatus').className = 'admin-status';
+        document.getElementById('adminForm').style.display = 'block';
+        document.getElementById('adminForm').scrollIntoView({ behavior: 'smooth' });
+    });
+}
+
+function cancelEdit() {
+    currentEditId = null;
+    document.getElementById('adminForm').style.display = 'none';
+}
+
+// ===== SAVE =====
+function savePost() {
+    var title = document.getElementById('fTitle').value.trim();
+    var slug = document.getElementById('fSlug').value.trim();
+    var category = document.getElementById('fCategory').value;
+    var excerpt = document.getElementById('fExcerpt').value.trim();
+    var content = document.getElementById('fContent').value.trim();
+    var readTime = parseInt(document.getElementById('fReadTime').value) || 5;
+    var author = document.getElementById('fAuthor').value.trim() || 'Young Investor Team';
+    var published = document.getElementById('fPublished').checked;
+
+    if (!title || !slug || !excerpt || !content) {
+        showStatus('error', 'Please fill in all required fields (title, slug, excerpt, content).');
+        return;
+    }
+    if (!/^[a-z0-9-]+$/.test(slug)) {
+        showStatus('error', 'Slug must be lowercase letters, numbers, and hyphens only.');
+        return;
+    }
+
+    var saveBtn = document.getElementById('saveLabel');
+    saveBtn.textContent = 'Saving...';
+
+    var data = {
+        title: title,
+        slug: slug,
+        category: category,
+        excerpt: excerpt,
+        content: content,
+        readTime: readTime,
+        author: author,
+        published: published,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    if (!currentEditId) {
+        data.publishedAt = firebase.firestore.FieldValue.serverTimestamp();
+        data.views = 0;
+    }
+
+    var op = currentEditId
+        ? db.collection('posts').doc(currentEditId).update(data)
+        : db.collection('posts').add(data);
+
+    op.then(function(ref) {
+        if (!currentEditId && ref) currentEditId = ref.id;
+        showStatus('success', published ? '✅ Post published!' : '📝 Draft saved!');
+        document.getElementById('dangerZone').style.display = 'block';
+        saveBtn.textContent = 'Save';
+        loadAllPosts();
+    }).catch(function(err) {
+        showStatus('error', 'Error: ' + err.message);
+        saveBtn.textContent = 'Save';
+    });
+}
+
+function deletePost() {
+    if (!currentEditId) return;
+    if (!confirm('Delete this post permanently? This cannot be undone.')) return;
+    db.collection('posts').doc(currentEditId).delete().then(function() {
+        cancelEdit();
+        loadAllPosts();
+    });
+}
+
+// ===== TOOLBAR HELPERS =====
+function wrap(open, close) {
+    var ta = document.getElementById('fContent');
+    var start = ta.selectionStart, end = ta.selectionEnd;
+    var selected = ta.value.substring(start, end);
+    var before = ta.value.substring(0, start);
+    var after = ta.value.substring(end);
+    ta.value = before + open + selected + close + after;
+    ta.focus();
+    ta.setSelectionRange(start + open.length, end + open.length);
+}
+
+function insertHighlightBox() {
+    var ta = document.getElementById('fContent');
+    var box = '\n<div class="highlight-box">\n  <span class="hb-number">$356,000</span>\n  <p>Your insight or key stat here.</p>\n</div>\n';
+    ta.value += box;
+}
+
+function insertCompare() {
+    var ta = document.getElementById('fContent');
+    var cmp = '\n<div class="data-compare">\n  <div class="data-col winner">\n    <div class="dc-label">Start at 20</div>\n    <div class="dc-amount">$736K</div>\n  </div>\n  <div class="data-col loser">\n    <div class="dc-label">Start at 30</div>\n    <div class="dc-amount">$380K</div>\n  </div>\n</div>\n';
+    ta.value += cmp;
+}
+
+function togglePreview() {
+    var preview = document.getElementById('contentPreview');
+    var content = document.getElementById('fContent').value;
+    if (preview.style.display === 'none') {
+        document.getElementById('previewContent').innerHTML = content;
+        preview.style.display = 'block';
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+// Auto-generate slug from title
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('fTitle').addEventListener('input', function() {
+        if (!currentEditId) {
+            document.getElementById('fSlug').value = this.value
+                .toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .slice(0, 80);
+        }
+        var pub = document.getElementById('fPublished').checked;
+        document.getElementById('saveLabel').textContent = pub ? 'Publish Post' : 'Save Draft';
+    });
+    document.getElementById('fPublished').addEventListener('change', function() {
+        document.getElementById('saveLabel').textContent = this.checked ? 'Publish Post' : 'Save Draft';
+    });
+});
+
+function showStatus(type, msg) {
+    var el = document.getElementById('adminStatus');
+    el.textContent = msg;
+    el.className = 'admin-status ' + type;
+    setTimeout(function() { el.className = 'admin-status'; }, 5000);
+}
+
+function escapeHtml(str) {
+    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
