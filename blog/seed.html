@@ -21,8 +21,9 @@
 
 <div class="container" style="max-width:700px;padding:60px 24px;">
     <div id="authLoading" style="text-align:center;padding:80px 0;">
-        <div style="width:40px;height:40px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
-        <p style="color:var(--text-muted);">Checking authentication...</p>
+        <div style="width:40px;height:40px;border:2px solid #333;border-top-color:#00e676;border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px;"></div>
+        <p style="color:#666;margin-bottom:24px;">Checking authentication...</p>
+        <button class="post-cta-btn" onclick="signIn()" style="opacity:0;" id="fallbackBtn">Sign in with Google</button>
     </div>
     <div id="signInGate" style="display:none;text-align:center;padding:80px 0;">
         <div style="font-size:48px;margin-bottom:20px;">🔐</div>
@@ -52,7 +53,13 @@
 <script src="../js/firebase-config.js"></script>
 <script>
 var ADMIN_EMAIL = 'jeffmbogne@gmail.com';
-var db = firebase.firestore();
+var db;
+
+// Fallback: if Firebase Auth doesn't respond in 3s, show sign-in button
+var authTimeout = setTimeout(function() {
+    document.getElementById('authLoading').style.display = 'none';
+    document.getElementById('signInGate').style.display = 'block';
+}, 3000);
 
 /* ============================================================
    5 BLOG POSTS — Full SEO-optimized content
@@ -420,12 +427,21 @@ var POSTS = [
 /* ============================================================
    AUTH + SEED LOGIC
    ============================================================ */
-firebase.auth().onAuthStateChanged(function(user) {
+try {
+    db = firebase.firestore();
+    firebase.auth().onAuthStateChanged(function(user) {
+        clearTimeout(authTimeout);
+        document.getElementById('authLoading').style.display = 'none';
+        if (!user) { document.getElementById('signInGate').style.display = 'block'; return; }
+        if (user.email !== ADMIN_EMAIL) { document.getElementById('denied').style.display = 'block'; return; }
+        showPanel();
+    });
+} catch(e) {
+    clearTimeout(authTimeout);
     document.getElementById('authLoading').style.display = 'none';
-    if (!user) { document.getElementById('signInGate').style.display = 'block'; return; }
-    if (user.email !== ADMIN_EMAIL) { document.getElementById('denied').style.display = 'block'; return; }
-    showPanel();
-});
+    document.getElementById('signInGate').style.display = 'block';
+    console.error('Firebase init error:', e);
+}
 
 function signIn() {
     firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(function(e) { alert(e.message); });
@@ -445,6 +461,7 @@ function showPanel() {
 }
 
 function seedAll() {
+    if (!db) { try { db = firebase.firestore(); } catch(e) { alert('Firestore not available: ' + e.message); return; } }
     var btn = document.getElementById('seedBtn');
     btn.textContent = 'Publishing...';
     btn.style.pointerEvents = 'none';
