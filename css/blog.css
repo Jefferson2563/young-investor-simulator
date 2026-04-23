@@ -122,6 +122,9 @@
     justify-content: center;
 }
 .filter-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     padding: 7px 16px;
     border-radius: 20px;
     border: 1px solid var(--border);
@@ -210,10 +213,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
     background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.1);
 }
+/* SVG icon inherits category color */
+.blog-card[data-cat="compound-interest"] .blog-card-header-icon { color: var(--cat-compound); }
+.blog-card[data-cat="dividends"] .blog-card-header-icon { color: var(--cat-dividends); }
+.blog-card[data-cat="portfolio"] .blog-card-header-icon { color: var(--cat-portfolio); }
+.blog-card[data-cat="tax"] .blog-card-header-icon { color: var(--cat-tax); }
+.blog-card[data-cat="mindset"] .blog-card-header-icon { color: var(--cat-mindset); }
+.blog-card[data-cat="general"] .blog-card-header-icon { color: var(--cat-general); }
+/* Filter pill icon alignment */
+.filter-pill svg { flex-shrink: 0; }
 .blog-card-tag {
     position: relative;
     z-index: 1;
