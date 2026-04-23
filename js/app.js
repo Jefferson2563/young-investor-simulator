@@ -866,7 +866,7 @@ function closeFullscreen() {
         if (heroAt30) heroAt30.textContent = formatMoney(res30.finalBalance, res30.finalBalance >= 1_000_000);
         if (heroGapLine) {
             var gapAmt = formatMoney(Math.abs(diff), Math.abs(diff) >= 1_000_000);
-            heroGapLine.innerHTML = (ct.heroGapStart || "That's ") + '<strong>' + gapAmt + '</strong>' + (ct.heroGapEnd || ' lost by waiting 10 years.');
+            heroGapLine.innerHTML = (ct.heroGapStart || "That's ") + '<strong>' + gapAmt + '</strong>' + (ct.heroGapMore || ' more by retirement.');
         }
     }
 
@@ -1438,7 +1438,7 @@ function closeFullscreen() {
         const heroBadge = document.querySelector('.hero-badge');
         if (heroBadge) heroBadge.textContent = t.heroBadge;
         const heroTitle = document.querySelector('.hero-title');
-        if (heroTitle) heroTitle.innerHTML = t.heroTitle1 + '<br>' + $('heroAmount').outerHTML;
+        if (heroTitle) heroTitle.innerHTML = (t.heroLine1 || 'Start at 20.') + '<br><span class="hero-highlight">' + (t.heroLine2 || 'Not 30.') + '</span>';
         const heroSub = document.querySelector('.hero-subtitle');
         if (heroSub) heroSub.innerHTML = t.heroSub + '<br>' + t.heroSub2;
         const heroCta = document.querySelector('.hero-cta span:first-child');

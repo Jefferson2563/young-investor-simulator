@@ -748,9 +748,19 @@ a { color: inherit; text-decoration: none; }
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
-    margin-bottom: 12px;
+    gap: 16px;
+    margin-bottom: 36px;
     flex-wrap: wrap;
+}
+
+/* Mini variant used in Option B hero */
+.hero-age-mini .hero-age-card {
+    padding: 12px 22px;
+    min-width: 120px;
+}
+
+.hero-age-mini .hero-age-amount {
+    font-size: 22px;
 }
 
 .hero-age-card {
@@ -785,7 +795,7 @@ a { color: inherit; text-decoration: none; }
 
 .hero-age-dim {
     color: var(--text-secondary);
-    opacity: 0.5;
+    opacity: 0.4;
 }
 
 .hero-age-vs {
@@ -795,9 +805,9 @@ a { color: inherit; text-decoration: none; }
 }
 
 .hero-age-gap {
-    font-size: 15px;
+    font-size: 16px;
     color: var(--text-secondary);
-    margin-bottom: 36px;
+    margin-bottom: 28px;
     text-align: center;
 }
 
@@ -807,8 +817,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 480px) {
-    .hero-age-card { padding: 14px 20px; min-width: 130px; }
-    .hero-age-amount { font-size: 24px; }
+    .hero-age-card { padding: 14px 20px; min-width: 110px; }
+    .hero-age-amount { font-size: 22px; }
 }
 
 .hero-title {
