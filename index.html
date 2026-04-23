@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Young Investor Simulator | See How Much Wealth You Can Build Starting Now</title>
-    <meta name="description" content="Free interactive investment simulator for young people. See how compound interest turns small monthly contributions into massive wealth. Start with $100/month and watch it grow.">
-    <meta name="keywords" content="young investor simulator, investment calculator, compound interest, youth investing, investment simulator, how to invest young, wealth building">
+    <title>Compound Interest Calculator for Young Investors — Free Simulator | YoungInvestor</title>
+    <meta name="description" content="Free compound interest calculator and investment simulator. See how $100/month grows to $736K starting at 20 vs $380K starting at 30. No signup. Instant results for beginners.">
+    <meta name="keywords" content="compound interest calculator, investment simulator, compound interest calculator for beginners, investment growth calculator, young investor simulator, how much will my money grow, savings growth calculator, compound interest starting at 20">
     <meta name="author" content="Young Investor Simulator">
     <meta name="robots" content="index, follow">
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Young Investor Simulator — See How Much Wealth You Can Build">
-    <meta property="og:description" content="Free investment simulator. See how $100/month becomes $1M+ with compound interest. Try it now — no signup required.">
+    <meta property="og:title" content="Compound Interest Calculator — Free Investment Simulator for Young Investors">
+    <meta property="og:description" content="Free compound interest calculator. See how $100/month grows to $736K starting at 20. No signup required — instant results.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://younginvestor.app/">
     <meta property="og:site_name" content="Young Investor">
@@ -21,12 +21,21 @@
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Young Investor Simulator — See How Much Wealth You Can Build">
-    <meta name="twitter:description" content="Free investment simulator. See how $100/month becomes $1M+ with compound interest. Try it now.">
+    <meta name="twitter:title" content="Compound Interest Calculator — Free Investment Simulator for Young Investors">
+    <meta name="twitter:description" content="Free compound interest calculator. See how $100/month grows to $736K starting at 20. No signup — instant results.">
     <meta name="twitter:image" content="https://younginvestor.app/assets/og-card.svg">
     <meta name="twitter:site" content="@younginvestapp">
 
     <link rel="canonical" href="https://younginvestor.app/">
+    <!-- hreflang — same URL serves all languages via JS i18n -->
+    <link rel="alternate" hreflang="en" href="https://younginvestor.app/">
+    <link rel="alternate" hreflang="fr" href="https://younginvestor.app/?lang=fr">
+    <link rel="alternate" hreflang="es" href="https://younginvestor.app/?lang=es">
+    <link rel="alternate" hreflang="pt" href="https://younginvestor.app/?lang=pt">
+    <link rel="alternate" hreflang="de" href="https://younginvestor.app/?lang=de">
+    <link rel="alternate" hreflang="ar" href="https://younginvestor.app/?lang=ar">
+    <link rel="alternate" hreflang="zh" href="https://younginvestor.app/?lang=zh">
+    <link rel="alternate" hreflang="x-default" href="https://younginvestor.app/">
 
     <!-- Favicon & PWA -->
     <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
@@ -62,10 +71,10 @@
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Young Investor Simulator",
+      "name": "Compound Interest Calculator — Young Investor Simulator",
       "alternateName": "younginvestor.app",
       "url": "https://younginvestor.app",
-      "description": "Free interactive investment simulator for young people. See how compound interest turns small monthly contributions into massive wealth. Start with $100/month and watch it grow.",
+      "description": "Free compound interest calculator and investment simulator for young investors. See how $100/month grows to $736K starting at 20. No signup required.",
       "applicationCategory": "FinanceApplication",
       "operatingSystem": "Web",
       "isAccessibleForFree": true,
@@ -86,6 +95,36 @@
           "https://www.youtube.com/@younginvestapp"
         ]
       }
+    }
+    </script>
+
+    <!-- FAQ structured data for Google rich results -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is a compound interest calculator?",
+          "acceptedAnswer": {"@type": "Answer", "text": "A compound interest calculator shows how your money grows exponentially when returns are reinvested. This free simulator calculates investment growth year-by-year, factoring in your starting amount, monthly contributions, annual return rate, and time horizon."}
+        },
+        {
+          "@type": "Question",
+          "name": "How much does starting investing at 20 vs 30 matter?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Investing $200/month at a 10% annual return starting at age 20 gives you roughly $736,000 by age 55 — versus $380,000 starting at 30. That's a $356,000 gap from just 10 years of delay. Compound interest rewards early starters more than any other factor."}
+        },
+        {
+          "@type": "Question",
+          "name": "Is this investment simulator free?",
+          "acceptedAnswer": {"@type": "Answer", "text": "Yes — the compound interest simulator is 100% free and requires no account. You can see instant results in seconds. No email, no credit card required."}
+        },
+        {
+          "@type": "Question",
+          "name": "What return rate should I use in the investment calculator?",
+          "acceptedAnswer": {"@type": "Answer", "text": "The S&P 500 has averaged around 10% annually over the past century (7% after inflation). For a conservative estimate, use 6–7%. For index funds or ETFs, 8–10% is a common benchmark for long-term projections."}
+        }
+      ]
     }
     </script>
 </head>
@@ -373,7 +412,7 @@
     <section class="simulator" id="simulator">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Play with the numbers</h2>
+                <h2 class="section-title">Free Compound Interest Simulator</h2>
                 <p class="section-desc">Move the sliders. Watch your future change in real-time.</p>
             </div>
 
@@ -827,6 +866,31 @@
                     <h4>Dream Fund</h4>
                     <p>Set savings goals. Track progress. Celebrate milestones.</p>
                 </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== SEO FAQ ========== -->
+    <section class="seo-faq" aria-label="Frequently asked questions about compound interest">
+        <div class="container">
+            <h2 class="seo-faq-title">About this compound interest calculator</h2>
+            <div class="seo-faq-grid">
+                <div class="seo-faq-item">
+                    <h3>What is a compound interest calculator?</h3>
+                    <p>A compound interest calculator shows how your money grows exponentially when returns are reinvested. This free simulator calculates investment growth year-by-year, factoring in your starting amount, monthly contributions, annual return rate, and time horizon.</p>
+                </div>
+                <div class="seo-faq-item">
+                    <h3>How much does starting at 20 vs 30 matter?</h3>
+                    <p>Investing $200/month at a 10% annual return starting at age 20 gives you roughly $736,000 by age 55 — versus $380,000 starting at 30. That's a $356,000 gap from just 10 years of delay. Compound interest rewards early starters more than any other factor.</p>
+                </div>
+                <div class="seo-faq-item">
+                    <h3>Is this investment simulator free?</h3>
+                    <p>Yes — the compound interest simulator is 100% free and requires no account. You can see instant results in seconds. No email, no credit card. Pro features (PDF export, advanced scenarios) are optional.</p>
+                </div>
+                <div class="seo-faq-item">
+                    <h3>What return rate should I use?</h3>
+                    <p>The S&P 500 has averaged around 10% annually over the past century (7% after inflation). For a conservative estimate, use 6–7%. For index funds or ETFs, 8–10% is a common benchmark for long-term projections.</p>
+                </div>
             </div>
         </div>
     </section>
