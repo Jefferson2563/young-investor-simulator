@@ -182,86 +182,35 @@ firebase.auth().onAuthStateChanged(function(user) {
     }
 });
 
-// Load posts from Firestore
+// ===== STATIC POSTS — instant load, zero Firebase dependency =====
+var STATIC_POSTS = [
+    { slug:'investing-at-20-vs-30', title:'Investing at 20 vs 30: The $356,000 Gap Nobody Talks About', category:'compound-interest', readTime:6, publishedAt:{seconds:1745000000}, excerpt:'Same person. Same income. Same $200/month. Just 10 years apart. The difference? $356,000.' },
+    { slug:'what-is-drip-dividend-reinvestment', title:'What is DRIP Investing? How the Dividend Snowball Quietly Builds a Fortune', category:'dividends', readTime:5, publishedAt:{seconds:1744900000}, excerpt:'DRIP stands for Dividend Reinvestment Plan — the simplest wealth-building strategy most beginners ignore. It turns the same investment into 64% more money over 30 years.' },
+    { slug:'100-dollars-month-starting-at-18', title:'$100/Month at 18: What Your Money Actually Looks Like at 65', category:'compound-interest', readTime:4, publishedAt:{seconds:1744800000}, excerpt:'You do not need a high salary to retire wealthy. $100/month starting at 18 can grow to over $1.1 million by retirement.' },
+    { slug:'3-numbers-every-beginner-investor-needs', title:'The 3 Numbers Every Beginner Investor Needs to Know (And Nothing Else)', category:'mindset', readTime:5, publishedAt:{seconds:1744700000}, excerpt:'Three numbers determine 90% of your long-term investment outcome. Master these before anything else.' },
+    { slug:'net-worth-at-25-guide', title:"Net Worth at 25: What's Normal, What's Great, and How to Track It", category:'portfolio', readTime:5, publishedAt:{seconds:1744600000}, excerpt:"Most 25-year-olds have no idea what their net worth actually is. Here is what is normal, what is exceptional, and how to track it properly." }
+];
+
 function loadPosts() {
-    db.collection('posts')
-        .get()
-        .then(function(snap) {
-            allPosts = [];
-            snap.forEach(function(doc) {
-                var d = Object.assign({ id: doc.id }, doc.data());
-                if (d.published) allPosts.push(d);
-            });
-            allPosts.sort(function(a, b) {
-                var ta = a.publishedAt ? a.publishedAt.seconds : 0;
-                var tb = b.publishedAt ? b.publishedAt.seconds : 0;
-                return tb - ta;
-            });
-            renderPosts();
-            document.getElementById('blogSkeleton').style.display = 'none';
-            document.getElementById('blogGrid').style.display = 'grid';
-            var countEl = document.querySelector('#postCount strong');
-            if (countEl) countEl.textContent = allPosts.length;
-        })
-        .catch(function(err) {
-            console.error('Error loading posts:', err);
-            document.getElementById('blogSkeleton').style.display = 'none';
-            document.getElementById('blogGrid').style.display = 'grid';
-            document.getElementById('blogGrid').innerHTML = '<div class="blog-empty"><p>Could not load posts. Please try again.</p></div>';
-        });
+    allPosts = STATIC_POSTS.slice();
+    renderPosts();
+    document.getElementById('blogSkeleton').style.display = 'none';
+    document.getElementById('blogGrid').style.display = 'grid';
+    var countEl = document.querySelector('#postCount strong');
+    if (countEl) countEl.textContent = allPosts.length;
+    try {
+        firebase.firestore().collection('posts').get().then(function(snap) {
+            var fp = [];
+            snap.forEach(function(doc) { var d = Object.assign({ id: doc.id }, doc.data()); if (d.published) fp.push(d); });
+            if (fp.length > allPosts.length) {
+                allPosts = fp;
+                allPosts.sort(function(a,b){ return (b.publishedAt?b.publishedAt.seconds:0)-(a.publishedAt?a.publishedAt.seconds:0); });
+                renderPosts();
+                if (countEl) countEl.textContent = allPosts.length;
+            }
+        }).catch(function(){});
+    } catch(e) {}
 }
-
-function renderPosts() {
-    var grid = document.getElementById('blogGrid');
-    var filtered = activeFilter === 'all' ? allPosts : allPosts.filter(function(p) { return p.category === activeFilter; });
-
-    if (filtered.length === 0) {
-        grid.innerHTML = '<div class="blog-empty">' +
-            '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>' +
-            '<p>No posts in this category yet. Check back soon.</p></div>';
-        return;
-    }
-
-    grid.innerHTML = filtered.map(function(post, i) {
-        return buildCard(post, i === 0 && activeFilter === 'all');
-    }).join('');
-}
-
-function buildCard(post, featured) {
-    var cat = post.category || 'general';
-    var icon = CATEGORY_ICONS[cat] || '✨';
-    var date = post.publishedAt ? new Date(post.publishedAt.seconds * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
-    var readTime = post.readTime || 5;
-    var catLabel = cat.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
-
-    return '<a href="post.html?slug=' + encodeURIComponent(post.slug) + '" class="blog-card' + (featured ? ' featured' : '') + '" data-cat="' + cat + '">' +
-        '<div class="blog-card-header">' +
-        '<div class="blog-card-header-icon">' + icon + '</div>' +
-        '<span class="blog-card-tag">' + catLabel + '</span>' +
-        '</div>' +
-        '<div class="blog-card-body">' +
-        '<div class="blog-card-title">' + escapeHtml(post.title) + '</div>' +
-        '<div class="blog-card-excerpt">' + escapeHtml(post.excerpt) + '</div>' +
-        '<div class="blog-card-meta">' +
-        '<span class="blog-card-date">' + date + '</span>' +
-        '<span class="blog-card-read"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>' + readTime + ' min read</span>' +
-        '<span class="blog-card-arrow">→</span>' +
-        '</div></div></a>';
-}
-
-function escapeHtml(str) {
-    return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-// Filter pills
-document.querySelectorAll('.filter-pill').forEach(function(pill) {
-    pill.addEventListener('click', function() {
-        activeFilter = this.dataset.filter;
-        document.querySelectorAll('.filter-pill').forEach(function(p) { p.classList.remove('active'); });
-        this.classList.add('active');
-        renderPosts();
-    });
-});
 
 loadPosts();
 </script>
