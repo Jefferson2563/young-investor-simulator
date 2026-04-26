@@ -145,15 +145,9 @@
 </footer>
 
 <!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="../js/firebase-config.js"></script>
-
 <script>
 /* ===== BLOG INDEX ===== */
 var ADMIN_EMAIL = 'jeffmbogne@gmail.com';
-var db = firebase.firestore();
 var allPosts = [];
 var activeFilter = 'all';
 
@@ -175,12 +169,8 @@ if (urlParams.get('filter')) {
     });
 }
 
-// Auth check — show admin link if owner
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user && user.email === ADMIN_EMAIL) {
-        document.getElementById('adminLink').style.display = 'flex';
-    }
-});
+// Show admin link — hidden by default, admin accesses directly
+// document.getElementById('adminLink').style.display = 'flex'; // enable manually if needed
 
 // ===== STATIC POSTS — instant load, zero Firebase dependency =====
 var STATIC_POSTS = [
@@ -198,18 +188,7 @@ function loadPosts() {
     document.getElementById('blogGrid').style.display = 'grid';
     var countEl = document.querySelector('#postCount strong');
     if (countEl) countEl.textContent = allPosts.length;
-    try {
-        firebase.firestore().collection('posts').get().then(function(snap) {
-            var fp = [];
-            snap.forEach(function(doc) { var d = Object.assign({ id: doc.id }, doc.data()); if (d.published) fp.push(d); });
-            if (fp.length > allPosts.length) {
-                allPosts = fp;
-                allPosts.sort(function(a,b){ return (b.publishedAt?b.publishedAt.seconds:0)-(a.publishedAt?a.publishedAt.seconds:0); });
-                renderPosts();
-                if (countEl) countEl.textContent = allPosts.length;
-            }
-        }).catch(function(){});
-    } catch(e) {}
+
 }
 
 loadPosts();
