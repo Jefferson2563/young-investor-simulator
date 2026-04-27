@@ -144,14 +144,7 @@
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-<script src="../js/firebase-config.js"></script>
-
 <script>
-var ADMIN_EMAIL = 'jeffmbogne@gmail.com';
-var db = firebase.firestore();
 var CATEGORY_ICONS = {
     'compound-interest': '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>',
     'dividends':         '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
@@ -169,12 +162,6 @@ var CATEGORY_TOOL_LINKS = {
     'general': { url: '../', label: 'Try the free calculator', sub: 'No signup required. See your results instantly.' }
 };
 
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user && user.email === ADMIN_EMAIL) {
-        document.getElementById('adminLink').style.display = 'flex';
-    }
-});
-
 var slug = new URLSearchParams(window.location.search).get('slug');
 if (!slug) {
     showNotFound();
@@ -182,21 +169,57 @@ if (!slug) {
     loadPost(slug);
 }
 
+var ALL_POSTS = [
+    {
+        slug: 'investing-at-20-vs-30',
+        title: 'Investing at 20 vs 30: The $356,000 Gap Nobody Talks About',
+        category: 'compound-interest', readTime: 6, author: 'Young Investor Team',
+        publishedAt: { seconds: 1745000000 },
+        excerpt: 'Same person. Same income. Same $200/month. Just 10 years apart. The difference? $356,000.',
+        content: '<p>Most people find out too late. They are 35, doing the math for the first time, realizing what a decade of waiting actually cost them. Not in potential. Not in theory. In real, hard dollars.</p><p>We ran the numbers. Starting with $200/month at a 10% annual return — a conservative S&P 500 historical average — the difference between starting at 20 and starting at 30 is <strong>$356,000</strong>.</p><div class="data-compare"><div class="data-col winner"><div class="dc-label">Start investing at 20</div><div class="dc-amount">$736K</div></div><div class="data-col loser"><div class="dc-label">Start investing at 30</div><div class="dc-amount">$380K</div></div></div><p>Same person. Same income. Same $200/month. Just 10 years apart. That gap is compound interest doing exactly what it is supposed to do.</p><h2>Why the gap is so enormous</h2><p>Most people think investing is about saving money. It is not. It is about <strong>time</strong>. The earlier you start, the more your money works for you instead of you working for it.</p><p>Here is the thing about compound interest: you do not just earn returns on your original investment. You earn returns on your returns. And then returns on those returns. Every single year, for decades.</p><div class="highlight-box"><span class="hb-number">The last 10 years</span><p>If you start at 20 and retire at 55, your final 10 years of compounding (ages 45-55) generate more wealth than the first 25 years combined. That is why the person who starts at 30 does not just lose 10 years of contributions — they lose the most powerful decade of the entire curve.</p></div><h2>What about people who cannot afford $200/month?</h2><p>The amount matters far less than you think. $50/month starting at 20 often beats $200/month starting at 30. Because the one variable that can never be recovered is time. You can earn more money. You can cut expenses. You cannot go back to being 20.</p><h2>Three things you can do today</h2><ul><li><strong>Pick a number</strong> — even $20/month. The habit matters more than the amount at the start.</li><li><strong>Open an account</strong> — any brokerage. Buy an S&P 500 index fund or ETF.</li><li><strong>Automate it</strong> — set up a monthly automatic transfer so you never have to think about it again.</li></ul><p>Every month you wait is a month you can never recover. The $356,000 gap grows every year you do not start.</p>'
+    },
+    {
+        slug: 'what-is-drip-dividend-reinvestment',
+        title: 'What is DRIP Investing? How the Dividend Snowball Quietly Builds a Fortune',
+        category: 'dividends', readTime: 5, author: 'Young Investor Team',
+        publishedAt: { seconds: 1744900000 },
+        excerpt: 'DRIP stands for Dividend Reinvestment Plan — the simplest wealth-building strategy most beginners ignore.',
+        content: '<p>Most young investors focus on stock prices. Buy low, sell high. Watch the number go up. But the investors who quietly build real, lasting wealth understand something different: <strong>dividends reinvested over decades are the closest thing to a legal money machine that exists.</strong></p><h2>What exactly is DRIP?</h2><p>When a company pays a dividend — a portion of its profits distributed to shareholders — you have two choices: take the cash payout, or reinvest it automatically into more shares of the same stock.</p><p>DRIP means reinvest. Every dividend payment buys you more shares. More shares generate more dividends. More dividends buy more shares. This cycle, running continuously for decades, is what investors call the dividend snowball.</p><div class="highlight-box"><span class="hb-number">Year 1 to Year 30</span><p>In year 1, your $10,000 at a 4% yield earns $400 in dividends. Reinvested, you now own fractionally more shares. By year 30, the snowball has become an avalanche — not because you added more money, but because the compounding never stopped.</p></div><h2>The real numbers: DRIP vs taking dividends as cash</h2><div class="data-compare"><div class="data-col winner"><div class="dc-label">With DRIP (reinvested)</div><div class="dc-amount">$138K+</div></div><div class="data-col loser"><div class="dc-label">Dividends taken as cash</div><div class="dc-amount">$84K</div></div></div><p>Same investment. Same yield. The only difference is one checkbox. Reinvesting turns $84K into $138K — <strong>a 64% bonus purely from letting dividends do their job</strong>.</p><h2>How to actually set up DRIP</h2><ol><li>Open any brokerage account</li><li>Buy a dividend ETF</li><li>Find the DRIP or dividend reinvestment setting — usually one toggle</li><li>Turn it on. Never turn it off.</li></ol><h2>The best dividend ETFs for beginners</h2><ul><li><strong>SCHD</strong> — Schwab US Dividend Equity. The gold standard for most DRIP investors.</li><li><strong>VYM</strong> — Vanguard High Dividend Yield. Broad diversification, lower cost, 3%+ yield.</li><li><strong>VIG</strong> — Vanguard Dividend Appreciation. Focuses on companies that consistently raise dividends.</li></ul>'
+    },
+    {
+        slug: '100-dollars-month-starting-at-18',
+        title: '$100/Month at 18: What Your Money Actually Looks Like at 65',
+        category: 'compound-interest', readTime: 4, author: 'Young Investor Team',
+        publishedAt: { seconds: 1744800000 },
+        excerpt: 'You do not need a high salary to retire wealthy. $100/month starting at 18 can grow to over $1.1 million by retirement.',
+        content: '<p>Everyone tells you to start investing early. Nobody shows you what that actually means in dollars. Let us fix that.</p><h2>The setup: $100/month, starting at 18</h2><p>$100/month. That is roughly $3.33 a day — the price of a coffee. Invested in a simple S&P 500 index fund from age 18 onward at a 10% annual return:</p><div class="highlight-box"><span class="hb-number">$1,176,477</span><p>That is what $100/month from age 18 to 65 becomes, assuming 10% annual returns. You contributed a total of $56,400. The other $1,120,000+ came entirely from compound interest.</p></div><p>You put in $56,400. You get back $1.1 million. The difference — over $1 million — is money you never worked for. Your money worked for it.</p><h2>What changes if you wait</h2><div class="data-compare"><div class="data-col winner"><div class="dc-label">Start at 18</div><div class="dc-amount">$1.17M</div></div><div class="data-col loser"><div class="dc-label">Start at 28</div><div class="dc-amount">$440K</div></div></div><p>Waiting 10 years — from 18 to 28 — costs you $737,000. Not $12,000 in missed contributions. $737,000 in missed compounding.</p><h2>The practical setup — 15 minutes</h2><ol><li><strong>Open a brokerage account</strong> — Trade Republic, Interactive Brokers, Fidelity, or Robinhood.</li><li><strong>Set up a monthly $100 automatic investment</strong> into an S&P 500 ETF (SPY, VOO, or VWCE in Europe).</li><li><strong>Enable dividend reinvestment (DRIP)</strong> if your broker offers it.</li><li><strong>Do not look at it for 5 years.</strong> The biggest mistake young investors make is panic-selling during dips.</li></ol>'
+    },
+    {
+        slug: '3-numbers-every-beginner-investor-needs',
+        title: 'The 3 Numbers Every Beginner Investor Needs to Know (And Nothing Else)',
+        category: 'mindset', readTime: 5, author: 'Young Investor Team',
+        publishedAt: { seconds: 1744700000 },
+        excerpt: 'Three numbers determine 90% of your long-term investment outcome. Master these before anything else.',
+        content: '<p>The financial industry makes investing feel complicated on purpose. Complexity sells advice. Complexity justifies fees. Here is the reality: 90% of your long-term investment outcome is determined by three numbers. Everything else is noise.</p><h2>Number 1: Your monthly contribution</h2><p>Not your lump sum. Not your total savings. Your <strong>monthly contribution</strong> — the amount that automatically goes into your investments every single month, no matter what.</p><div class="highlight-box"><span class="hb-number">$200/mo</span><p>$200/month starting at 22, invested in an index fund, becomes approximately $650,000 by age 55 at 10% returns. Consistency matters far more than the amount.</p></div><p><strong>Your goal:</strong> Lock in a monthly contribution you can actually sustain. Not impressive. Sustainable.</p><h2>Number 2: Your return rate</h2><p>For most beginner investors, the right benchmark is the S&P 500 historical average: <strong>approximately 10% per year</strong>. You do not need to beat the market. A simple index ETF does it automatically, at almost zero cost.</p><div class="data-compare"><div class="data-col winner"><div class="dc-label">Index fund (matches market)</div><div class="dc-amount">~10%/yr</div></div><div class="data-col loser"><div class="dc-label">Average active fund (after fees)</div><div class="dc-amount">~7-8%/yr</div></div></div><h2>Number 3: Time</h2><p>The most powerful variable in all of investing. More powerful than your salary, your stock picks, and the economy. Time is the only variable you cannot buy back.</p><div class="highlight-box"><span class="hb-number">Every year costs you</span><p>If you are 22 and waiting to get serious, every year you wait costs you roughly $14,000-$25,000 in final wealth. That is the compounded cost of one year of inaction.</p></div><h2>Ignore everything else for now</h2><p>Monthly contribution. Return rate. Time. Get those locked in, automate them, and then learn everything else from a position of strength.</p>'
+    },
+    {
+        slug: 'net-worth-at-25-guide',
+        title: "Net Worth at 25: What's Normal, What's Great, and How to Track It",
+        category: 'portfolio', readTime: 5, author: 'Young Investor Team',
+        publishedAt: { seconds: 1744600000 },
+        excerpt: "Most 25-year-olds have no idea what their net worth actually is. Here is what is normal, what is exceptional, and how to track it properly.",
+        content: '<p>Most people in their mid-20s have a vague sense of their financial situation. They know roughly what is in their checking account. They know they have some student debt. But almost nobody knows their actual net worth. And that is the number that tells the real story.</p><h2>What is net worth, exactly?</h2><p>Net worth is simple math: <strong>everything you own, minus everything you owe.</strong></p><p>Assets: bank accounts, investment accounts, retirement accounts, any real estate equity, vehicles. Liabilities: student loans, credit card debt, car loans, mortgage balance.</p><p>If you have $8,000 in savings, $4,000 invested, and $15,000 in student loans: your net worth is minus $3,000. That is completely normal at 25.</p><h2>What is actually normal net worth at 25?</h2><div class="data-compare"><div class="data-col loser"><div class="dc-label">Average (includes debt)</div><div class="dc-amount">-$5K to +$20K</div></div><div class="data-col winner"><div class="dc-label">On track to financial freedom</div><div class="dc-amount">$20K to $50K+</div></div></div><h2>Why trajectory matters more than the number</h2><p>A 25-year-old with $50,000 net worth who stopped investing is in worse shape than a 25-year-old at $0 who invests $300/month consistently.</p><div class="highlight-box"><span class="hb-number">The trajectory rule</span><p>If your net worth grows by an average of $1,000/month from age 25 to 35, you will have $120,000 plus investment returns — likely $150,000 to $200,000 by 35. That is the compounding foundation that makes everything after much easier.</p></div><h2>How to calculate your net worth properly</h2><ol><li><strong>List every asset with current value</strong></li><li><strong>List every liability with current balance</strong></li><li><strong>Subtract liabilities from assets</strong></li><li><strong>Track it monthly</strong> — a growing net worth is one of the most motivating things you will ever watch.</li></ol>'
+    }
+];
+
 function loadPost(slug) {
-    db.collection('posts')
-        .where('slug', '==', slug)
-        .where('published', '==', true)
-        .limit(1)
-        .get()
-        .then(function(snap) {
-            if (snap.empty) { showNotFound(); return; }
-            var post = Object.assign({ id: snap.docs[0].id }, snap.docs[0].data());
-            renderPost(post);
-            loadRelated(post);
-            // Increment view count
-            db.collection('posts').doc(post.id).update({ views: firebase.firestore.FieldValue.increment(1) }).catch(function(){});
-        })
-        .catch(function(err) { console.error(err); showNotFound(); });
+    var post = null;
+    for (var i = 0; i < ALL_POSTS.length; i++) {
+        if (ALL_POSTS[i].slug === slug) { post = ALL_POSTS[i]; break; }
+    }
+    if (!post) { showNotFound(); return; }
+    renderPost(post);
+    loadRelated(post);
 }
 
 function renderPost(post) {
@@ -281,31 +304,22 @@ function buildTOC() {
 }
 
 function loadRelated(post) {
-    db.collection('posts')
-        .where('published', '==', true)
-        .where('category', '==', post.category)
-        .limit(4)
-        .get()
-        .then(function(snap) {
-            var related = [];
-            snap.forEach(function(doc) {
-                if (doc.id !== post.id) related.push(Object.assign({ id: doc.id }, doc.data()));
-            });
-            if (related.length === 0) return;
-            var grid = document.getElementById('relatedGrid');
-            document.getElementById('relatedSection').style.display = 'block';
-            grid.innerHTML = related.slice(0, 3).map(function(p) {
-                var cat = p.category || 'general';
-                var icon = CATEGORY_ICONS[cat] || '✨';
-                var catLabel = cat.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
-                return '<a href="post.html?slug=' + encodeURIComponent(p.slug) + '" class="blog-card" data-cat="' + cat + '">' +
-                    '<div class="blog-card-header"><div class="blog-card-header-icon">' + icon + '</div><span class="blog-card-tag">' + catLabel + '</span></div>' +
-                    '<div class="blog-card-body"><div class="blog-card-title">' + escapeHtml(p.title) + '</div>' +
-                    '<div class="blog-card-excerpt">' + escapeHtml(p.excerpt) + '</div>' +
-                    '<div class="blog-card-meta"><span class="blog-card-date"></span><span class="blog-card-arrow">→</span></div>' +
-                    '</div></a>';
-            }).join('');
-        });
+    var related = ALL_POSTS.filter(function(p) { return p.slug !== post.slug && p.category === post.category; });
+    if (related.length === 0) related = ALL_POSTS.filter(function(p) { return p.slug !== post.slug; }).slice(0, 2);
+    if (related.length === 0) return;
+    var grid = document.getElementById('relatedGrid');
+    document.getElementById('relatedSection').style.display = 'block';
+    grid.innerHTML = related.slice(0, 3).map(function(p) {
+        var cat = p.category || 'general';
+        var icon = CATEGORY_ICONS[cat] || '';
+        var catLabel = cat.replace(/-/g, ' ').replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+        return '<a href="post.html?slug=' + encodeURIComponent(p.slug) + '" class="blog-card" data-cat="' + cat + '">' +
+            '<div class="blog-card-header"><div class="blog-card-header-icon">' + icon + '</div><span class="blog-card-tag">' + catLabel + '</span></div>' +
+            '<div class="blog-card-body"><div class="blog-card-title">' + escapeHtml(p.title) + '</div>' +
+            '<div class="blog-card-excerpt">' + escapeHtml(p.excerpt) + '</div>' +
+            '<div class="blog-card-meta"><span class="blog-card-arrow">→</span></div>' +
+            '</div></a>';
+    }).join('');
 }
 
 function showNotFound() {
