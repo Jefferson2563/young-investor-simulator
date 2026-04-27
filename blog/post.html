@@ -162,13 +162,6 @@ var CATEGORY_TOOL_LINKS = {
     'general': { url: '../', label: 'Try the free calculator', sub: 'No signup required. See your results instantly.' }
 };
 
-var slug = new URLSearchParams(window.location.search).get('slug');
-if (!slug) {
-    showNotFound();
-} else {
-    loadPost(slug);
-}
-
 var ALL_POSTS = [
     {
         slug: 'investing-at-20-vs-30',
@@ -337,6 +330,10 @@ function copyLink() {
         if (btn) { btn.textContent = '✓ Copied!'; setTimeout(function() { btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> Copy link'; }, 2000); }
     });
 }
+
+// Run after all data and functions are defined
+var slug = new URLSearchParams(window.location.search).get('slug');
+if (!slug) { showNotFound(); } else { loadPost(slug); }
 </script>
 </body>
 </html>
