@@ -42,8 +42,40 @@
         <a href="index.html">Blog</a>
         <a href="admin.html" class="active">Admin</a>
     </div>
+    <button id="ghSettingsBtn" class="admin-btn" onclick="openSettings()" style="display:none;margin-right:8px;">⚙ GitHub</button>
     <button id="signOutBtn" class="admin-btn" onclick="firebase.auth().signOut()" style="display:none;">Sign out</button>
 </nav>
+
+<!-- ===== GITHUB SETTINGS MODAL ===== -->
+<div id="settingsModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:1000;align-items:center;justify-content:center;padding:24px;">
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:32px;max-width:520px;width:100%;">
+        <h3 style="margin:0 0 8px;font-size:20px;">GitHub Auto-Publish Setup</h3>
+        <p style="color:var(--text-muted);font-size:14px;line-height:1.6;margin-bottom:20px;">One-time setup. After this, "Publish" will auto-deploy posts to your live site in 2 minutes.</p>
+
+        <div style="background:rgba(0,230,118,0.06);border:1px solid rgba(0,230,118,0.15);border-radius:8px;padding:14px;margin-bottom:20px;font-size:13px;line-height:1.6;">
+            <strong style="color:#00e676;">Step 1:</strong> Create a GitHub Personal Access Token (3 min)<br>
+            <a href="https://github.com/settings/tokens/new?scopes=repo&description=Young%20Investor%20Blog%20Auto-Publish" target="_blank" style="color:#00e676;text-decoration:underline;">→ Click here to open GitHub token page</a>
+            <ul style="margin:10px 0 0 16px;padding:0;color:var(--text-muted);">
+                <li>Set expiration: <strong>No expiration</strong> (or 1 year)</li>
+                <li>Scopes: tick <strong>"repo"</strong> (full repo access)</li>
+                <li>Click <strong>"Generate token"</strong> at the bottom</li>
+                <li>Copy the token (starts with <code>ghp_</code>)</li>
+            </ul>
+        </div>
+
+        <label style="display:block;margin-bottom:6px;font-size:13px;font-weight:600;">Step 2: Paste your token</label>
+        <input type="password" id="ghTokenInput" placeholder="ghp_..." style="width:100%;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:monospace;font-size:13px;margin-bottom:16px;">
+
+        <div style="display:flex;gap:10px;">
+            <button class="admin-btn primary" style="flex:1;padding:12px;" onclick="saveGhToken()">Save token</button>
+            <button class="admin-btn" onclick="closeSettings()">Cancel</button>
+        </div>
+
+        <div id="ghTokenStatus" style="margin-top:14px;padding:10px 12px;border-radius:6px;display:none;font-size:13px;"></div>
+
+        <p style="color:var(--text-muted);font-size:11px;margin-top:18px;line-height:1.5;">Token is stored only in your browser (localStorage). Never sent anywhere except GitHub's API. To remove, clear browser data for this site.</p>
+    </div>
+</div>
 
 <!-- ===== SIGN IN GATE ===== -->
 <div class="container">
@@ -224,9 +256,16 @@ firebase.auth().onAuthStateChanged(function(user) {
     }
     // Admin confirmed
     document.getElementById('signOutBtn').style.display = 'block';
+    document.getElementById('ghSettingsBtn').style.display = 'inline-block';
     document.getElementById('adminDashboard').style.display = 'block';
     document.getElementById('adminWelcome').textContent = 'Signed in as ' + user.email;
     loadAllPosts();
+    // Prompt to set up GitHub if no token saved
+    if (!ghToken()) {
+        setTimeout(function() {
+            if (!ghToken()) showStatus('error', '⚙ Click "GitHub" in the navbar to enable auto-publishing.');
+        }, 1500);
+    }
 });
 
 function signInWithGoogle() {
@@ -258,7 +297,7 @@ function loadAllPosts() {
                 '<div class="admin-post-meta">' + date + ' · ' + (p.category || 'general') + ' · ' + (p.published ? '✅ Published' : '📝 Draft') + '</div>' +
                 '</div>' +
                 '<div class="admin-post-actions">' +
-                '<a href="post.html?slug=' + encodeURIComponent(p.slug) + '" target="_blank" class="admin-btn">View</a>' +
+                '<a href="' + encodeURIComponent(p.slug) + '/" target="_blank" class="admin-btn">View</a>' +
                 '<button class="admin-btn" onclick="editPost(' + JSON.stringify(p.id) + ')">Edit</button>' +
                 '</div></div>';
         }).join('');
@@ -354,10 +393,28 @@ function savePost() {
 
     op.then(function(ref) {
         if (!currentEditId && ref) currentEditId = ref.id;
-        showStatus('success', published ? '✅ Post published!' : '📝 Draft saved!');
         document.getElementById('dangerZone').style.display = 'block';
-        saveBtn.textContent = 'Save';
-        loadAllPosts();
+        if (!published) {
+            showStatus('success', '📝 Draft saved (not published).');
+            saveBtn.textContent = 'Save';
+            loadAllPosts();
+            return;
+        }
+        // Published! Auto-deploy to GitHub
+        showStatus('success', '💾 Saved to Firestore. Deploying to GitHub...');
+        var publishData = {
+            slug: slug, title: title, category: category, excerpt: excerpt,
+            content: content, readTime: readTime, author: author, published: true,
+            publishedAt: { seconds: Math.floor(Date.now() / 1000) }
+        };
+        publishPostToGitHub(publishData).then(function(ok) {
+            saveBtn.textContent = 'Save';
+            loadAllPosts();
+        }).catch(function(err) {
+            showStatus('error', '❌ GitHub publish failed: ' + err.message);
+            saveBtn.textContent = 'Save';
+            loadAllPosts();
+        });
     }).catch(function(err) {
         showStatus('error', 'Error: ' + err.message);
         saveBtn.textContent = 'Save';
@@ -436,6 +493,308 @@ function showStatus(type, msg) {
 
 function escapeHtml(str) {
     return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// =============================================================
+// GITHUB AUTO-PUBLISH SYSTEM
+// =============================================================
+
+var GITHUB_OWNER = 'Jefferson2563';
+var GITHUB_REPO = 'young-investor-simulator';
+var GITHUB_BRANCH = 'main';
+
+function ghToken() { return localStorage.getItem('yi_gh_token') || ''; }
+
+function openSettings() {
+    document.getElementById('ghTokenInput').value = ghToken();
+    document.getElementById('settingsModal').style.display = 'flex';
+}
+function closeSettings() {
+    document.getElementById('settingsModal').style.display = 'none';
+    document.getElementById('ghTokenStatus').style.display = 'none';
+}
+function showGhStatus(type, msg) {
+    var el = document.getElementById('ghTokenStatus');
+    el.textContent = msg;
+    el.style.display = 'block';
+    el.style.background = type === 'success' ? 'rgba(0,230,118,0.1)' : 'rgba(255,82,82,0.1)';
+    el.style.color = type === 'success' ? '#00e676' : '#ff5252';
+    el.style.border = '1px solid ' + (type === 'success' ? 'rgba(0,230,118,0.3)' : 'rgba(255,82,82,0.3)');
+}
+
+async function saveGhToken() {
+    var t = document.getElementById('ghTokenInput').value.trim();
+    if (!t) { showGhStatus('error', 'Token cannot be empty.'); return; }
+    if (!t.startsWith('ghp_') && !t.startsWith('github_pat_')) {
+        showGhStatus('error', 'Invalid format. Tokens start with "ghp_" or "github_pat_".');
+        return;
+    }
+    showGhStatus('success', 'Verifying token with GitHub...');
+    try {
+        var res = await fetch('https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO, {
+            headers: { 'Authorization': 'token ' + t, 'Accept': 'application/vnd.github.v3+json' }
+        });
+        if (!res.ok) {
+            showGhStatus('error', 'Token rejected by GitHub (' + res.status + '). Check scopes include "repo".');
+            return;
+        }
+        localStorage.setItem('yi_gh_token', t);
+        showGhStatus('success', '✅ Token saved & verified. Auto-publish is now enabled.');
+        setTimeout(closeSettings, 1500);
+    } catch (e) {
+        showGhStatus('error', 'Verification failed: ' + e.message);
+    }
+}
+
+// === GitHub API helpers ===
+function ghHeaders() {
+    return {
+        'Authorization': 'token ' + ghToken(),
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+    };
+}
+
+async function ghGet(path) {
+    var url = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + path + '?ref=' + GITHUB_BRANCH;
+    var res = await fetch(url, { headers: ghHeaders() });
+    if (res.status === 404) return null;
+    if (!res.ok) throw new Error('GET ' + path + ' failed: ' + res.status);
+    return await res.json();
+}
+
+async function ghPut(path, content, message, sha) {
+    var url = 'https://api.github.com/repos/' + GITHUB_OWNER + '/' + GITHUB_REPO + '/contents/' + path;
+    // UTF-8 → base64
+    var b64 = btoa(unescape(encodeURIComponent(content)));
+    var body = { message: message, content: b64, branch: GITHUB_BRANCH };
+    if (sha) body.sha = sha;
+    var res = await fetch(url, { method: 'PUT', headers: ghHeaders(), body: JSON.stringify(body) });
+    if (!res.ok) {
+        var err = await res.text();
+        throw new Error('PUT ' + path + ' failed: ' + res.status + ' — ' + err);
+    }
+    return await res.json();
+}
+
+// === Publishing data ===
+var CAT_LABELS = {
+    'compound-interest': 'Compound Interest',
+    'dividends': 'Dividends',
+    'portfolio': 'Portfolio',
+    'tax': 'Tax',
+    'mindset': 'Mindset',
+    'general': 'General'
+};
+var CAT_ICONS = {
+    'compound-interest': '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>',
+    'dividends':         '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+    'portfolio':         '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg>',
+    'tax':               '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+    'mindset':           '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="9" y1="18" x2="15" y2="18"/><line x1="10" y1="22" x2="14" y2="22"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/></svg>',
+    'general':           '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'
+};
+var CAT_TOOLS = {
+    'compound-interest': { url: '../../', label: 'Try the compound interest simulator', sub: 'See how your $100/month grows to $736K starting at 20.' },
+    'dividends': { url: '../../dividends/', label: 'Try the DRIP calculator', sub: 'See how dividend reinvestment compounds your passive income.' },
+    'portfolio': { url: '../../portfolio/', label: 'Track your net worth', sub: 'See all your investments in one free dashboard.' },
+    'tax': { url: '../../tax/', label: 'Calculate your tax liability', sub: 'Know what you owe before you sell.' },
+    'mindset': { url: '../../', label: 'Start your investment simulation', sub: 'See how much your money can grow starting today.' },
+    'general': { url: '../../', label: 'Try the free calculator', sub: 'No signup required. See your results instantly.' }
+};
+
+function fmtDate(seconds) {
+    var d = new Date(seconds * 1000);
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    return months[d.getUTCMonth()] + ' ' + d.getUTCDate() + ', ' + d.getUTCFullYear();
+}
+function isoDate(seconds) {
+    var d = new Date(seconds * 1000);
+    var m = String(d.getUTCMonth() + 1).padStart(2, '0');
+    var day = String(d.getUTCDate()).padStart(2, '0');
+    return d.getUTCFullYear() + '-' + m + '-' + day;
+}
+
+function buildTOC(content) {
+    var counter = 0;
+    var headings = [];
+    var newContent = content.replace(/<(h2|h3)>(.+?)<\/\1>/g, function(_, tag, text) {
+        var clean = text.replace(/<[^>]+>/g, '').trim();
+        var id = 'section-' + counter++;
+        headings.push({ tag: tag, text: clean, id: id });
+        return '<' + tag + ' id="' + id + '">' + text + '</' + tag + '>';
+    });
+    if (headings.length < 2) return { content: newContent, toc: '' };
+    var items = headings.map(function(h) {
+        var indent = h.tag === 'h3' ? ' style="padding-left:24px;"' : '';
+        return '<li><a href="#' + h.id + '"' + indent + '>' + escapeHtml(h.text) + '</a></li>';
+    }).join('');
+    return { content: newContent, toc: '<ul class="post-toc-list">' + items + '</ul>' };
+}
+
+function buildRelated(post, allPosts) {
+    var pub = allPosts.filter(function(p) { return p.published && p.slug !== post.slug; });
+    var sameCat = pub.filter(function(p) { return p.category === post.category; });
+    var others = pub.filter(function(p) { return p.category !== post.category; });
+    var related = sameCat.concat(others).slice(0, 3);
+    if (related.length === 0) return '';
+    return related.map(function(p) {
+        var cat = p.category || 'general';
+        var icon = CAT_ICONS[cat] || CAT_ICONS.general;
+        var label = CAT_LABELS[cat] || 'General';
+        return '<a href="../' + p.slug + '/" class="blog-card" data-cat="' + cat + '">' +
+            '<div class="blog-card-header"><div class="blog-card-header-icon">' + icon + '</div><span class="blog-card-tag">' + label + '</span></div>' +
+            '<div class="blog-card-body"><div class="blog-card-title">' + escapeHtml(p.title) + '</div>' +
+            '<div class="blog-card-excerpt">' + escapeHtml(p.excerpt) + '</div>' +
+            '<div class="blog-card-meta"><span class="blog-card-arrow">&rarr;</span></div></div></a>';
+    }).join('');
+}
+
+function buildStaticPostHTML(post, allPosts) {
+    var cat = post.category || 'general';
+    var label = CAT_LABELS[cat] || 'General';
+    var icon = CAT_ICONS[cat] || CAT_ICONS.general;
+    var seconds = post.publishedAt && post.publishedAt.seconds ? post.publishedAt.seconds : Math.floor(Date.now() / 1000);
+    var dateStr = fmtDate(seconds);
+    var iso = isoDate(seconds);
+    var tool = CAT_TOOLS[cat] || CAT_TOOLS.general;
+    var tocResult = buildTOC(post.content);
+    var related = buildRelated(post, allPosts);
+    var canonical = 'https://younginvestor.app/blog/' + post.slug + '/';
+    var titleEsc = escapeHtml(post.title);
+    var excerptEsc = escapeHtml(post.excerpt);
+
+    var schema = {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: post.title,
+        description: post.excerpt,
+        author: { '@type': 'Organization', name: 'Young Investor' },
+        publisher: { '@type': 'Organization', name: 'Young Investor', logo: { '@type': 'ImageObject', url: 'https://younginvestor.app/assets/logo.svg' } },
+        datePublished: iso,
+        dateModified: iso,
+        mainEntityOfPage: { '@type': 'WebPage', '@id': canonical },
+        image: 'https://younginvestor.app/assets/og-card.svg'
+    };
+
+    var ctaBox = '<div class="post-cta-box"><h3>' + tool.label + '</h3><p>' + tool.sub + ' Free, no signup required.</p><a href="' + tool.url + '" class="post-cta-btn">Try it free &rarr;</a></div>';
+    var shareBox = '<div class="post-share"><span>Share:</span>' +
+        '<a href="https://twitter.com/intent/tweet?text=' + encodeURIComponent(post.title) + '&url=' + canonical + '" target="_blank" rel="noopener" class="share-btn">Tweet</a>' +
+        '<a href="https://www.reddit.com/submit?url=' + canonical + '&title=' + encodeURIComponent(post.title) + '" target="_blank" rel="noopener" class="share-btn">Reddit</a></div>';
+
+    return '<!DOCTYPE html>\n<html lang="en" data-theme="dark">\n<head>\n' +
+        '<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+        '<title>' + titleEsc + ' — Young Investor Blog</title>\n' +
+        '<meta name="description" content="' + excerptEsc + '">\n' +
+        '<meta name="keywords" content="' + cat.replace(/-/g, ' ') + ', investing, young investor, ' + post.slug.replace(/-/g, ' ') + '">\n' +
+        '<link rel="canonical" href="' + canonical + '">\n' +
+        '<meta property="og:type" content="article">\n' +
+        '<meta property="og:site_name" content="Young Investor">\n' +
+        '<meta property="og:title" content="' + titleEsc + '">\n' +
+        '<meta property="og:description" content="' + excerptEsc + '">\n' +
+        '<meta property="og:url" content="' + canonical + '">\n' +
+        '<meta property="og:image" content="https://younginvestor.app/assets/og-card.svg">\n' +
+        '<meta property="article:published_time" content="' + iso + '">\n' +
+        '<meta property="article:author" content="' + escapeHtml(post.author || 'Young Investor Team') + '">\n' +
+        '<meta name="twitter:card" content="summary_large_image">\n' +
+        '<meta name="twitter:title" content="' + titleEsc + '">\n' +
+        '<meta name="twitter:description" content="' + excerptEsc + '">\n' +
+        '<link rel="icon" href="../../assets/logo.svg" type="image/svg+xml">\n' +
+        '<link rel="preconnect" href="https://fonts.googleapis.com">\n' +
+        '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap">\n' +
+        '<link rel="stylesheet" href="../../css/style.css">\n' +
+        '<link rel="stylesheet" href="../../css/blog.css">\n' +
+        '<script type="application/ld+json">' + JSON.stringify(schema) + '<\/script>\n' +
+        '<script async src="https://www.googletagmanager.com/gtag/js?id=G-97RRNZ9LGW"><\/script>\n' +
+        '<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\'G-97RRNZ9LGW\');<\/script>\n' +
+        '</head>\n<body>\n' +
+        '<nav class="blog-nav">\n' +
+        '<a href="../../" class="blog-nav-logo"><img src="../../assets/logo.svg" alt="" class="logo-icon"><span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span></a>\n' +
+        '<div class="blog-nav-links">\n' +
+        '<a href="../../">Simulator</a>\n<a href="../../dividends/">Dividends</a>\n<a href="../../portfolio/">Portfolio</a>\n<a href="../../tax/">Tax</a>\n<a href="../" class="active">Blog</a>\n' +
+        '</div>\n<a href="../../" class="blog-nav-cta">Try the calculator &rarr;</a>\n</nav>\n' +
+        '<section class="post-hero"><div class="container">\n' +
+        '<div class="post-breadcrumb"><a href="../">Blog</a><span>&rsaquo;</span><span>' + label + '</span></div>\n' +
+        '<span class="post-hero-tag">' + icon + '<span style="margin-left:8px;">' + label + '</span></span>\n' +
+        '<h1>' + titleEsc + '</h1>\n' +
+        '<div class="post-hero-meta"><span><strong>' + escapeHtml(post.author || 'Young Investor Team') + '</strong></span><span class="sep">&middot;</span><span>' + dateStr + '</span><span class="sep">&middot;</span><span>' + (post.readTime || 5) + ' min read</span></div>\n' +
+        '</div></section>\n' +
+        '<div class="container"><div class="post-layout">\n' +
+        '<article class="post-content">\n' + tocResult.content + '\n' + ctaBox + '\n' + shareBox + '\n</article>\n' +
+        '<aside class="post-sidebar">\n' +
+        (tocResult.toc ? '<div class="post-sidebar-card"><h4>In this article</h4>' + tocResult.toc + '</div>\n' : '') +
+        '<div class="post-sidebar-card" style="background:linear-gradient(135deg,rgba(0,230,118,0.07),rgba(0,230,118,0.02));border-color:rgba(0,230,118,0.15);">\n' +
+        '<h4>Free calculator</h4><p style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.6;">See the numbers in real-time — no signup required.</p>\n' +
+        '<a href="' + tool.url + '" class="post-cta-btn" style="width:100%;justify-content:center;box-sizing:border-box;">Try it now &rarr;</a></div>\n' +
+        '</aside>\n</div></div>\n' +
+        (related ? '<section style="padding:56px 0;border-top:1px solid var(--border);"><div class="container"><h2 style="font-size:22px;font-weight:800;margin-bottom:24px;">More articles</h2><div class="blog-grid">' + related + '</div></div></section>\n' : '') +
+        '<footer class="footer"><div class="container"><div class="footer-grid">\n' +
+        '<div class="footer-col"><div class="footer-logo"><img src="../../assets/logo.svg" alt="" class="logo-icon"><span class="logo-text">Young Investor <span class="logo-accent">Simulator</span></span></div><p class="footer-about">A free tool built to show young people the power of starting early.</p></div>\n' +
+        '<div class="footer-col"><h4 class="footer-heading">Tools</h4><a href="../../">Compound Interest Simulator</a><a href="../../dividends/">Dividend Calculator</a><a href="../../portfolio/">Portfolio Tracker</a><a href="../../tax/">Tax Calculator</a></div>\n' +
+        '<div class="footer-col"><h4 class="footer-heading">Blog</h4><a href="../">All Articles</a><a href="../?filter=compound-interest">Compound Interest</a><a href="../?filter=dividends">Dividends</a><a href="../?filter=mindset">Mindset</a></div>\n' +
+        '</div><div class="footer-bottom"><span>&copy; 2026 Young Investor Simulator. Built for the next generation.</span></div></div></footer>\n' +
+        '</body></html>';
+}
+
+function buildSitemap(allPosts) {
+    var today = new Date().toISOString().split('T')[0];
+    var lines = ['<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">'];
+    var mainPages = [
+        { url: 'https://younginvestor.app/', priority: '1.0', freq: 'weekly' },
+        { url: 'https://younginvestor.app/dividends/', priority: '0.9', freq: 'weekly' },
+        { url: 'https://younginvestor.app/portfolio/', priority: '0.9', freq: 'weekly' },
+        { url: 'https://younginvestor.app/tax/', priority: '0.9', freq: 'weekly' },
+        { url: 'https://younginvestor.app/goals/', priority: '0.8', freq: 'monthly' },
+        { url: 'https://younginvestor.app/blog/', priority: '0.9', freq: 'weekly' }
+    ];
+    mainPages.forEach(function(p) {
+        lines.push('  <url><loc>' + p.url + '</loc><lastmod>' + today + '</lastmod><changefreq>' + p.freq + '</changefreq><priority>' + p.priority + '</priority></url>');
+    });
+    allPosts.filter(function(p) { return p.published; }).forEach(function(p) {
+        var seconds = p.publishedAt && p.publishedAt.seconds ? p.publishedAt.seconds : Math.floor(Date.now() / 1000);
+        var iso = isoDate(seconds);
+        lines.push('  <url><loc>https://younginvestor.app/blog/' + p.slug + '/</loc><lastmod>' + iso + '</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>');
+    });
+    lines.push('</urlset>');
+    return lines.join('\n');
+}
+
+async function publishPostToGitHub(post) {
+    if (!ghToken()) {
+        showStatus('error', '⚙ GitHub token not set. Click "GitHub" in navbar to set it up.');
+        return false;
+    }
+    showStatus('success', '🛠 Building static page...');
+    // Get all posts from Firestore for sitemap + related
+    var snap = await db.collection('posts').get();
+    var allPosts = [];
+    snap.forEach(function(d) {
+        var data = Object.assign({ id: d.id }, d.data());
+        // Use the just-saved data for current post
+        if (data.slug === post.slug) {
+            data = Object.assign(data, post);
+        }
+        allPosts.push(data);
+    });
+    // If our post isn't in Firestore yet, add it
+    if (!allPosts.some(function(p) { return p.slug === post.slug; })) allPosts.push(post);
+
+    var html = buildStaticPostHTML(post, allPosts);
+    var path = 'blog/' + post.slug + '/index.html';
+
+    showStatus('success', '🚀 Publishing to GitHub...');
+    var existing = await ghGet(path);
+    await ghPut(path, html, 'Publish post: ' + post.title, existing ? existing.sha : null);
+
+    showStatus('success', '🗺 Updating sitemap...');
+    var sitemap = buildSitemap(allPosts);
+    var sitemapExisting = await ghGet('sitemap.xml');
+    await ghPut('sitemap.xml', sitemap, 'Update sitemap for: ' + post.slug, sitemapExisting ? sitemapExisting.sha : null);
+
+    showStatus('success', '✅ Live in ~2 min at younginvestor.app/blog/' + post.slug + '/');
+    return true;
 }
 </script>
 </body>
