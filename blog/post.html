@@ -232,7 +232,7 @@ function renderPost(post) {
 
     // Hero
     document.getElementById('breadcrumbCat').textContent = catLabel;
-    document.getElementById('postTag').textContent = icon + ' ' + catLabel;
+    document.getElementById('postTag').innerHTML = icon + '<span style="margin-left:8px;">' + catLabel + '</span>';
     document.getElementById('postTitle').textContent = post.title;
     document.getElementById('postAuthor').textContent = post.author || 'Young Investor Team';
     document.getElementById('postDate').textContent = date;
