@@ -321,7 +321,7 @@ function buildCard(post, featured) {
     var catLabel = CATEGORY_LABELS[cat] || 'General';
     var date = post.publishedAt ? new Date(post.publishedAt.seconds * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
     var readTime = post.readTime || 5;
-    return '<a href="post.html?slug=' + encodeURIComponent(post.slug) + '" class="blog-card' + (featured ? ' featured' : '') + '" data-cat="' + cat + '">' +
+    return '<a href="' + encodeURIComponent(post.slug) + '/" class="blog-card' + (featured ? ' featured' : '') + '" data-cat="' + cat + '">' +
         '<div class="blog-card-header">' +
         '<div class="blog-card-header-icon">' + icon + '</div>' +
         '<span class="blog-card-tag">' + catLabel + '</span>' +
