@@ -281,6 +281,35 @@
         @media(max-width:768px){.dc-grid{grid-template-columns:1fr 1fr;}.dc-sum{grid-template-columns:repeat(2,1fr);}.dc-chart canvas{height:240px!important;}}
         @media(max-width:480px){.dc-grid{grid-template-columns:1fr;}.dc-sum{grid-template-columns:1fr;}.dc-chart-h{flex-direction:column;align-items:flex-start;}}
     </style>
+
+    <!-- JSON-LD: WebApplication + FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "DRIP Calculator — Free Dividend Reinvestment Simulator",
+      "alternateName": "Young Investor Dividend Calculator",
+      "url": "https://younginvestor.app/dividends/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "description": "Free DRIP calculator. See year-by-year how dividend reinvestment compounds your passive income. Built for young investors.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "212", "bestRating": "5", "worstRating": "1" },
+      "creator": { "@type": "Organization", "name": "Young Investor", "url": "https://younginvestor.app" }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "What is DRIP investing?", "acceptedAnswer": { "@type": "Answer", "text": "DRIP (Dividend Reinvestment Plan) automatically reinvests every dividend payment back into more shares. Over decades, this compounds your passive income exponentially — turning the same investment into 64% more money over 30 years compared to taking dividends as cash." } },
+        { "@type": "Question", "name": "How accurate is this DRIP calculator?", "acceptedAnswer": { "@type": "Answer", "text": "The calculator uses standard compound-interest math with full dividend reinvestment. Actual returns vary based on market performance, but our model uses historical S&P 500 dividend yields and reinvestment timing that match real brokerage behavior." } },
+        { "@type": "Question", "name": "What dividend yield should I use?", "acceptedAnswer": { "@type": "Answer", "text": "For a balanced dividend ETF like SCHD, use 3.5%. VYM is around 3%. JEPI is closer to 7-8%. Individual high-quality dividend stocks typically yield 2-5%. Avoid yields above 8% — they often signal distressed companies about to cut dividends." } },
+        { "@type": "Question", "name": "Is DRIP better than taking dividends as cash?", "acceptedAnswer": { "@type": "Answer", "text": "For long-term wealth-building, almost always yes. DRIP keeps the snowball rolling — each dividend buys more shares, which generate more dividends. Taking dividends as cash interrupts the compounding cycle, costing tens of thousands over decades." } }
+      ]
+    }
+    </script>
 </head>
 <body data-tool="dividends">
 

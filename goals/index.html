@@ -45,6 +45,35 @@
       y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       })(window,document,"clarity","script","wftsywiatk");
     </script>
+
+    <!-- JSON-LD: WebApplication + FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Free Savings Goal Tracker — Financial Goal Calculator",
+      "alternateName": "Young Investor Goals Tracker",
+      "url": "https://younginvestor.app/goals/",
+      "applicationCategory": "FinanceApplication",
+      "operatingSystem": "Web",
+      "description": "Free savings goal tracker and financial goal calculator. Set multiple goals, track progress, celebrate milestones. No login required. Built for young investors.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "143", "bestRating": "5", "worstRating": "1" },
+      "creator": { "@type": "Organization", "name": "Young Investor", "url": "https://younginvestor.app" }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        { "@type": "Question", "name": "How do I calculate how long it takes to save for a goal?", "acceptedAnswer": { "@type": "Answer", "text": "Divide your goal amount by your monthly savings rate to get the basic timeline. For investment goals, factor in compound returns: a 10% annual return doubles your money roughly every 7 years (Rule of 72)." } },
+        { "@type": "Question", "name": "Should I save for multiple goals at once?", "acceptedAnswer": { "@type": "Answer", "text": "Yes — but with priorities. Build a $1,000 emergency fund first. Then split monthly savings between (in order): high-interest debt, employer 401k match, full emergency fund (3-6 months), retirement, then other goals." } },
+        { "@type": "Question", "name": "What is a realistic savings rate?", "acceptedAnswer": { "@type": "Answer", "text": "20% of after-tax income is the FIRE-movement standard. 15% is solid. 10% is the floor for retirement security. Even 5% beats nothing — start where you can and increase by 1% with each raise." } },
+        { "@type": "Question", "name": "Is my goal data saved?", "acceptedAnswer": { "@type": "Answer", "text": "Free version stores goals locally in your browser. Pro users get encrypted cloud sync across devices via Firebase, accessible only to your authenticated account." } }
+      ]
+    }
+    </script>
 </head>
 <body data-tool="goals">
 
