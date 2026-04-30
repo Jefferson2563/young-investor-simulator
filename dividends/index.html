@@ -62,6 +62,33 @@
         .dc-sub{font-size:15px;color:var(--text-secondary);max-width:480px;margin:0 auto;line-height:1.6;}
 
         /* Form */
+        /* Quick Scenarios bar */
+        .dc-scenarios{max-width:880px;margin:0 auto 16px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 22px;}
+        .dc-scenarios-h{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px;}
+        .dc-scenarios-t{font-family:var(--font-display);font-size:14px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;}
+        .dc-scenarios-t svg{color:var(--gold);}
+        .dc-scenarios-row{display:flex;gap:8px;flex-wrap:wrap;}
+        .dc-scn{flex:1;min-width:130px;padding:11px 14px;background:transparent;border:1px solid var(--gold-border);border-radius:10px;color:var(--text-secondary);cursor:pointer;transition:all 0.2s;text-align:left;font-family:var(--font-main);}
+        .dc-scn:hover{background:var(--gold-soft);border-color:var(--gold);color:var(--text);}
+        .dc-scn.active{background:var(--gold);border-color:var(--gold);color:#000;}
+        .dc-scn-name{display:block;font-size:13px;font-weight:700;margin-bottom:2px;}
+        .dc-scn-desc{display:block;font-size:11px;opacity:0.75;}
+        .dc-scn.active .dc-scn-desc{opacity:0.85;}
+
+        /* Goal Mode toggle */
+        .dc-mode-toggle{max-width:880px;margin:0 auto 18px;display:flex;justify-content:center;gap:0;background:var(--bg-card);border:1px solid var(--border);border-radius:100px;padding:4px;width:fit-content;}
+        .dc-mode-btn{padding:8px 20px;background:transparent;border:none;border-radius:100px;color:var(--text-secondary);font-family:var(--font-main);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.2s;}
+        .dc-mode-btn.active{background:var(--gold);color:#000;}
+        .dc-goal-row{grid-column:1/-1;display:none;}
+        .dc-mode-goal .dc-goal-row{display:block;}
+        .dc-mode-goal .dc-yrs-row{display:none;}
+        .dc-goal-result{grid-column:1/-1;background:var(--gold-soft);border:1px solid var(--gold);border-radius:10px;padding:14px 18px;font-size:14px;color:var(--text);text-align:center;display:none;margin-top:6px;}
+        .dc-goal-result strong{color:var(--gold);font-size:18px;}
+
+        /* Share button */
+        .dc-share{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;background:rgba(0,230,118,0.1);border:1px solid rgba(0,230,118,0.3);border-radius:100px;color:#00e676;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:var(--font-main);}
+        .dc-share:hover{background:rgba(0,230,118,0.18);}
+
         .dc-form{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;margin:0 auto 28px;max-width:880px;}
         .dc-form-head{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
         .dc-form-head svg{flex-shrink:0;}
@@ -380,8 +407,47 @@
                 <p class="dc-sub">See exactly where you'll be in 10, 20, or 30 years. Real formulas. Honest projections. No BS.</p>
             </div>
 
+            <!-- QUICK SCENARIOS -->
+            <div class="dc-scenarios">
+                <div class="dc-scenarios-h">
+                    <span class="dc-scenarios-t" id="dcScnTitle">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        Quick scenarios
+                    </span>
+                    <span style="font-size:11px;color:var(--text-muted);" id="dcScnHint">One click loads all settings</span>
+                </div>
+                <div class="dc-scenarios-row">
+                    <button class="dc-scn" data-scn="conservative" onclick="loadScenario('conservative')">
+                        <span class="dc-scn-name" id="scnNameCons">🛡️ Conservative</span>
+                        <span class="dc-scn-desc" id="scnDescCons">SCHD · 3.5% yield · 30y</span>
+                    </button>
+                    <button class="dc-scn active" data-scn="balanced" onclick="loadScenario('balanced')">
+                        <span class="dc-scn-name" id="scnNameBal">⚖️ Balanced</span>
+                        <span class="dc-scn-desc" id="scnDescBal">VYM · 3% yield · 25y</span>
+                    </button>
+                    <button class="dc-scn" data-scn="growth" onclick="loadScenario('growth')">
+                        <span class="dc-scn-name" id="scnNameGrw">📈 Growth-focused</span>
+                        <span class="dc-scn-desc" id="scnDescGrw">VIG · 1.7% · fast growth</span>
+                    </button>
+                    <button class="dc-scn" data-scn="income" onclick="loadScenario('income')">
+                        <span class="dc-scn-name" id="scnNameInc">💰 High Income</span>
+                        <span class="dc-scn-desc" id="scnDescInc">JEPI · 7.5% · monthly</span>
+                    </button>
+                    <button class="dc-scn" data-scn="coastfire" onclick="loadScenario('coastfire')">
+                        <span class="dc-scn-name" id="scnNameCF">🏖️ Coast FIRE</span>
+                        <span class="dc-scn-desc" id="scnDescCF">$50k now · 35y · let it ride</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- MODE TOGGLE -->
+            <div class="dc-mode-toggle" id="dcModeToggle">
+                <button class="dc-mode-btn active" data-mode="years" onclick="setMode('years')" id="dcModeYrs">📅 Project years</button>
+                <button class="dc-mode-btn" data-mode="goal" onclick="setMode('goal')" id="dcModeGoal">🎯 Reach a goal</button>
+            </div>
+
             <!-- FORM -->
-            <div class="dc-form">
+            <div class="dc-form" id="dcForm">
                 <div class="dc-form-head">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
                     <span class="dc-form-title">Your Numbers</span>
@@ -394,12 +460,14 @@
                     <div class="dc-f"><label>Dividend Growth / yr</label><div class="dc-suf"><input type="number" id="fDivGr" value="5" min="-10" max="20" step="0.5"></div></div>
                     <div class="dc-f"><label>Share Price Growth / yr</label><div class="dc-suf"><input type="number" id="fPrGr" value="7" min="-20" max="30" step="0.5"></div></div>
                     <div class="dc-f"><label>Payout Frequency</label><select id="fFreq"><option value="12">Monthly</option><option value="4" selected>Quarterly</option><option value="2">Semi-Annual</option><option value="1">Annual</option></select></div>
-                    <div class="dc-f"><label>Years</label><input type="number" id="fYrs" value="10" min="1" max="50" step="1"></div>
+                    <div class="dc-f dc-yrs-row"><label>Years</label><input type="number" id="fYrs" value="10" min="1" max="50" step="1"></div>
+                    <div class="dc-f dc-goal-row"><label id="lblGoalIncome">Target monthly income</label><div class="dc-pre"><input type="number" id="fGoalMonthly" value="2000" min="50" step="50"></div></div>
                     <div class="dc-row">
                         <label class="dc-sw"><input type="checkbox" id="fDrip" checked><span></span></label>
                         <label for="fDrip">Reinvest Dividends (DRIP)</label>
                     </div>
                     <button class="dc-go" onclick="run()">Calculate My Dividends</button>
+                    <div class="dc-goal-result" id="dcGoalResult"></div>
                 </div>
             </div>
 
@@ -1373,6 +1441,188 @@
             }
         });
     }
+
+    /* ============================================================
+       ENHANCEMENT: Scenarios, Goal Mode, Shareable URLs
+       ============================================================ */
+    var SCENARIOS = {
+        conservative: { init: 5000, month: 200, price: 80, yield: 3.5, divGr: 8, prGr: 7, freq: 4, yrs: 30, drip: true, ticker: 'SCHD' },
+        balanced:     { init: 10000, month: 250, price: 110, yield: 3.0, divGr: 6, prGr: 7.5, freq: 4, yrs: 25, drip: true, ticker: 'VYM' },
+        growth:       { init: 10000, month: 300, price: 200, yield: 1.7, divGr: 9, prGr: 10, freq: 4, yrs: 30, drip: true, ticker: 'VIG' },
+        income:       { init: 15000, month: 200, price: 55, yield: 7.5, divGr: 1, prGr: 4, freq: 12, yrs: 20, drip: true, ticker: 'JEPI' },
+        coastfire:    { init: 50000, month: 0, price: 150, yield: 3.0, divGr: 7, prGr: 7, freq: 4, yrs: 35, drip: true, ticker: 'VTI' }
+    };
+
+    function loadScenario(name) {
+        var s = SCENARIOS[name]; if (!s) return;
+        document.getElementById('fInit').value = s.init;
+        document.getElementById('fMonth').value = s.month;
+        document.getElementById('fPrice').value = s.price;
+        document.getElementById('fYield').value = s.yield;
+        document.getElementById('fDivGr').value = s.divGr;
+        document.getElementById('fPrGr').value = s.prGr;
+        document.getElementById('fFreq').value = s.freq;
+        document.getElementById('fYrs').value = s.yrs;
+        document.getElementById('fDrip').checked = s.drip;
+        document.querySelectorAll('.dc-scn').forEach(function(b) { b.classList.toggle('active', b.dataset.scn === name); });
+        // Highlight matching ticker preset if present
+        var tickerBtns = document.querySelectorAll('.dc-preset-btn');
+        tickerBtns.forEach(function(b) {
+            b.classList.toggle('active', b.dataset.preset === s.ticker);
+        });
+        if (typeof run === 'function') run();
+    }
+    window.loadScenario = loadScenario;
+
+    /* === GOAL MODE === */
+    var currentMode = 'years';
+    function setMode(mode) {
+        currentMode = mode;
+        var form = document.getElementById('dcForm');
+        if (mode === 'goal') form.classList.add('dc-mode-goal');
+        else form.classList.remove('dc-mode-goal');
+        document.querySelectorAll('.dc-mode-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.mode === mode); });
+        document.getElementById('dcGoalResult').style.display = 'none';
+        var goBtn = document.querySelector('.dc-go');
+        if (goBtn) goBtn.textContent = mode === 'goal' ? 'When will I reach my goal?' : 'Calculate My Dividends';
+    }
+    window.setMode = setMode;
+
+    /* Solve for years given a target monthly dividend income */
+    function solveYearsForGoal(target) {
+        var init = +document.getElementById('fInit').value || 0;
+        var month = +document.getElementById('fMonth').value || 0;
+        var price = +document.getElementById('fPrice').value || 50;
+        var yieldPct = +document.getElementById('fYield').value || 0;
+        var divGrPct = +document.getElementById('fDivGr').value || 0;
+        var prGrPct = +document.getElementById('fPrGr').value || 0;
+        var freq = +document.getElementById('fFreq').value || 4;
+        var drip = document.getElementById('fDrip').checked;
+        if (yieldPct <= 0) return { years: null, reason: 'yield-zero' };
+
+        var shares = init / price;
+        var divPerShare = price * (yieldPct / 100);
+        var curPrice = price;
+
+        // Simulate up to 60 years
+        for (var y = 1; y <= 60; y++) {
+            var yearDiv = 0;
+            // monthly contributions
+            for (var m = 1; m <= 12; m++) {
+                shares += month / curPrice;
+                if (m % (12 / freq) === 0) {
+                    var divPay = shares * (divPerShare / freq);
+                    yearDiv += divPay;
+                    if (drip) shares += divPay / curPrice;
+                }
+            }
+            // monthly dividend at end of year
+            var monthlyDiv = (shares * divPerShare) / 12;
+            if (monthlyDiv >= target) return { years: y, monthly: monthlyDiv };
+            // grow next year
+            curPrice *= (1 + prGrPct / 100);
+            divPerShare *= (1 + divGrPct / 100);
+        }
+        return { years: null, reason: 'too-long' };
+    }
+
+    /* Wrap original run() to handle goal mode */
+    var _origRun = window.run;
+    window.run = function() {
+        if (currentMode === 'goal') {
+            var target = +document.getElementById('fGoalMonthly').value || 0;
+            if (target <= 0) return;
+            var result = solveYearsForGoal(target);
+            var resBox = document.getElementById('dcGoalResult');
+            resBox.style.display = 'block';
+            if (result.years) {
+                document.getElementById('fYrs').value = result.years;
+                resBox.innerHTML = '🎯 You\'ll hit <strong>$' + target.toLocaleString() + '/month</strong> in dividends in <strong>' + result.years + ' years</strong>. Now showing detailed projection below.';
+                if (typeof _origRun === 'function') _origRun();
+            } else if (result.reason === 'yield-zero') {
+                resBox.innerHTML = '⚠️ Set a dividend yield above 0% to project goal.';
+            } else {
+                resBox.innerHTML = '⚠️ Goal not reachable in 60 years with current settings. Try increasing your monthly contribution or yield.';
+            }
+            updateShareURL();
+            return;
+        }
+        if (typeof _origRun === 'function') _origRun();
+        updateShareURL();
+    };
+
+    /* === SHAREABLE URL === */
+    function buildShareURL() {
+        var p = new URLSearchParams();
+        p.set('init', document.getElementById('fInit').value);
+        p.set('m', document.getElementById('fMonth').value);
+        p.set('pr', document.getElementById('fPrice').value);
+        p.set('y', document.getElementById('fYield').value);
+        p.set('dg', document.getElementById('fDivGr').value);
+        p.set('pg', document.getElementById('fPrGr').value);
+        p.set('f', document.getElementById('fFreq').value);
+        p.set('yr', document.getElementById('fYrs').value);
+        p.set('drip', document.getElementById('fDrip').checked ? '1' : '0');
+        return location.origin + location.pathname + '?' + p.toString();
+    }
+
+    function updateShareURL() {
+        try { history.replaceState(null, '', buildShareURL()); } catch(e) {}
+    }
+
+    function loadFromURL() {
+        var p = new URLSearchParams(location.search);
+        if (!p.has('init') && !p.has('y')) return false;
+        if (p.has('init')) document.getElementById('fInit').value = p.get('init');
+        if (p.has('m')) document.getElementById('fMonth').value = p.get('m');
+        if (p.has('pr')) document.getElementById('fPrice').value = p.get('pr');
+        if (p.has('y')) document.getElementById('fYield').value = p.get('y');
+        if (p.has('dg')) document.getElementById('fDivGr').value = p.get('dg');
+        if (p.has('pg')) document.getElementById('fPrGr').value = p.get('pg');
+        if (p.has('f')) document.getElementById('fFreq').value = p.get('f');
+        if (p.has('yr')) document.getElementById('fYrs').value = p.get('yr');
+        if (p.has('drip')) document.getElementById('fDrip').checked = p.get('drip') === '1';
+        // Deselect any active scenario since this is a custom URL
+        document.querySelectorAll('.dc-scn').forEach(function(b) { b.classList.remove('active'); });
+        return true;
+    }
+
+    /* Add Share button to summary section after first run */
+    function injectShareButton() {
+        var sumEl = document.querySelector('.dc-sum');
+        if (!sumEl || document.getElementById('dcShareBtn')) return;
+        var btn = document.createElement('button');
+        btn.className = 'dc-share';
+        btn.id = 'dcShareBtn';
+        btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> <span>Copy share link</span>';
+        btn.onclick = function() {
+            var url = buildShareURL();
+            navigator.clipboard.writeText(url).then(function() {
+                btn.querySelector('span').textContent = '✓ Copied!';
+                setTimeout(function() { btn.querySelector('span').textContent = 'Copy share link'; }, 2200);
+            });
+        };
+        // Insert above the summary cards
+        sumEl.parentNode.insertBefore(btn, sumEl);
+        btn.style.display = 'block';
+        btn.style.margin = '0 auto 18px';
+    }
+
+    /* Initial load */
+    document.addEventListener('DOMContentLoaded', function() {
+        var loaded = loadFromURL();
+        if (loaded) {
+            // Auto-run with custom params
+            setTimeout(function() { if (typeof window.run === 'function') window.run(); }, 200);
+        }
+    });
+
+    /* Hook share button injection after each run */
+    var _origRun2 = window.run;
+    window.run = function() {
+        _origRun2();
+        setTimeout(injectShareButton, 50);
+    };
 
     })();
     </script>
