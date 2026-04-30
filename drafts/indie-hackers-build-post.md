@@ -112,14 +112,17 @@ Now the admin panel triggers this same flow via the GitHub API directly from the
 
 ## Numbers, since people always ask
 
-After 6 months public:
-- ~3,500 monthly active users (free)
-- 19 blog posts indexed
-- 5 paying Pro subscribers
-- 7 languages live (Arabic and Chinese added in month 4)
-- DA ~5 (yes, low, but rising)
+> **[FILL IN YOUR REAL NUMBERS BEFORE POSTING]**
+> The placeholders below are illustrative — replace each with your actual current figures from Firebase, Stripe, GA4, and Search Console.
 
-Revenue is not life-changing. But the tool is helping people, and I'm slowly learning what kind of finance product actually compounds (pun intended) over time.
+After [N] months public:
+- [N] monthly active users (free) — pull from GA4 / Clarity
+- 19 blog posts indexed (verify with `site:younginvestor.app/blog/` on Google)
+- [N] paying Pro subscribers — count from Stripe dashboard
+- 7 languages live (Arabic and Chinese added in month [N])
+- DA [N] per Moz / Ahrefs
+
+Revenue is not life-changing yet. But the tool is helping people, and I'm slowly learning what kind of finance product actually compounds over time.
 
 ---
 

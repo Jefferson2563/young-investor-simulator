@@ -42,7 +42,7 @@
         <a href="index.html">Blog</a>
         <a href="admin.html" class="active">Admin</a>
     </div>
-    <button id="ghSettingsBtn" class="admin-btn" onclick="openSettings()" style="display:none;margin-right:8px;">⚙ GitHub</button>
+    <button id="ghSettingsBtn" class="admin-btn" onclick="openSettings()" style="display:none;margin-right:8px;">GitHub Settings</button>
     <button id="signOutBtn" class="admin-btn" onclick="firebase.auth().signOut()" style="display:none;">Sign out</button>
 </nav>
 
@@ -80,7 +80,6 @@
 <!-- ===== SIGN IN GATE ===== -->
 <div class="container">
     <div class="admin-gate" id="signInGate" style="display:none;">
-        <div class="admin-gate-icon">🔐</div>
         <h2>Admin Access</h2>
         <p>Sign in with your Google account to manage blog posts.</p>
         <button class="post-cta-btn" onclick="signInWithGoogle()">
@@ -91,10 +90,9 @@
 
     <!-- ===== ACCESS DENIED ===== -->
     <div class="admin-gate" id="accessDenied" style="display:none;">
-        <div class="admin-gate-icon">🚫</div>
         <h2>Access Denied</h2>
         <p>This area is restricted to the site admin only.</p>
-        <a href="index.html" class="post-cta-btn">← Back to Blog</a>
+        <a href="index.html" class="post-cta-btn">Back to Blog</a>
     </div>
 
     <!-- ===== LOADING ===== -->
@@ -116,7 +114,7 @@
             <!-- ===== ANALYTICS PANEL ===== -->
             <div class="analytics-panel" id="analyticsPanel" style="margin-bottom:32px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
-                    <h2 style="font-size:18px;font-weight:700;">📊 Analytics Overview</h2>
+                    <h2 style="font-size:18px;font-weight:700;">Analytics Overview</h2>
                     <button class="admin-btn" onclick="loadAnalytics()" style="font-size:12px;padding:6px 12px;">Refresh</button>
                 </div>
 
@@ -167,11 +165,11 @@
 
                 <!-- EXTERNAL ANALYTICS LINKS -->
                 <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:12px;color:var(--text-muted);line-height:1.7;">
-                    <strong style="color:var(--text);">📍 Geographic & traffic data:</strong> open
+                    <strong style="color:var(--text);">Geographic &amp; traffic data:</strong>
                     <a href="https://clarity.microsoft.com/projects" target="_blank" style="color:#00e676;">Microsoft Clarity</a> ·
                     <a href="https://analytics.google.com/" target="_blank" style="color:#00e676;">Google Analytics</a> ·
                     <a href="https://search.google.com/search-console" target="_blank" style="color:#00e676;">Search Console</a>
-                    <br><strong style="color:var(--text);">💳 Revenue & churn:</strong>
+                    <br><strong style="color:var(--text);">Revenue &amp; churn:</strong>
                     <a href="https://dashboard.stripe.com/" target="_blank" style="color:#00e676;">Stripe Dashboard</a>
                 </div>
             </div>
@@ -206,12 +204,12 @@
                     <div class="admin-form-group">
                         <label>Category *</label>
                         <select id="fCategory">
-                            <option value="compound-interest">📈 Compound Interest</option>
-                            <option value="dividends">💰 Dividends</option>
-                            <option value="portfolio">📊 Portfolio</option>
-                            <option value="tax">🛡️ Tax</option>
-                            <option value="mindset">🧠 Mindset</option>
-                            <option value="general">✨ General</option>
+                            <option value="compound-interest">Compound Interest</option>
+                            <option value="dividends">Dividends</option>
+                            <option value="portfolio">Portfolio</option>
+                            <option value="tax">Tax</option>
+                            <option value="mindset">Mindset</option>
+                            <option value="general">General</option>
                         </select>
                     </div>
 
@@ -240,9 +238,9 @@
                             <button class="admin-toolbar-btn" onclick="wrap('<em>','</em>')"><i>I</i></button>
                             <button class="admin-toolbar-btn" onclick="wrap('<blockquote>','</blockquote>')">"</button>
                             <button class="admin-toolbar-btn" onclick="wrap('<ul>\n<li>','</li>\n</ul>')">UL</button>
-                            <button class="admin-toolbar-btn" onclick="insertHighlightBox()">📦 Box</button>
-                            <button class="admin-toolbar-btn" onclick="insertCompare()">📊 Compare</button>
-                            <button class="admin-toolbar-btn" onclick="togglePreview()">👁 Preview</button>
+                            <button class="admin-toolbar-btn" onclick="insertHighlightBox()">Box</button>
+                            <button class="admin-toolbar-btn" onclick="insertCompare()">Compare</button>
+                            <button class="admin-toolbar-btn" onclick="togglePreview()">Preview</button>
                         </div>
                         <textarea id="fContent" placeholder="<h2>Section Title</h2>\n<p>Your content here...</p>"></textarea>
                     </div>
@@ -327,7 +325,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     // Prompt to set up GitHub if no token saved
     if (!ghToken()) {
         setTimeout(function() {
-            if (!ghToken()) showStatus('error', '⚙ Click "GitHub" in the navbar to enable auto-publishing.');
+            if (!ghToken()) showStatus('error', 'Click "GitHub Settings" in the navbar to enable auto-publishing.');
         }, 1500);
     }
 });
@@ -358,7 +356,7 @@ function loadAllPosts() {
                 '<div class="admin-post-dot ' + (p.published ? 'published' : 'draft') + '"></div>' +
                 '<div class="admin-post-info">' +
                 '<div class="admin-post-title">' + escapeHtml(p.title) + '</div>' +
-                '<div class="admin-post-meta">' + date + ' · ' + (p.category || 'general') + ' · ' + (p.published ? '✅ Published' : '📝 Draft') + '</div>' +
+                '<div class="admin-post-meta">' + date + ' · ' + (p.category || 'general') + ' · ' + (p.published ? 'Published' : 'Draft') + '</div>' +
                 '</div>' +
                 '<div class="admin-post-actions">' +
                 '<a href="' + encodeURIComponent(p.slug) + '/" target="_blank" class="admin-btn">View</a>' +
@@ -459,13 +457,13 @@ function savePost() {
         if (!currentEditId && ref) currentEditId = ref.id;
         document.getElementById('dangerZone').style.display = 'block';
         if (!published) {
-            showStatus('success', '📝 Draft saved (not published).');
+            showStatus('success', 'Draft saved (not published).');
             saveBtn.textContent = 'Save';
             loadAllPosts();
             return;
         }
         // Published! Auto-deploy to GitHub
-        showStatus('success', '💾 Saved to Firestore. Deploying to GitHub...');
+        showStatus('success', 'Saved to Firestore. Deploying to GitHub...');
         var publishData = {
             slug: slug, title: title, category: category, excerpt: excerpt,
             content: content, readTime: readTime, author: author, published: true,
@@ -475,7 +473,7 @@ function savePost() {
             saveBtn.textContent = 'Save';
             loadAllPosts();
         }).catch(function(err) {
-            showStatus('error', '❌ GitHub publish failed: ' + err.message);
+            showStatus('error', 'GitHub publish failed: ' + err.message);
             saveBtn.textContent = 'Save';
             loadAllPosts();
         });
@@ -700,7 +698,7 @@ async function saveGhToken() {
             return;
         }
         localStorage.setItem('yi_gh_token', t);
-        showGhStatus('success', '✅ Token saved & verified. Auto-publish is now enabled.');
+        showGhStatus('success', 'Token saved and verified. Auto-publish is now enabled.');
         setTimeout(closeSettings, 1500);
     } catch (e) {
         showGhStatus('error', 'Verification failed: ' + e.message);
@@ -924,10 +922,10 @@ function buildSitemap(allPosts) {
 
 async function publishPostToGitHub(post) {
     if (!ghToken()) {
-        showStatus('error', '⚙ GitHub token not set. Click "GitHub" in navbar to set it up.');
+        showStatus('error', 'GitHub token not set. Click "GitHub Settings" in navbar to set it up.');
         return false;
     }
-    showStatus('success', '🛠 Building static page...');
+    showStatus('success', 'Building static page...');
     // Get all posts from Firestore for sitemap + related
     var snap = await db.collection('posts').get();
     var allPosts = [];
@@ -945,16 +943,16 @@ async function publishPostToGitHub(post) {
     var html = buildStaticPostHTML(post, allPosts);
     var path = 'blog/' + post.slug + '/index.html';
 
-    showStatus('success', '🚀 Publishing to GitHub...');
+    showStatus('success', 'Publishing to GitHub...');
     var existing = await ghGet(path);
     await ghPut(path, html, 'Publish post: ' + post.title, existing ? existing.sha : null);
 
-    showStatus('success', '🗺 Updating sitemap...');
+    showStatus('success', 'Updating sitemap...');
     var sitemap = buildSitemap(allPosts);
     var sitemapExisting = await ghGet('sitemap.xml');
     await ghPut('sitemap.xml', sitemap, 'Update sitemap for: ' + post.slug, sitemapExisting ? sitemapExisting.sha : null);
 
-    showStatus('success', '✅ Live in ~2 min at younginvestor.app/blog/' + post.slug + '/');
+    showStatus('success', 'Live in ~2 min at younginvestor.app/blog/' + post.slug + '/');
     return true;
 }
 </script>

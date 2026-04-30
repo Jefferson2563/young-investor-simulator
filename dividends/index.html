@@ -418,23 +418,23 @@
                 </div>
                 <div class="dc-scenarios-row">
                     <button class="dc-scn" data-scn="conservative" onclick="loadScenario('conservative')">
-                        <span class="dc-scn-name" id="scnNameCons">🛡️ Conservative</span>
+                        <span class="dc-scn-name" id="scnNameCons">Conservative</span>
                         <span class="dc-scn-desc" id="scnDescCons">SCHD · 3.5% yield · 30y</span>
                     </button>
                     <button class="dc-scn active" data-scn="balanced" onclick="loadScenario('balanced')">
-                        <span class="dc-scn-name" id="scnNameBal">⚖️ Balanced</span>
+                        <span class="dc-scn-name" id="scnNameBal">Balanced</span>
                         <span class="dc-scn-desc" id="scnDescBal">VYM · 3% yield · 25y</span>
                     </button>
                     <button class="dc-scn" data-scn="growth" onclick="loadScenario('growth')">
-                        <span class="dc-scn-name" id="scnNameGrw">📈 Growth-focused</span>
+                        <span class="dc-scn-name" id="scnNameGrw">Growth-focused</span>
                         <span class="dc-scn-desc" id="scnDescGrw">VIG · 1.7% · fast growth</span>
                     </button>
                     <button class="dc-scn" data-scn="income" onclick="loadScenario('income')">
-                        <span class="dc-scn-name" id="scnNameInc">💰 High Income</span>
+                        <span class="dc-scn-name" id="scnNameInc">High Income</span>
                         <span class="dc-scn-desc" id="scnDescInc">JEPI · 7.5% · monthly</span>
                     </button>
                     <button class="dc-scn" data-scn="coastfire" onclick="loadScenario('coastfire')">
-                        <span class="dc-scn-name" id="scnNameCF">🏖️ Coast FIRE</span>
+                        <span class="dc-scn-name" id="scnNameCF">Coast FIRE</span>
                         <span class="dc-scn-desc" id="scnDescCF">$50k now · 35y · let it ride</span>
                     </button>
                 </div>
@@ -442,8 +442,8 @@
 
             <!-- MODE TOGGLE -->
             <div class="dc-mode-toggle" id="dcModeToggle">
-                <button class="dc-mode-btn active" data-mode="years" onclick="setMode('years')" id="dcModeYrs">📅 Project years</button>
-                <button class="dc-mode-btn" data-mode="goal" onclick="setMode('goal')" id="dcModeGoal">🎯 Reach a goal</button>
+                <button class="dc-mode-btn active" data-mode="years" onclick="setMode('years')" id="dcModeYrs">Project years</button>
+                <button class="dc-mode-btn" data-mode="goal" onclick="setMode('goal')" id="dcModeGoal">Reach a goal</button>
             </div>
 
             <!-- FORM -->
@@ -719,14 +719,16 @@
 
     /* ===== LANG ===== */
     var DC_TRANSLATIONS = {
-        en: { h1part: 'passive income', h1pre: 'How much ', h1post: ' will you earn?', sub: 'See exactly where you\'ll be in 10, 20, or 30 years. Real formulas. Honest projections. No BS.', eco: 'YOUNG INVESTOR ECOSYSTEM', formTitle: 'Your Numbers', lblInit: 'Initial Investment', lblMonth: 'Monthly Contribution', lblPrice: 'Share Price', lblYield: 'Dividend Yield (annual)', lblDivGr: 'Dividend Growth / yr', lblPrGr: 'Share Price Growth / yr', lblFreq: 'Payout Frequency', lblYrs: 'Years', lblDrip: 'Reinvest Dividends (DRIP)', btnCalc: 'Calculate My Dividends', navSim: 'Simulator', navDiv: 'Dividends', disc: 'Disclaimer' },
-        fr: { h1part: 'revenus passifs', h1pre: 'Combien de ', h1post: ' allez-vous gagner ?', sub: 'Voyez exactement où vous serez dans 10, 20 ou 30 ans. Vraies formules. Projections honnêtes.', eco: 'ÉCOSYSTÈME YOUNG INVESTOR', formTitle: 'Vos chiffres', lblInit: 'Investissement initial', lblMonth: 'Contribution mensuelle', lblPrice: 'Prix de l\'action', lblYield: 'Rendement du dividende', lblDivGr: 'Croissance dividende / an', lblPrGr: 'Croissance prix / an', lblFreq: 'Fréquence de versement', lblYrs: 'Années', lblDrip: 'Réinvestir les dividendes (DRIP)', btnCalc: 'Calculer mes dividendes', navSim: 'Simulateur', navDiv: 'Dividendes', disc: 'Avertissement' },
-        es: { h1part: 'ingresos pasivos', h1pre: '¿Cuántos ', h1post: ' ganarás?', sub: 'Mira exactamente dónde estarás en 10, 20 o 30 años. Fórmulas reales. Proyecciones honestas.', eco: 'ECOSISTEMA YOUNG INVESTOR', formTitle: 'Tus números', lblInit: 'Inversión inicial', lblMonth: 'Aporte mensual', lblPrice: 'Precio de la acción', lblYield: 'Rendimiento del dividendo', lblDivGr: 'Crecimiento dividendo / año', lblPrGr: 'Crecimiento precio / año', lblFreq: 'Frecuencia de pago', lblYrs: 'Años', lblDrip: 'Reinvertir dividendos (DRIP)', btnCalc: 'Calcular mis dividendos', navSim: 'Simulador', navDiv: 'Dividendos', disc: 'Aviso legal' },
-        pt: { h1part: 'renda passiva', h1pre: 'Quanto de ', h1post: ' você vai ganhar?', sub: 'Veja exatamente onde estará em 10, 20 ou 30 anos. Fórmulas reais. Projeções honestas.', eco: 'ECOSSISTEMA YOUNG INVESTOR', formTitle: 'Seus números', lblInit: 'Investimento inicial', lblMonth: 'Aporte mensal', lblPrice: 'Preço da ação', lblYield: 'Rendimento do dividendo', lblDivGr: 'Crescimento dividendo / ano', lblPrGr: 'Crescimento preço / ano', lblFreq: 'Frequência de pagamento', lblYrs: 'Anos', lblDrip: 'Reinvestir dividendos (DRIP)', btnCalc: 'Calcular meus dividendos', navSim: 'Simulador', navDiv: 'Dividendos', disc: 'Aviso' },
-        de: { h1part: 'passives Einkommen', h1pre: 'Wie viel ', h1post: ' wirst du verdienen?', sub: 'Sieh genau, wo du in 10, 20 oder 30 Jahren stehst. Echte Formeln. Ehrliche Prognosen.', eco: 'YOUNG INVESTOR ÖKOSYSTEM', formTitle: 'Deine Zahlen', lblInit: 'Anfangsinvestition', lblMonth: 'Monatlicher Beitrag', lblPrice: 'Aktienkurs', lblYield: 'Dividendenrendite', lblDivGr: 'Dividendenwachstum / Jahr', lblPrGr: 'Kurswachstum / Jahr', lblFreq: 'Ausschüttungsfrequenz', lblYrs: 'Jahre', lblDrip: 'Dividenden reinvestieren (DRIP)', btnCalc: 'Meine Dividenden berechnen', navSim: 'Simulator', navDiv: 'Dividenden', disc: 'Haftungsausschluss' },
-        ar: { h1part: 'دخل سلبي', h1pre: 'كم من ', h1post: ' ستكسب؟', sub: 'اعرف بالضبط أين ستكون خلال 10 أو 20 أو 30 سنة. صيغ حقيقية. توقعات صادقة.', eco: 'منظومة YOUNG INVESTOR', formTitle: 'أرقامك', lblInit: 'الاستثمار الأولي', lblMonth: 'المساهمة الشهرية', lblPrice: 'سعر السهم', lblYield: 'عائد التوزيعات', lblDivGr: 'نمو التوزيعات / سنة', lblPrGr: 'نمو السعر / سنة', lblFreq: 'تكرار الدفع', lblYrs: 'سنوات', lblDrip: 'إعادة استثمار التوزيعات (DRIP)', btnCalc: 'احسب توزيعاتي', navSim: 'المحاكي', navDiv: 'الأرباح', disc: 'إخلاء مسؤولية' },
-        zh: { h1part: '被动收入', h1pre: '你能赚多少', h1post: '？', sub: '看看10年、20年或30年后你的准确位置。真实公式。诚实预测。', eco: 'YOUNG INVESTOR 生态系统', formTitle: '你的数据', lblInit: '初始投资', lblMonth: '每月定投', lblPrice: '股价', lblYield: '股息率', lblDivGr: '股息增长 / 年', lblPrGr: '价格增长 / 年', lblFreq: '派息频率', lblYrs: '年数', lblDrip: '股息再投资 (DRIP)', btnCalc: '计算我的股息', navSim: '模拟器', navDiv: '股息', disc: '免责声明' }
+        en: { h1part: 'passive income', h1pre: 'How much ', h1post: ' will you earn?', sub: 'See exactly where you\'ll be in 10, 20, or 30 years. Real formulas. Honest projections. No BS.', eco: 'YOUNG INVESTOR ECOSYSTEM', formTitle: 'Your Numbers', lblInit: 'Initial Investment', lblMonth: 'Monthly Contribution', lblPrice: 'Share Price', lblYield: 'Dividend Yield (annual)', lblDivGr: 'Dividend Growth / yr', lblPrGr: 'Share Price Growth / yr', lblFreq: 'Payout Frequency', lblYrs: 'Years', lblDrip: 'Reinvest Dividends (DRIP)', btnCalc: 'Calculate My Dividends', navSim: 'Simulator', navDiv: 'Dividends', disc: 'Disclaimer', scnTitle: 'Quick scenarios', scnHint: 'One click loads all settings', scnCons: 'Conservative', scnBal: 'Balanced', scnGrw: 'Growth-focused', scnInc: 'High Income', scnCF: 'Coast FIRE', modeYrs: 'Project years', modeGoal: 'Reach a goal', lblGoal: 'Target monthly income', btnGoal: 'When will I reach my goal?', btnShare: 'Copy share link', btnShareCopied: 'Copied' },
+        fr: { h1part: 'revenus passifs', h1pre: 'Combien de ', h1post: ' allez-vous gagner ?', sub: 'Voyez exactement où vous serez dans 10, 20 ou 30 ans. Vraies formules. Projections honnêtes.', eco: 'ÉCOSYSTÈME YOUNG INVESTOR', formTitle: 'Vos chiffres', lblInit: 'Investissement initial', lblMonth: 'Contribution mensuelle', lblPrice: 'Prix de l\'action', lblYield: 'Rendement du dividende', lblDivGr: 'Croissance dividende / an', lblPrGr: 'Croissance prix / an', lblFreq: 'Fréquence de versement', lblYrs: 'Années', lblDrip: 'Réinvestir les dividendes (DRIP)', btnCalc: 'Calculer mes dividendes', navSim: 'Simulateur', navDiv: 'Dividendes', disc: 'Avertissement', scnTitle: 'Scenarios rapides', scnHint: 'Un clic charge tous les parametres', scnCons: 'Conservateur', scnBal: 'Equilibre', scnGrw: 'Axe croissance', scnInc: 'Haut revenu', scnCF: 'Coast FIRE', modeYrs: 'Projeter sur X annees', modeGoal: 'Atteindre un objectif', lblGoal: 'Revenu mensuel cible', btnGoal: 'Quand vais-je atteindre mon objectif ?', btnShare: 'Copier le lien', btnShareCopied: 'Copie' },
+        es: { h1part: 'ingresos pasivos', h1pre: '¿Cuántos ', h1post: ' ganarás?', sub: 'Mira exactamente dónde estarás en 10, 20 o 30 años. Fórmulas reales. Proyecciones honestas.', eco: 'ECOSISTEMA YOUNG INVESTOR', formTitle: 'Tus números', lblInit: 'Inversión inicial', lblMonth: 'Aporte mensual', lblPrice: 'Precio de la acción', lblYield: 'Rendimiento del dividendo', lblDivGr: 'Crecimiento dividendo / año', lblPrGr: 'Crecimiento precio / año', lblFreq: 'Frecuencia de pago', lblYrs: 'Años', lblDrip: 'Reinvertir dividendos (DRIP)', btnCalc: 'Calcular mis dividendos', navSim: 'Simulador', navDiv: 'Dividendos', disc: 'Aviso legal', scnTitle: 'Escenarios rapidos', scnHint: 'Un clic carga todos los ajustes', scnCons: 'Conservador', scnBal: 'Equilibrado', scnGrw: 'Enfoque crecimiento', scnInc: 'Alto ingreso', scnCF: 'Coast FIRE', modeYrs: 'Proyectar anios', modeGoal: 'Alcanzar una meta', lblGoal: 'Ingreso mensual objetivo', btnGoal: 'Cuando alcanzare mi meta?', btnShare: 'Copiar enlace', btnShareCopied: 'Copiado' },
+        pt: { h1part: 'renda passiva', h1pre: 'Quanto de ', h1post: ' você vai ganhar?', sub: 'Veja exatamente onde estará em 10, 20 ou 30 anos. Fórmulas reais. Projeções honestas.', eco: 'ECOSSISTEMA YOUNG INVESTOR', formTitle: 'Seus números', lblInit: 'Investimento inicial', lblMonth: 'Aporte mensal', lblPrice: 'Preço da ação', lblYield: 'Rendimento do dividendo', lblDivGr: 'Crescimento dividendo / ano', lblPrGr: 'Crescimento preço / ano', lblFreq: 'Frequência de pagamento', lblYrs: 'Anos', lblDrip: 'Reinvestir dividendos (DRIP)', btnCalc: 'Calcular meus dividendos', navSim: 'Simulador', navDiv: 'Dividendos', disc: 'Aviso', scnTitle: 'Cenarios rapidos', scnHint: 'Um clique carrega tudo', scnCons: 'Conservador', scnBal: 'Equilibrado', scnGrw: 'Foco crescimento', scnInc: 'Alta renda', scnCF: 'Coast FIRE', modeYrs: 'Projetar anos', modeGoal: 'Atingir uma meta', lblGoal: 'Renda mensal alvo', btnGoal: 'Quando atingirei minha meta?', btnShare: 'Copiar link', btnShareCopied: 'Copiado' },
+        de: { h1part: 'passives Einkommen', h1pre: 'Wie viel ', h1post: ' wirst du verdienen?', sub: 'Sieh genau, wo du in 10, 20 oder 30 Jahren stehst. Echte Formeln. Ehrliche Prognosen.', eco: 'YOUNG INVESTOR ÖKOSYSTEM', formTitle: 'Deine Zahlen', lblInit: 'Anfangsinvestition', lblMonth: 'Monatlicher Beitrag', lblPrice: 'Aktienkurs', lblYield: 'Dividendenrendite', lblDivGr: 'Dividendenwachstum / Jahr', lblPrGr: 'Kurswachstum / Jahr', lblFreq: 'Ausschüttungsfrequenz', lblYrs: 'Jahre', lblDrip: 'Dividenden reinvestieren (DRIP)', btnCalc: 'Meine Dividenden berechnen', navSim: 'Simulator', navDiv: 'Dividenden', disc: 'Haftungsausschluss', scnTitle: 'Schnelle Szenarien', scnHint: 'Ein Klick laedt alle Einstellungen', scnCons: 'Konservativ', scnBal: 'Ausgewogen', scnGrw: 'Wachstumsorientiert', scnInc: 'Hohes Einkommen', scnCF: 'Coast FIRE', modeYrs: 'Jahre projizieren', modeGoal: 'Ein Ziel erreichen', lblGoal: 'Monatliches Zieleinkommen', btnGoal: 'Wann erreiche ich mein Ziel?', btnShare: 'Link kopieren', btnShareCopied: 'Kopiert' },
+        ar: { h1part: 'دخل سلبي', h1pre: 'كم من ', h1post: ' ستكسب؟', sub: 'اعرف بالضبط أين ستكون خلال 10 أو 20 أو 30 سنة. صيغ حقيقية. توقعات صادقة.', eco: 'منظومة YOUNG INVESTOR', formTitle: 'أرقامك', lblInit: 'الاستثمار الأولي', lblMonth: 'المساهمة الشهرية', lblPrice: 'سعر السهم', lblYield: 'عائد التوزيعات', lblDivGr: 'نمو التوزيعات / سنة', lblPrGr: 'نمو السعر / سنة', lblFreq: 'تكرار الدفع', lblYrs: 'سنوات', lblDrip: 'إعادة استثمار التوزيعات (DRIP)', btnCalc: 'احسب توزيعاتي', navSim: 'المحاكي', navDiv: 'الأرباح', disc: 'إخلاء مسؤولية', scnTitle: 'سيناريوهات سريعة', scnHint: 'نقرة واحدة تحمل جميع الإعدادات', scnCons: 'محافظ', scnBal: 'متوازن', scnGrw: 'يركز على النمو', scnInc: 'دخل عال', scnCF: 'Coast FIRE', modeYrs: 'توقع سنوات', modeGoal: 'الوصول إلى هدف', lblGoal: 'الدخل الشهري المستهدف', btnGoal: 'متى سأحقق هدفي؟', btnShare: 'نسخ الرابط', btnShareCopied: 'تم النسخ' },
+        zh: { h1part: '被动收入', h1pre: '你能赚多少', h1post: '？', sub: '看看10年、20年或30年后你的准确位置。真实公式。诚实预测。', eco: 'YOUNG INVESTOR 生态系统', formTitle: '你的数据', lblInit: '初始投资', lblMonth: '每月定投', lblPrice: '股价', lblYield: '股息率', lblDivGr: '股息增长 / 年', lblPrGr: '价格增长 / 年', lblFreq: '派息频率', lblYrs: '年数', lblDrip: '股息再投资 (DRIP)', btnCalc: '计算我的股息', navSim: '模拟器', navDiv: '股息', disc: '免责声明', scnTitle: '快速方案', scnHint: '一键加载所有设置', scnCons: '保守型', scnBal: '均衡型', scnGrw: '增长导向', scnInc: '高收入', scnCF: 'Coast FIRE', modeYrs: '投影年数', modeGoal: '达成目标', lblGoal: '目标月收入', btnGoal: '我何时能达成目标？', btnShare: '复制分享链接', btnShareCopied: '已复制' }
     };
+    window.__divTranslations = DC_TRANSLATIONS;
+    window.applyDcLang = applyDcLang;
     function applyDcLang(lang) {
         var t = DC_TRANSLATIONS[lang]; if (!t) return;
         var h1 = document.querySelector('.dc-h1');
@@ -738,7 +740,22 @@
         var labelKeys = ['lblInit','lblMonth','lblPrice','lblYield','lblDivGr','lblPrGr','lblFreq','lblYrs'];
         labels.forEach(function(lbl, i) { if (labelKeys[i] && t[labelKeys[i]]) lbl.textContent = t[labelKeys[i]]; });
         var dripLbl = document.querySelector('label[for="fDrip"]'); if (dripLbl) dripLbl.textContent = t.lblDrip;
-        var goBtn = document.querySelector('.dc-go'); if (goBtn) goBtn.textContent = t.btnCalc;
+        var goBtn = document.querySelector('.dc-go'); if (goBtn) goBtn.textContent = (window.__divMode === 'goal' && t.btnGoal) ? t.btnGoal : t.btnCalc;
+        // Quick scenarios labels
+        var setIf = function(id, val) { var el = document.getElementById(id); if (el && val) el.textContent = val; };
+        setIf('dcScnTitle', t.scnTitle);
+        setIf('dcScnHint', t.scnHint);
+        // Re-set scenario titles (preserve descriptions which contain ticker info)
+        setIf('scnNameCons', t.scnCons);
+        setIf('scnNameBal', t.scnBal);
+        setIf('scnNameGrw', t.scnGrw);
+        setIf('scnNameInc', t.scnInc);
+        setIf('scnNameCF', t.scnCF);
+        // Mode toggle
+        setIf('dcModeYrs', t.modeYrs);
+        setIf('dcModeGoal', t.modeGoal);
+        // Goal label
+        setIf('lblGoalIncome', t.lblGoal);
         // Nav
         var navLinks = document.querySelectorAll('.nav-links a');
         navLinks.forEach(function(a) {
@@ -1476,15 +1493,25 @@
 
     /* === GOAL MODE === */
     var currentMode = 'years';
+    function getDivT() {
+        var lang = localStorage.getItem('yis-lang') || 'en';
+        return (window.__divTranslations && window.__divTranslations[lang]) || null;
+    }
     function setMode(mode) {
         currentMode = mode;
+        window.__divMode = mode;
         var form = document.getElementById('dcForm');
         if (mode === 'goal') form.classList.add('dc-mode-goal');
         else form.classList.remove('dc-mode-goal');
         document.querySelectorAll('.dc-mode-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.mode === mode); });
         document.getElementById('dcGoalResult').style.display = 'none';
         var goBtn = document.querySelector('.dc-go');
-        if (goBtn) goBtn.textContent = mode === 'goal' ? 'When will I reach my goal?' : 'Calculate My Dividends';
+        // Re-apply current language so button text updates
+        if (typeof window.applyDcLang === 'function') {
+            window.applyDcLang(localStorage.getItem('yis-lang') || 'en');
+        } else if (goBtn) {
+            goBtn.textContent = mode === 'goal' ? 'When will I reach my goal?' : 'Calculate My Dividends';
+        }
     }
     window.setMode = setMode;
 
@@ -1535,14 +1562,15 @@
             var result = solveYearsForGoal(target);
             var resBox = document.getElementById('dcGoalResult');
             resBox.style.display = 'block';
+            var t = getDivT() || { goalReached:'You will hit ', goalIn:' in dividends in ', goalYears:' years. Detailed projection below.', goalYieldZero:'Set a dividend yield above 0%.', goalUnreach:'Goal not reachable in 60 years.' };
             if (result.years) {
                 document.getElementById('fYrs').value = result.years;
-                resBox.innerHTML = '🎯 You\'ll hit <strong>$' + target.toLocaleString() + '/month</strong> in dividends in <strong>' + result.years + ' years</strong>. Now showing detailed projection below.';
+                resBox.innerHTML = (t.goalReached || 'You will hit ') + '<strong>$' + target.toLocaleString() + '/mo</strong>' + (t.goalIn || ' in dividends in ') + '<strong>' + result.years + '</strong>' + (t.goalYears || ' years.');
                 if (typeof _origRun === 'function') _origRun();
             } else if (result.reason === 'yield-zero') {
-                resBox.innerHTML = '⚠️ Set a dividend yield above 0% to project goal.';
+                resBox.innerHTML = t.goalYieldZero || 'Set a dividend yield above 0% to project goal.';
             } else {
-                resBox.innerHTML = '⚠️ Goal not reachable in 60 years with current settings. Try increasing your monthly contribution or yield.';
+                resBox.innerHTML = t.goalUnreach || 'Goal not reachable in 60 years with current settings.';
             }
             updateShareURL();
             return;
@@ -1594,12 +1622,15 @@
         var btn = document.createElement('button');
         btn.className = 'dc-share';
         btn.id = 'dcShareBtn';
-        btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> <span>Copy share link</span>';
+        var sT = getDivT() || {};
+        var defaultLabel = sT.btnShare || 'Copy share link';
+        var copiedLabel = sT.btnShareCopied || 'Copied';
+        btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> <span>' + defaultLabel + '</span>';
         btn.onclick = function() {
             var url = buildShareURL();
             navigator.clipboard.writeText(url).then(function() {
-                btn.querySelector('span').textContent = '✓ Copied!';
-                setTimeout(function() { btn.querySelector('span').textContent = 'Copy share link'; }, 2200);
+                btn.querySelector('span').textContent = copiedLabel;
+                setTimeout(function() { btn.querySelector('span').textContent = defaultLabel; }, 2200);
             });
         };
         // Insert above the summary cards
