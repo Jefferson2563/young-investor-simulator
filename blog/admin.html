@@ -113,64 +113,39 @@
 
             <!-- ===== ANALYTICS PANEL ===== -->
             <div class="analytics-panel" id="analyticsPanel" style="margin-bottom:32px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;">
-                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
-                    <h2 style="font-size:18px;font-weight:700;">Analytics Overview</h2>
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:10px;">
+                    <h2 style="font-size:18px;font-weight:700;">Analytics Health Check</h2>
                     <button class="admin-btn" onclick="loadAnalytics()" style="font-size:12px;padding:6px 12px;">Refresh</button>
                 </div>
+                <p style="color:var(--text-muted);font-size:12px;margin-bottom:20px;">Each tool collects data independently. Click through to see actual numbers.</p>
 
-                <div class="stats-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:22px;">
-                    <div class="stat-card" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;">
-                        <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Total Users</div>
-                        <div style="font-size:28px;font-weight:800;color:var(--text);margin-top:6px;" id="statTotalUsers">—</div>
-                        <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="statTotalUsersDelta">All-time signups</div>
+                <!-- TRACKER STATUS -->
+                <div id="trackerHealth" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:22px;">
+                    <!-- populated by JS -->
+                </div>
+
+                <!-- WHAT'S ON THIS PAGE (Firestore-only) -->
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+                    <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;">
+                        <h3 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Your Account (Firebase)</h3>
+                        <div id="recentSignups" style="font-size:13px;line-height:1.7;">Loading...</div>
                     </div>
-                    <div class="stat-card" style="background:var(--bg);border:1px solid #D4A843;border-radius:10px;padding:16px;">
-                        <div style="font-size:12px;color:#D4A843;text-transform:uppercase;letter-spacing:0.5px;font-weight:700;">Pro Subscribers</div>
-                        <div style="font-size:28px;font-weight:800;color:#D4A843;margin-top:6px;" id="statProSubs">—</div>
-                        <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="statProRevenue">€0 MRR</div>
-                    </div>
-                    <div class="stat-card" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;">
-                        <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Conversion</div>
-                        <div style="font-size:28px;font-weight:800;color:#00e676;margin-top:6px;" id="statConversion">—</div>
-                        <div style="font-size:11px;color:var(--text-muted);margin-top:3px;">Free → Pro</div>
-                    </div>
-                    <div class="stat-card" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;">
-                        <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">New (7d)</div>
-                        <div style="font-size:28px;font-weight:800;color:var(--text);margin-top:6px;" id="statNew7d">—</div>
-                        <div style="font-size:11px;color:var(--text-muted);margin-top:3px;">Last 7 days</div>
-                    </div>
-                    <div class="stat-card" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;">
-                        <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">New (30d)</div>
-                        <div style="font-size:28px;font-weight:800;color:var(--text);margin-top:6px;" id="statNew30d">—</div>
-                        <div style="font-size:11px;color:var(--text-muted);margin-top:3px;">Last 30 days</div>
-                    </div>
-                    <div class="stat-card" style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;">
-                        <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Posts Live</div>
-                        <div style="font-size:28px;font-weight:800;color:var(--text);margin-top:6px;" id="statPostsLive">—</div>
-                        <div style="font-size:11px;color:var(--text-muted);margin-top:3px;" id="statPostsTotal">— total drafts</div>
+                    <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;">
+                        <h3 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Subscriptions (Firestore)</h3>
+                        <div id="planBreakdown" style="font-size:13px;line-height:1.7;">Loading...</div>
                     </div>
                 </div>
 
-                <!-- PLAN BREAKDOWN -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:18px;">
-                    <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;">
-                        <h3 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Plan Breakdown</h3>
-                        <div id="planBreakdown" style="font-size:13px;">Loading...</div>
-                    </div>
-                    <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:16px;">
-                        <h3 style="font-size:13px;font-weight:700;margin-bottom:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Recent Signups</h3>
-                        <div id="recentSignups" style="font-size:13px;">Loading...</div>
-                    </div>
-                </div>
-
-                <!-- EXTERNAL ANALYTICS LINKS -->
-                <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:12px;color:var(--text-muted);line-height:1.7;">
-                    <strong style="color:var(--text);">Geographic &amp; traffic data:</strong>
-                    <a href="https://clarity.microsoft.com/projects" target="_blank" style="color:#00e676;">Microsoft Clarity</a> ·
-                    <a href="https://analytics.google.com/" target="_blank" style="color:#00e676;">Google Analytics</a> ·
-                    <a href="https://search.google.com/search-console" target="_blank" style="color:#00e676;">Search Console</a>
-                    <br><strong style="color:var(--text);">Revenue &amp; churn:</strong>
-                    <a href="https://dashboard.stripe.com/" target="_blank" style="color:#00e676;">Stripe Dashboard</a>
+                <!-- HIDDEN STATS (kept in DOM so the existing JS doesn't error; not displayed) -->
+                <div style="display:none;">
+                    <span id="statTotalUsers">0</span>
+                    <span id="statProSubs">0</span>
+                    <span id="statProRevenue">€0 MRR</span>
+                    <span id="statConversion">0%</span>
+                    <span id="statNew7d">0</span>
+                    <span id="statNew30d">0</span>
+                    <span id="statPostsLive">0</span>
+                    <span id="statPostsTotal">0</span>
                 </div>
             </div>
 
@@ -563,6 +538,82 @@ function escapeHtml(str) {
 function loadAnalytics() {
     var setText = function(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
     var setHTML = function(id, v) { var el = document.getElementById(id); if (el) el.innerHTML = v; };
+
+    // ============================================================
+    // TRACKER HEALTH CHECK — verifies each integration is loaded
+    // ============================================================
+    var checks = [
+        {
+            name: 'Google Analytics 4',
+            id: 'G-97RRNZ9LGW',
+            status: (typeof window.gtag === 'function' && window.dataLayer) ? 'ok' : 'fail',
+            shows: 'Pageviews, sessions, MAU, geographic data, traffic sources',
+            link: 'https://analytics.google.com/',
+            linkLabel: 'Open GA4 dashboard'
+        },
+        {
+            name: 'Microsoft Clarity',
+            id: 'wftsywiatk',
+            status: (typeof window.clarity === 'function') ? 'ok' : 'fail',
+            shows: 'Heatmaps, session recordings, rage clicks, dead clicks',
+            link: 'https://clarity.microsoft.com/projects',
+            linkLabel: 'Open Clarity dashboard'
+        },
+        {
+            name: 'Firebase Auth',
+            id: 'young-investor-simulator',
+            status: (typeof firebase !== 'undefined' && firebase.auth && firebase.auth().currentUser) ? 'ok' : 'fail',
+            shows: 'Authenticated users (sign-in events, accounts)',
+            link: 'https://console.firebase.google.com/project/young-investor-simulator/authentication/users',
+            linkLabel: 'Open Firebase users'
+        },
+        {
+            name: 'Firestore Database',
+            id: '/users, /posts',
+            status: (typeof db !== 'undefined' && db && typeof db.collection === 'function') ? 'ok' : 'fail',
+            shows: 'Pro subscribers, plan data, blog posts, user profiles',
+            link: 'https://console.firebase.google.com/project/young-investor-simulator/firestore/data',
+            linkLabel: 'Open Firestore data'
+        },
+        {
+            name: 'Google Search Console',
+            id: 'younginvestor.app',
+            status: 'external',
+            shows: 'Search rankings, impressions, clicks, indexed pages',
+            link: 'https://search.google.com/search-console',
+            linkLabel: 'Open Search Console'
+        },
+        {
+            name: 'Stripe',
+            id: 'live mode',
+            status: 'external',
+            shows: 'Revenue, MRR, churn, payment failures, customer details',
+            link: 'https://dashboard.stripe.com/',
+            linkLabel: 'Open Stripe dashboard'
+        }
+    ];
+
+    var healthHTML = checks.map(function(c) {
+        var dot, label;
+        if (c.status === 'ok') { dot = '#00e676'; label = 'Connected'; }
+        else if (c.status === 'fail') { dot = '#ff5252'; label = 'Not loaded'; }
+        else { dot = '#7df9ff'; label = 'External'; }
+        return '<div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:14px 16px;">' +
+            '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">' +
+                '<div style="display:flex;align-items:center;gap:8px;">' +
+                    '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:' + dot + ';box-shadow:0 0 8px ' + dot + ';"></span>' +
+                    '<strong style="font-size:13px;">' + c.name + '</strong>' +
+                '</div>' +
+                '<span style="font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">' + label + '</span>' +
+            '</div>' +
+            '<div style="font-size:11px;color:var(--text-muted);font-family:monospace;margin-bottom:6px;">' + c.id + '</div>' +
+            '<div style="font-size:12px;color:var(--text);line-height:1.5;margin-bottom:10px;">' + c.shows + '</div>' +
+            '<a href="' + c.link + '" target="_blank" style="font-size:12px;color:#00e676;font-weight:600;text-decoration:none;">' + c.linkLabel + ' &rarr;</a>' +
+        '</div>';
+    }).join('');
+    setHTML('trackerHealth', healthHTML);
+    // ============================================================
+
     setText('statTotalUsers', '...');
     setText('statProSubs', '...');
     setText('statConversion', '...');
