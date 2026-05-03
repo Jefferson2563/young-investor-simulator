@@ -324,11 +324,7 @@ function processAuthState(user) {
     document.getElementById('adminWelcome').textContent = 'Signed in as ' + user.email;
     loadAllPosts();
     loadAnalytics();
-    if (!ghToken()) {
-        setTimeout(function() {
-            if (!ghToken()) showStatus('error', 'Click "GitHub Settings" in the navbar to enable auto-publishing.');
-        }, 1500);
-    }
+    // Note: GitHub auto-publish setup is optional. No nag banner — set it up only when needed.
 }
 
 // Listen for every auth state change (sign in, sign out, token refresh)
@@ -576,21 +572,60 @@ function loadAnalytics() {
     setHTML('planBreakdown', '<span style="color:var(--text-muted);">Loading...</span>');
     setHTML('recentSignups', '<span style="color:var(--text-muted);">Loading...</span>');
 
-    // Hard timeout — if Firestore takes more than 10s the rules are blocking us
+    // Step 1: read OWN user doc to verify rules let me read at all + show my Pro status
+    var me = firebase.auth().currentUser;
+    if (me) {
+        db.collection('users').doc(me.uid).get().then(function(doc) {
+            if (doc.exists) {
+                var data = doc.data();
+                var planLine = (data.plan === 'pro')
+                    ? '<span style="color:#D4A843;font-weight:700;">PRO</span> ' + (data.planType || 'monthly') + (data.planExpiry ? ' &middot; expires ' + new Date(data.planExpiry.seconds * 1000).toLocaleDateString() : '')
+                    : '<span style="color:var(--text-muted);">Free</span>';
+                setHTML('recentSignups',
+                    '<div style="font-size:12px;line-height:1.7;">' +
+                    '<strong>Your account:</strong><br>' +
+                    me.email + '<br>' +
+                    'Plan: ' + planLine + '<br>' +
+                    '<span style="color:var(--text-muted);">UID: ' + me.uid.substring(0, 12) + '...</span>' +
+                    '</div>'
+                );
+            } else {
+                setHTML('recentSignups',
+                    '<div style="color:#ff8a65;line-height:1.6;font-size:12px;">' +
+                    '<strong>Your user doc does not exist in Firestore.</strong><br>' +
+                    'Sign out and sign back in. The doc is created automatically on sign-in via premium.js.' +
+                    '</div>'
+                );
+            }
+        }).catch(function(err) {
+            setHTML('recentSignups',
+                '<div style="color:#ff5252;line-height:1.6;font-size:12px;">' +
+                'Cannot read your own user doc: ' + err.message + '<br>' +
+                'Firestore rules likely block all reads. Update them.' +
+                '</div>'
+            );
+        });
+    }
+
+    // Step 2: try to read the whole /users collection (admin read)
     var done = false;
     var timeout = setTimeout(function() {
         if (done) return;
         done = true;
-        setText('statTotalUsers', '!');
+        setText('statTotalUsers', '0');
+        setText('statProSubs', '0');
+        setText('statConversion', '0%');
+        setText('statNew7d', '0');
+        setText('statNew30d', '0');
         setHTML('planBreakdown',
-            '<div style="color:#ff8a65;line-height:1.6;">' +
-            '<strong>Cannot read /users collection.</strong><br>' +
-            'This means your Firestore security rules block admin reads.<br><br>' +
-            'Open <a href="https://console.firebase.google.com/project/young-investor-simulator/firestore/rules" target="_blank" style="color:#00e676;">Firebase Console &rarr; Rules</a> ' +
-            'and add:<br><pre style="background:#0a0a0a;padding:10px;border-radius:6px;font-size:11px;margin-top:8px;overflow:auto;">match /users/{userId} {\n  allow read, write: if request.auth.uid == userId;\n  allow read: if request.auth != null\n    &amp;&amp; request.auth.token.email == \'jeffmbogne@gmail.com\';\n}</pre>' +
+            '<div style="color:#ff8a65;line-height:1.6;font-size:12px;">' +
+            '<strong>Cannot list /users collection (timed out at 10s).</strong><br>' +
+            'Your Firestore rules are blocking the admin read.<br><br>' +
+            '<strong>Fix:</strong> open <a href="https://console.firebase.google.com/project/young-investor-simulator/firestore/rules" target="_blank" style="color:#00e676;">Firebase Console &rarr; Rules</a> and replace the users block with:' +
+            '<pre style="background:#0a0a0a;padding:10px;border-radius:6px;font-size:10px;margin-top:6px;overflow:auto;color:#ddd;">match /users/{userId} {\n  allow read, write: if request.auth.uid == userId;\n  allow read: if request.auth != null\n    &amp;&amp; request.auth.token.email == \'jeffmbogne@gmail.com\';\n}</pre>' +
+            'Then click <strong>Publish</strong> and refresh this page.' +
             '</div>'
         );
-        setHTML('recentSignups', '<span style="color:#ff8a65;">Blocked by rules</span>');
     }, 10000);
 
     db.collection('users').get().then(function(snap) {
