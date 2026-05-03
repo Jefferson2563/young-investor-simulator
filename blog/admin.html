@@ -291,22 +291,24 @@ var db = firebase.firestore();
 var currentEditId = null;
 
 // ===== AUTH =====
-var authResolved = false;
-
-// Safety timeout — if Firebase Auth never calls back within 6 seconds, show sign-in
+// The auth callback always processes — the timeout only shows a "still loading" hint.
 var authTimer = setTimeout(function() {
-    if (!authResolved) {
-        authResolved = true;
-        document.getElementById('authLoading').style.display = 'none';
-        document.getElementById('signInGate').style.display = 'flex';
+    var auth = firebase.auth();
+    if (!auth.currentUser) {
+        document.getElementById('authLoading').innerHTML =
+            '<div style="color:var(--text-muted);font-size:13px;">Auth is taking longer than expected. <a href="#" onclick="location.reload();return false;" style="color:#00e676;">Reload</a> if this persists.</div>';
     }
-}, 6000);
+}, 8000);
 
-firebase.auth().onAuthStateChanged(function(user) {
-    if (authResolved) return; // timeout already fired
-    authResolved = true;
+function processAuthState(user) {
     clearTimeout(authTimer);
-    document.getElementById('authLoading').style.display = 'none';
+    var loading = document.getElementById('authLoading');
+    if (loading) loading.style.display = 'none';
+    // Hide ALL gates first to avoid stale UI from previous timeout
+    document.getElementById('signInGate').style.display = 'none';
+    document.getElementById('accessDenied').style.display = 'none';
+    document.getElementById('adminDashboard').style.display = 'none';
+
     if (!user) {
         document.getElementById('signInGate').style.display = 'flex';
         return;
@@ -322,13 +324,15 @@ firebase.auth().onAuthStateChanged(function(user) {
     document.getElementById('adminWelcome').textContent = 'Signed in as ' + user.email;
     loadAllPosts();
     loadAnalytics();
-    // Prompt to set up GitHub if no token saved
     if (!ghToken()) {
         setTimeout(function() {
             if (!ghToken()) showStatus('error', 'Click "GitHub Settings" in the navbar to enable auto-publishing.');
         }, 1500);
     }
-});
+}
+
+// Listen for every auth state change (sign in, sign out, token refresh)
+firebase.auth().onAuthStateChanged(processAuthState);
 
 function signInWithGoogle() {
     var provider = new firebase.auth.GoogleAuthProvider();
@@ -564,8 +568,35 @@ function loadAnalytics() {
     var setText = function(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
     var setHTML = function(id, v) { var el = document.getElementById(id); if (el) el.innerHTML = v; };
     setText('statTotalUsers', '...');
+    setText('statProSubs', '...');
+    setText('statConversion', '...');
+    setText('statNew7d', '...');
+    setText('statNew30d', '...');
+    setText('statPostsLive', '...');
+    setHTML('planBreakdown', '<span style="color:var(--text-muted);">Loading...</span>');
+    setHTML('recentSignups', '<span style="color:var(--text-muted);">Loading...</span>');
+
+    // Hard timeout — if Firestore takes more than 10s the rules are blocking us
+    var done = false;
+    var timeout = setTimeout(function() {
+        if (done) return;
+        done = true;
+        setText('statTotalUsers', '!');
+        setHTML('planBreakdown',
+            '<div style="color:#ff8a65;line-height:1.6;">' +
+            '<strong>Cannot read /users collection.</strong><br>' +
+            'This means your Firestore security rules block admin reads.<br><br>' +
+            'Open <a href="https://console.firebase.google.com/project/young-investor-simulator/firestore/rules" target="_blank" style="color:#00e676;">Firebase Console &rarr; Rules</a> ' +
+            'and add:<br><pre style="background:#0a0a0a;padding:10px;border-radius:6px;font-size:11px;margin-top:8px;overflow:auto;">match /users/{userId} {\n  allow read, write: if request.auth.uid == userId;\n  allow read: if request.auth != null\n    &amp;&amp; request.auth.token.email == \'jeffmbogne@gmail.com\';\n}</pre>' +
+            '</div>'
+        );
+        setHTML('recentSignups', '<span style="color:#ff8a65;">Blocked by rules</span>');
+    }, 10000);
 
     db.collection('users').get().then(function(snap) {
+        if (done) return;
+        done = true;
+        clearTimeout(timeout);
         var users = [];
         snap.forEach(function(d) { users.push(Object.assign({ id: d.id }, d.data())); });
 
@@ -641,15 +672,24 @@ function loadAnalytics() {
 
         // Posts stats — defer to existing post list once it loads
         db.collection('posts').get().then(function(psnap) {
-            var pubCount = 0, total = 0;
-            psnap.forEach(function(d) { total++; if (d.data().published) pubCount++; });
+            var pubCount = 0, totalPosts = 0;
+            psnap.forEach(function(d) { totalPosts++; if (d.data().published) pubCount++; });
             setText('statPostsLive', pubCount.toLocaleString());
-            setText('statPostsTotal', total + ' total (' + (total - pubCount) + ' drafts)');
+            setText('statPostsTotal', totalPosts + ' total (' + (totalPosts - pubCount) + ' drafts)');
         }).catch(function() {});
     }).catch(function(err) {
+        if (done) return;
+        done = true;
+        clearTimeout(timeout);
         console.error('Analytics load failed:', err);
         setText('statTotalUsers', '!');
-        setHTML('planBreakdown', '<div style="color:#ff5252;">Failed to load: ' + err.message + '</div>');
+        var msg = err && err.message ? err.message : String(err);
+        var rulesBlock = (err && err.code === 'permission-denied') ?
+            '<br><br><strong>This is a Firestore rules problem.</strong> Open ' +
+            '<a href="https://console.firebase.google.com/project/young-investor-simulator/firestore/rules" target="_blank" style="color:#00e676;">Firebase Console &rarr; Rules</a> ' +
+            'and ensure the admin email rule is present.' : '';
+        setHTML('planBreakdown', '<div style="color:#ff5252;line-height:1.6;">Failed to load: ' + msg + rulesBlock + '</div>');
+        setHTML('recentSignups', '<span style="color:#ff5252;">Failed: ' + msg + '</span>');
     });
 }
 window.loadAnalytics = loadAnalytics;
