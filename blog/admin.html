@@ -111,10 +111,23 @@
                 <span class="admin-badge">ADMIN</span>
             </div>
 
+            <!-- ===== LOOKER STUDIO LIVE GA4 EMBED =====
+                 Paste your Looker Studio embed URL into LOOKER_EMBED_URL below
+                 (in the <script> at the bottom of this file). Until you do,
+                 this section shows setup instructions. -->
+            <div id="lookerEmbedPanel" style="margin-bottom:32px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+                    <h2 style="font-size:18px;font-weight:700;">Live Traffic Dashboard <span style="font-size:11px;color:var(--text-muted);font-weight:400;">(GA4 via Looker Studio)</span></h2>
+                </div>
+                <div id="lookerEmbedSlot">
+                    <!-- iframe injected here by JS, OR setup card if not configured -->
+                </div>
+            </div>
+
             <!-- ===== ANALYTICS PANEL ===== -->
             <div class="analytics-panel" id="analyticsPanel" style="margin-bottom:32px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;">
                 <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:10px;">
-                    <h2 style="font-size:18px;font-weight:700;">Analytics Health Check</h2>
+                    <h2 style="font-size:18px;font-weight:700;">Connection Health</h2>
                     <button class="admin-btn" onclick="loadAnalytics()" style="font-size:12px;padding:6px 12px;">Refresh</button>
                 </div>
                 <p style="color:var(--text-muted);font-size:12px;margin-bottom:20px;">Each tool collects data independently. Click through to see actual numbers.</p>
@@ -535,6 +548,42 @@ function escapeHtml(str) {
 // =============================================================
 // ANALYTICS DASHBOARD
 // =============================================================
+// =============================================================
+// LOOKER STUDIO EMBED — paste your iframe SRC URL here.
+// Get it from: lookerstudio.google.com → your report → Share →
+//   Embed report → copy ONLY the URL from src="..." (looks like
+//   https://lookerstudio.google.com/embed/reporting/<id>/page/<id>)
+// Leave empty string to show setup instructions instead.
+// =============================================================
+var LOOKER_EMBED_URL = ""; // <-- PASTE URL BETWEEN THE QUOTES
+
+function renderLookerEmbed() {
+    var slot = document.getElementById('lookerEmbedSlot');
+    if (!slot) return;
+    if (LOOKER_EMBED_URL && LOOKER_EMBED_URL.indexOf('lookerstudio.google.com') !== -1) {
+        slot.innerHTML = '<iframe src="' + LOOKER_EMBED_URL + '" ' +
+            'style="width:100%;height:1200px;border:0;border-radius:10px;background:#fff;" ' +
+            'frameborder="0" allowfullscreen ' +
+            'sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>';
+    } else {
+        slot.innerHTML =
+            '<div style="background:var(--bg);border:1px dashed var(--border);border-radius:10px;padding:24px;">' +
+                '<div style="font-size:14px;font-weight:700;margin-bottom:10px;">Setup (one-time, ~10 min)</div>' +
+                '<ol style="font-size:13px;line-height:1.9;color:var(--text);padding-left:20px;margin:0 0 14px 0;">' +
+                    '<li>Open <a href="https://lookerstudio.google.com/" target="_blank" style="color:#00e676;">lookerstudio.google.com</a> &rarr; <strong>Create</strong> &rarr; <strong>Report</strong></li>' +
+                    '<li>Add data source &rarr; <strong>Google Analytics</strong> &rarr; pick the <code>younginvestor.app</code> property</li>' +
+                    '<li>Drop in widgets you like (geo map, page views, retention, traffic sources, events)</li>' +
+                    '<li>Click <strong>Share</strong> (top-right) &rarr; <strong>Manage access</strong> &rarr; set link to <em>"Anyone with the link can view"</em></li>' +
+                    '<li>Click <strong>Share</strong> &rarr; <strong>Embed report</strong> &rarr; toggle <em>Enable embedding</em> ON</li>' +
+                    '<li>Copy the URL from the <code>src="..."</code> attribute (starts with <code>https://lookerstudio.google.com/embed/reporting/</code>)</li>' +
+                    '<li>Paste it into <code>LOOKER_EMBED_URL</code> at the top of <code>blog/admin.html</code> &rarr; commit &rarr; push</li>' +
+                '</ol>' +
+                '<div style="font-size:12px;color:var(--text-muted);">Once pasted, this whole section becomes your live dashboard — same charts you saw in the GA4 screenshots, refreshes automatically.</div>' +
+            '</div>';
+    }
+}
+renderLookerEmbed();
+
 function loadAnalytics() {
     var setText = function(id, v) { var el = document.getElementById(id); if (el) el.textContent = v; };
     var setHTML = function(id, v) { var el = document.getElementById(id); if (el) el.innerHTML = v; };
